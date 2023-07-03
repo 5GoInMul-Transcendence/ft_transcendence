@@ -1,8 +1,8 @@
 ---
-name: Free report
-about: 구현과 버그가 아닌 기록을 위한 템플릿
-title: "[Docs] "
-labels: documentation
+name: Implementation report
+about: 구현 및 설계를 위해 작성하는 템플릿
+title: "[Feat] "
+labels: enhancement
 assignees: ''
 
 ---
