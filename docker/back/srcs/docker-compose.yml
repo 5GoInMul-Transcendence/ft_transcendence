@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres:15.3-bookworm
+    container_name: postgres
+    build: ./postgres
+    ports: 
+      - 5432:5432
+    env_file:
+      - .env
+    restart: always
