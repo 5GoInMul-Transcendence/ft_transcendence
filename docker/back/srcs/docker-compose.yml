@@ -8,3 +8,13 @@ services:
     env_file:
       - .env
     restart: always
+  
+  app:
+    image: node:18.16.1-bookworm
+    container_name: app
+    build:
+      context: ../../../
+      dockerfile: ./docker/back/srcs/app/
+    ports: 
+      - 8080:8080
+    restart: always
