@@ -5,6 +5,6 @@ clean:
 fclean:
 	docker stop $$(docker ps -qa)
 	docker system prune --all --force --volumes
-re: fclean
+re: clean
 	make all
 .PHONY	: all clean fclean re

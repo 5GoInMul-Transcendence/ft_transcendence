@@ -1,20 +1,27 @@
+version: '3'
+
 services:
-  postgres:
-    image: postgres:15.3-bookworm
-    container_name: postgres
-    build: ./postgres
-    ports: 
-      - 5432:5432
-    env_file:
-      - .env
-    restart: always
-  
   app:
     image: node:18.16.1-bookworm
     container_name: app
+    # Set project root directory
     build:
       context: ../../../
-      dockerfile: ./docker/back/srcs/app/
+      dockerfile: /docker/back/srcs/app/Dockerfile
+    volumes:
+      - /back/web-app:/usr/src
     ports: 
       - 8080:8080
     restart: always
+
+  # postgres:
+  #   image: postgres:15.3-bookworm
+  #   container_name: postgres
+  #   build: ./postgres
+  #   ports: 
+  #     - 5432:5432
+  #   env_file:
+  #     - .env
+  #   restart: always
+# docker run -it --name mycontainer -p 8080:80 -v /host/dir:/container/dir image_name command arg1 arg2
+ 
