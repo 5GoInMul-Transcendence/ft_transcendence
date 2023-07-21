@@ -12,7 +12,6 @@ export default function Login() {
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      console.log("press submit");
     },
     [id, password]
   );

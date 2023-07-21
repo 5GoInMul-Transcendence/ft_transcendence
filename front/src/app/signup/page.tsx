@@ -2,7 +2,7 @@
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
-import axios from "axios";
+// import axios from "axios";
 import Pong from "@/component/Pong";
 import useInput from "@/hooks/useInput";
 
@@ -30,20 +30,18 @@ export default function SignUp() {
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (mismatchError) {
-        console.log("회원가입 요청 보내기");
-        axios
-          .post("/api/users", {
-            email,
-            id,
-            password,
-          })
-          .then((resopnse) => {
-            alert("회원가입 완료!");
-            console.log(resopnse);
-          })
-          .catch((error) => {
-            console.log(error.resopnse);
-          });
+        // axios
+        //   .post("/api/users", {
+        //     email,
+        //     id,
+        //     password,
+        //   })
+        //   .then((resopnse) => {
+        //     alert("회원가입 완료!");
+        //   })
+        //   .catch((error) => {
+        //     console.log(error.resopnse);
+        //   });
       }
     },
     [email, id, password, passwordCheck, mismatchError]
