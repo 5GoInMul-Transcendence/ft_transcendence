@@ -2,7 +2,6 @@
 import React, { useCallback, useState } from "react";
 import styled from "styled-components";
 import Link from "next/link";
-// import axios from "axios";
 import Pong from "@/component/Pong";
 import useInput from "@/hooks/useInput";
 
@@ -30,18 +29,6 @@ export default function SignUp() {
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (mismatchError) {
-        // axios
-        //   .post("/api/users", {
-        //     email,
-        //     id,
-        //     password,
-        //   })
-        //   .then((resopnse) => {
-        //     alert("회원가입 완료!");
-        //   })
-        //   .catch((error) => {
-        //     console.log(error.resopnse);
-        //   });
       }
     },
     [email, id, password, passwordCheck, mismatchError]
@@ -74,10 +61,6 @@ export default function SignUp() {
               value={passwordCheck}
               onChange={onChangePasswordCheck}
             />
-            {/* {!password && <Error>비밀번호를 입력해주세요</Error>}
-            {!mismatchError && <Error>비밀번호가 일치하지 않습니다</Error>}
-            {!id && <Error> 닉네임을 입력해주세요 </Error>}
-        {mismatchError && <Error>{signUpError}</Error>} */}
           </div>
         </div>
         <span>
