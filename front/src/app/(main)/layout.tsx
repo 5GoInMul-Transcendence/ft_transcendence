@@ -14,7 +14,7 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <Wrapper>
+    <Container>
       <MainContainer>
         <Pong />
         <Menubar>
@@ -36,7 +36,7 @@ export default function MainLayout({
           <FriendList />
         </FriendZone>
       </SideContainer>
-    </Wrapper>
+    </Container>
   );
 }
 
@@ -51,7 +51,7 @@ const FriendZone = styled.div`
   text-align: right;
 `;
 
-const Wrapper = styled.div`
+const Container = styled.div`
   display: flex;
   padding: 1rem;
 `;

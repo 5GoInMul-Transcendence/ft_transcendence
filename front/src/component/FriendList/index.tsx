@@ -1,3 +1,5 @@
+'use client';
+
 import styled from 'styled-components';
 import ProfileImage from '../ProfileImage';
 
@@ -12,13 +14,13 @@ const friends = [
 export default function FriendList() {
   return (
     <div>
-      {friends.map((e) => (
-        <FriendItem>
+      {friends.map((e, index) => (
+        <FriendItem key={index}>
           <div>
             <ProfileImage url='' size='35px' />
             &nbsp;{e.name}
           </div>
-          <StatusDiv stat={e.status} />
+          <StatusDiv $status={e.status} />
         </FriendItem>
       ))}
     </div>
@@ -34,10 +36,10 @@ const FriendItem = styled.div`
   }
 `;
 
-const StatusDiv = styled.div<{ stat: string }>`
+const StatusDiv = styled.div<{ $status: string }>`
   width: 10px;
   height: 10px;
   border-radius: 100%;
-  background-color: ${({ theme, stat }) =>
-    stat == 'online' ? theme.colors.green : theme.colors.pink};
+  background-color: ${({ $status, theme }) =>
+    $status === 'online' ? theme.colors.green : theme.colors.pink};
 `;

@@ -22,8 +22,8 @@ export default function Login() {
         <Pong />
       </Wrapper>
       <Wrapper>
-        <LoginForm>
-          <Form onSubmit={onSubmit}>
+        <LoginFormWrapper>
+          <LoginForm onSubmit={onSubmit}>
             <div>ID</div>
             <input type='id' value={id} onChange={onChangeId} />
             <div>password</div>
@@ -33,13 +33,13 @@ export default function Login() {
               onChange={onChangePassword}
             />
             <button type='submit'>L0GIN</button>
-          </Form>
+          </LoginForm>
           <button>Login with 42</button>
-          <Div>
+          <SignupDiv>
             Did you not register? &nbsp;
             <Link href='/signup'>go to Signup</Link>
-          </Div>
-        </LoginForm>
+          </SignupDiv>
+        </LoginFormWrapper>
       </Wrapper>
     </Container>
   );
@@ -53,6 +53,7 @@ const Container = styled.div`
   justify-content: center;
   gap: 0 8rem;
 `;
+
 const Wrapper = styled.div`
   width: 24rem;
   display: flex;
@@ -60,7 +61,7 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const LoginForm = styled.div`
+const LoginFormWrapper = styled.div`
   ${({ theme }) => theme.flex.centerColumn};
   background: ${({ theme }) => theme.colors.darkgrey};
   width: 24rem;
@@ -80,12 +81,12 @@ const LoginForm = styled.div`
   }
 `;
 
-const Div = styled.div`
+const SignupDiv = styled.div`
   font-size: ${({ theme }) => theme.fontSize.xxsmall};
   margin-top: 2.4rem;
 `;
 
-const Form = styled.form`
+const LoginForm = styled.form`
   width: 20rem;
   ${({ theme }) => theme.flex.centerColumn};
   * {
