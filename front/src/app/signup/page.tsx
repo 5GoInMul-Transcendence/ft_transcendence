@@ -1,15 +1,16 @@
-"use client";
-import React, { useCallback, useState } from "react";
-import styled from "styled-components";
-import Link from "next/link";
-import Pong from "@/component/Pong";
-import useInput from "@/hooks/useInput";
+'use client';
+
+import React, { useCallback, useState } from 'react';
+import Link from 'next/link';
+import styled from 'styled-components';
+import Pong from '@/component/Pong';
+import useInput from '@/hooks/useInput';
 
 export default function SignUp() {
-  const [email, , onChangeEmail] = useInput("");
-  const [id, , onChangeId] = useInput("");
-  const [password, setPassword] = useInput("");
-  const [passwordCheck, setPasswordCheck] = useInput("");
+  const [email, , onChangeEmail] = useInput('');
+  const [id, , onChangeId] = useInput('');
+  const [password, setPassword] = useInput('');
+  const [passwordCheck, setPasswordCheck] = useInput('');
   const [mismatchError, setMismatchError] = useState(false);
   const onChangePasswordCheck = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,14 +41,14 @@ export default function SignUp() {
         <div>
           <span>ID</span>
           <div>
-            <input type="text" value={id} onChange={onChangeId} />
+            <input type='text' value={id} onChange={onChangeId} />
           </div>
         </div>
         <div>
           <span>PASSWORD</span>
           <div>
             <input
-              type="password"
+              type='password'
               value={password}
               onChange={onChangePassword}
             />
@@ -57,7 +58,7 @@ export default function SignUp() {
           <span>PASSWORD REFEAT</span>
           <div>
             <input
-              type="password"
+              type='password'
               value={passwordCheck}
               onChange={onChangePasswordCheck}
             />
@@ -67,12 +68,12 @@ export default function SignUp() {
           EMAIL <button> CHECK</button>
         </span>
         <div>
-          <input type="email" value={email} onChange={onChangeEmail}></input>
+          <input type='email' value={email} onChange={onChangeEmail}></input>
         </div>
-        <button type="submit">SEND</button>
+        <button type='submit'>SEND</button>
         <div>Already signed up? gogogo</div>
         <div>
-          <Link href="/login">go to Login</Link>
+          <Link href='/login'>go to Login</Link>
         </div>
       </Form>
     </Container>
