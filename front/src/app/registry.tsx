@@ -1,9 +1,12 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useServerInsertedHTML } from "next/navigation";
-import { ServerStyleSheet, StyleSheetManager } from "styled-components";
-import { ThemeProvider } from "styled-components";
+import React, { useState } from 'react';
+import { useServerInsertedHTML } from 'next/navigation';
+import {
+  ServerStyleSheet,
+  StyleSheetManager,
+  ThemeProvider,
+} from 'styled-components';
 
 export default function StyledComponentsRegistry({
   children,
@@ -21,7 +24,7 @@ export default function StyledComponentsRegistry({
     return <>{styles}</>;
   });
 
-  if (typeof window !== "undefined") return <>{children}</>;
+  if (typeof window !== 'undefined') return <>{children}</>;
 
   return (
     <StyleSheetManager sheet={styledComponentsStyleSheet.instance}>

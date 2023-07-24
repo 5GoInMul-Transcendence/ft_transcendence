@@ -1,4 +1,5 @@
 'use client';
+
 import { useCallback } from 'react';
 import Link from 'next/link';
 import useInput from '@/hooks/useInput';

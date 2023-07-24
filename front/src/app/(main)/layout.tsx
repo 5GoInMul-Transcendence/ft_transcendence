@@ -1,4 +1,5 @@
 'use client';
+
 import Link from 'next/link';
 import styled from 'styled-components';
 import Pong from '@/component/Pong';
@@ -30,10 +31,10 @@ export default function MainLayout({
         <MyZone>
           <ProfileImage url='' size='45px' /> &nbsp;{name}
         </MyZone>
-        <FriendsZone>
+        <FriendZone>
           <button>+ add friend</button>
           <FriendList />
-        </FriendsZone>
+        </FriendZone>
       </SideContainer>
     </Wrapper>
   );
@@ -46,7 +47,7 @@ const MyZone = styled.div`
   ${({ theme }) => theme.flex.right};
 `;
 
-const FriendsZone = styled.div`
+const FriendZone = styled.div`
   text-align: right;
 `;
 
