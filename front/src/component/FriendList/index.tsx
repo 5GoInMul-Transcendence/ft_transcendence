@@ -1,7 +1,7 @@
 'use client';
 
 import useSwr from 'swr';
-import { IUser } from '@/types/IUser';
+import { IFriends } from '@/types/IFriends';
 import fetcher from '@/utils/fetcher';
 import styled from 'styled-components';
 import ProfileImage from '../ProfileImage';
@@ -13,7 +13,7 @@ export default function FriendList() {
 
   return (
     <div>
-      {friends.map((e: IUser, index: number) => (
+      {friends.map((e: IFriends, index: number) => (
         <FriendItem key={index}>
           <div>
             <ProfileImage url={e.url} size="35px" />
