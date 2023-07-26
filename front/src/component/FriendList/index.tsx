@@ -1,23 +1,22 @@
 'use client';
 
+import useSwr from 'swr';
+import { IUser } from '@/types/IUser';
+import fetcher from '@/utils/fetcher';
 import styled from 'styled-components';
 import ProfileImage from '../ProfileImage';
 
-const friends = [
-  { name: 'kipark', url: '', status: 'online' },
-  { name: 'jayoon', url: '', status: 'offline' },
-  { name: 'donghyun', url: '', status: 'offline' },
-  { name: 'jabae', url: '', status: 'online' },
-  { name: 'jiyo', url: '', status: 'online' },
-];
-
 export default function FriendList() {
+  const { data: friends, error } = useSwr('/api/friends', fetcher);
+
+  if (!friends) return null;
+
   return (
     <div>
-      {friends.map((e, index) => (
+      {friends.map((e: IUser, index: number) => (
         <FriendItem key={index}>
           <div>
-            <ProfileImage url='' size='35px' />
+            <ProfileImage url={e.url} size="35px" />
             &nbsp;{e.name}
           </div>
           <StatusDiv $status={e.status} />
