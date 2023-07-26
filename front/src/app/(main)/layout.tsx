@@ -25,7 +25,7 @@ export default function MainLayout({
             <Link href='/profile'>profile</Link>
           </div>
         </Menubar>
-        {children}
+        <ChildWrapper>{children}</ChildWrapper>
       </MainContainer>
       <SideContainer>
         <MyZone>
@@ -41,10 +41,8 @@ export default function MainLayout({
 }
 
 const MyZone = styled.div`
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  margin-right: 1rem;
   ${({ theme }) => theme.flex.right};
+  margin: 1rem 1rem 1rem 0;
 `;
 
 const FriendZone = styled.div`
@@ -53,16 +51,23 @@ const FriendZone = styled.div`
 
 const Container = styled.div`
   display: flex;
+  height: 100vh;
   padding: 1rem;
 `;
 
 const MainContainer = styled.div`
+  ${({ theme }) => theme.flex.centerColumn};
   width: 80%;
+`;
+
+const ChildWrapper = styled.div`
+  flex-grow: 1;
+  width: 100%;
 `;
 
 const SideContainer = styled.div`
   width: 20%;
-  height: 100vh;
+  height: 100%;
 `;
 
 const Menubar = styled.div`
