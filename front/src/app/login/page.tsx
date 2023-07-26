@@ -5,6 +5,7 @@ import Link from 'next/link';
 import useInput from '@/hooks/useInput';
 import styled from 'styled-components';
 import Pong from '@/component/Pong';
+import PingPongAnimation from '@/component/PingPongAnimation';
 
 export default function Login() {
   const [id, , onChangeId] = useInput('');
@@ -20,24 +21,25 @@ export default function Login() {
     <Container>
       <Wrapper>
         <Pong />
+        <PingPongAnimation />
       </Wrapper>
       <Wrapper>
         <LoginFormWrapper>
           <LoginForm onSubmit={onSubmit}>
             <div>ID</div>
-            <input type='id' value={id} onChange={onChangeId} />
-            <div>password</div>
+            <input type='id' value={id} onChange={onChangeId} maxLength={12} />
+            <div>Password</div>
             <input
               type='password'
               value={password}
               onChange={onChangePassword}
             />
-            <button type='submit'>L0GIN</button>
+            <button type='submit'>Login</button>
           </LoginForm>
           <button>Login with 42</button>
           <SignupDiv>
             Did you not register? &nbsp;
-            <Link href='/signup'>go to Signup</Link>
+            <Link href='/signup'>Go to Signup</Link>
           </SignupDiv>
         </LoginFormWrapper>
       </Wrapper>
@@ -50,22 +52,18 @@ const Container = styled.div`
   height: 100%;
   width: 100%;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 0 8rem;
+  gap: 0 3rem;
 `;
 
 const Wrapper = styled.div`
-  width: 24rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 30rem;
+  ${({ theme }) => theme.flex.centerColumn};
 `;
 
 const LoginFormWrapper = styled.div`
   ${({ theme }) => theme.flex.centerColumn};
   background: ${({ theme }) => theme.colors.darkgrey};
-  width: 24rem;
-  height: 24rem;
+  width: 25rem;
   padding: 2.5rem 1rem 1rem 1rem;
   font-size: ${({ theme }) => theme.fontSize.xsmall};
   * {
@@ -83,7 +81,11 @@ const LoginFormWrapper = styled.div`
 
 const SignupDiv = styled.div`
   font-size: ${({ theme }) => theme.fontSize.xxsmall};
-  margin-top: 2.4rem;
+  margin-top: 1.8rem;
+  a {
+    text-decoration: underline;
+    text-decoration-color: white;
+  }
 `;
 
 const LoginForm = styled.form`
