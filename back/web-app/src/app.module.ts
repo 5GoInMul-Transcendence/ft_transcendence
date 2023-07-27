@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import {SmsModule} from './auth/sms/sms.module';
 
 @Module({
-  imports: [ConfigModule.forRoot( { isGlobal:true })],
+  imports: [ConfigModule.forRoot( { isGlobal:true }), SmsModule],
   controllers: [AppController],
   providers: [AppService],
 })
