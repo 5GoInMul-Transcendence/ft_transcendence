@@ -7,10 +7,15 @@ import { ConfigService } from '@nestjs/config';
 export class MailConfig implements MailerOptionsFactory {
   constructor(private readonly configService: ConfigService) {}
   createMailerOptions(): MailerOptions {
+    const email = this.configService.get('EMAIL');
+    const emailPassword = this.configService.get('EMAIL_PASSWORD');
+    const emailHost = this.configService.get('EMAIL_HOST_GOOGLE');
+    const fromName = this.configService.get('EMAIL_FROM_USER_NAME');
+
     return {
-      transport: `smtps://${this.configService.get('EMAIL')}:${this.configService.get('EMAIL_PASSWORD')}@${this.configService.get('EMAIL_HOST_GOOGLE')}`,
+      transport: `smtps://${email}:${emailPassword}@${emailHost}`,
       defaults: {
-        from: `"${this.configService.get('EMAIL_FROM_USER_NAME')}" <${this.configService.get('EMAIL')}>`,
+        from: `"${fromName}" <${email}>`,
       },
       template: {
         dir: __dirname + '/../../templates',
