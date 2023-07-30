@@ -13,8 +13,8 @@ interface Props {
 export default function Buttons({ button: b, leftButton, rightButton }: Props) {
   return (
     <Wrapper>
-      <Button {...{ ...leftButton, width: b?.width }} />
-      <Button {...{ ...rightButton, width: b?.width }} />
+      <Button {...leftButton} width={b?.width} />
+      <Button {...rightButton} width={b?.width} />
     </Wrapper>
   );
 }
