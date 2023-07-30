@@ -17,7 +17,7 @@ export default function Chats() {
   };
 
   useEffect(() => {
-    socket?.on('server', (message) => {
+    socket?.on('server', (message: any) => {
       setClientMessageList((prev) => [...prev, message.message]);
     });
   }, [socket]);
