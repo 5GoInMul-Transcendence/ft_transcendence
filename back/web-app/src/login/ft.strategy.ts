@@ -42,18 +42,4 @@ export class FtStrategy extends PassportStrategy(Strategy, 'ft') {
     }
     cb(null, profile);
   }
-
-  //   const req = this.http.get('https://api.intra.42.fr/v2/me', {
-  //     headers: { Authorization: `Bearer ${accessToken}` },
-  //   });
-
-  //   try {
-  //     const { data } = await lastValueFrom(req);
-  //     if (!data) throw new exception();
-  //     console.log(data);
-  //     return data;
-  //   } catch (error) {}
-
-  //   throw new UnauthorizedException();
-  // }
 }
