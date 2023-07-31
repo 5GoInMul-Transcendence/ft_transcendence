@@ -10,8 +10,6 @@ export class LoginService {
     if (!req.user) {
       return 'No user from ft'
     }
-
-    // console.log(req);
     return {
       message: 'User information from ft',
       user: req.user

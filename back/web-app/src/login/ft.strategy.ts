@@ -1,5 +1,5 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy } from 'passport-42';
+import { Strategy, verify } from 'passport-42';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
@@ -8,12 +8,6 @@ export class FtStrategy extends PassportStrategy(Strategy, 'ft') {
 
   constructor(configService: ConfigService) {
     super({
-      // authorizationURL: `https://api.intra.42.fr/oauth/authorize?client_id=${configService.get<string>(
-      //   'FT_UID',
-      // )}&redirect_uri=${configService.get<string>(
-      //   'FT_REDIRECT',
-      // )}&response_type=code`,
-      // tokenURL: 'https://api.intra.42.fr/oauth/token',
       clientID: configService.get<string>('FT_UID'),
       clientSecret: configService.get<string>('FT_SECRET'),
       callbackURL: configService.get<string>('FT_REDIRECT'),
@@ -26,20 +20,21 @@ export class FtStrategy extends PassportStrategy(Strategy, 'ft') {
         'profileUrl': 'url',
         'emails.0.value': 'email',
         'phoneNumbers.0.value': 'phone',
-        'photos.0.value': 'image_url'
+        'photos.0.value': 'image.link'
       },
     });
   }
 
-  async validate(accessToken: string, refreshToken: string, profile: any, cb: any) {
-    try {
-      console.log('accessToken: ', accessToken);
-      console.log('refreshToken: ', refreshToken);
-      // console.log('profile: ', profile);
-      return accessToken;
-    } catch (error) {
-      console.log(error);
-    }
-    cb(null, profile);
+  async validate(accessToken: string, refreshToken: string, profile: any, cb: verify): Promise<any> {
+    const {name, emails, photos} = profile;
+    const user = {
+      email: emails[0].value,
+      firstName: name.familyName,
+      lastName: name.givenName,
+      picture: photos[0].value,
+      accessToken
+    };
+
+    cb(null, user);
   }
 }
