@@ -61,7 +61,7 @@ const MainContainer = styled.div`
 `;
 
 const ChildWrapper = styled.div`
-  flex-grow: 1;
+  height: calc(100% - 5rem);
   width: 100%;
 `;
 
