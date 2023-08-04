@@ -14,7 +14,6 @@ export class LoginController {
   @Get('redirect')
   @UseGuards(FortyTwoAuthGuard)
   ftAuthRedirect(@Req() req: any) {
-    // console.log(req.profile);
     console.log(req.user);
     return this.loginService.ftLogin(req)
   }
