@@ -1,14 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common'; 
 
 @Injectable()
 export class LoginService {
-  ftLogin(req: any) {
+  ftLogin(req: any): {message: string; user: any} {
+    const userData: {message: string; user: any;} = {
+      message: "",
+      user: null,
+    }
+
     if (!req.user) {
-      return 'No user from ft'
+      userData.message = 'No user from ft';
     }
-    return {
-      message: 'User information from ft',
-      user: req.user
+    else {
+      userData.message = 'User information from ft';
+      userData.user = req.user;
     }
+    return userData;
   }
 }

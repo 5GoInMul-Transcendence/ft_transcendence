@@ -34,12 +34,10 @@ export class FtStrategy extends PassportStrategy(Strategy, 'ft') {
    * @param cb 
    */
   async validate(accessToken: string, refreshToken: string, profile: any, cb: verify) {
-    const {id, name, emails, photos} = profile;
+    const {id, emails} = profile;
     const user = {
       id: id,
       mail: emails[0].value,
-      avatarId: photos[0].value,
-      // accessToken
     };
 
     cb(null, user);

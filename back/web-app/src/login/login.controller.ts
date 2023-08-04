@@ -8,12 +8,12 @@ export class LoginController {
   constructor(private readonly loginService: LoginService) {}
 
   @Get()
-  @UseGuards(FortyTwoAuthGuard)
-  async ftAuth(@Req() req: any) {}
+  @UseGuards(FortyTwoAuthGuard) // Guards 의 역할은?
+  async ftAuth(@Req() req: any) {} // async 일 필요 있나?
 
   @Get('redirect')
   @UseGuards(FortyTwoAuthGuard)
-  ftAuthRedirect(@Req() req: any) {
+  ftAuthRedirect(@Req() req: any): {message: string; user: any} {
     console.log(req.user);
     return this.loginService.ftLogin(req)
   }
