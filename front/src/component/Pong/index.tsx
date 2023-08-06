@@ -1,12 +1,15 @@
+import Link from 'next/link';
 import styled from 'styled-components';
 
 export default function Pong() {
   return (
     <HeaderContainer>
-      <span>P</span>
-      <span>o</span>
-      <span>n</span>
-      <span>g</span> Game
+      <Link href='/main'>
+        <span>P</span>
+        <span>o</span>
+        <span>n</span>
+        <span>g</span> Game
+      </Link>
     </HeaderContainer>
   );
 }

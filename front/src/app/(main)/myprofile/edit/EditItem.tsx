@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import styled from 'styled-components';
 
 interface Props {
@@ -5,11 +6,16 @@ interface Props {
   content: string;
 }
 
-export default function ProfileItem({ title, content }: Props) {
+export default function EditItem({ title, content }: Props) {
   return (
     <Wrapper>
       <div>{title}</div>
-      <div>{content}</div>
+      <EditContentDiv>
+        <span>{content}</span>
+        <span>
+          <Image src='/pencil.png' alt='me' width='25' height='25' />
+        </span>
+      </EditContentDiv>
     </Wrapper>
   );
 }
@@ -25,4 +31,8 @@ const Wrapper = styled.div`
     color: ${({ theme }) => theme.colors.black};
     background: ${({ theme }) => theme.colors.lightgrey};
   }
+`;
+
+const EditContentDiv = styled.div`
+  ${({ theme }) => theme.flex.spaceBetween};
 `;

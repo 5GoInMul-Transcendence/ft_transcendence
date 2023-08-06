@@ -1,37 +1,17 @@
 'use client';
 
 import AchievementItem from './AchievementItem';
-import Buttons from '@/component/Buttons';
 import MatchItem from './MatchItem';
 import ProfileImage from '@/component/ProfileImage';
 import ProfileItem from '@/app/(main)/profile/ProfileItem';
-import Toggle from '@/component/Toggle';
 import styled from 'styled-components';
-import useToggle from '@/hooks/useToggle';
 
 export default function Profile() {
-  const [follw, onChangeFollow] = useToggle(false);
-  const [block, onChangeBlock] = useToggle(false);
-
   return (
     <Container>
       <TopWrapper>
         <Wrapper $width={3}>
           <ProfileImage url='' size='250px' />
-          <TogglesWrapper>
-            <Toggle
-              text='follow'
-              color='green'
-              checked={follw}
-              onToggle={onChangeFollow}
-            />
-            <Toggle
-              text='block'
-              color='pink'
-              checked={block}
-              onToggle={onChangeBlock}
-            />
-          </TogglesWrapper>
         </Wrapper>
         <Wrapper $width={7}>
           <ProfileItem title='NICNAME' content='jabae' />
@@ -41,13 +21,9 @@ export default function Profile() {
             title='ACHIEVMENT'
             content={['10연승', '10연패..']}
           />
+          <EditButton>EDIT</EditButton>
         </Wrapper>
       </TopWrapper>
-      <Buttons
-        button={{ width: '20rem' }}
-        leftButton={{ text: 'direct message', color: 'white' }}
-        rightButton={{ text: 'match game', color: 'green' }}
-      />
     </Container>
   );
 }
@@ -71,6 +47,9 @@ const Wrapper = styled.div<{ $width: number }>`
   justify-content: space-between;
   margin: 0 2rem;
   height: 100%;
+  div {
+    margin-bottom: 1rem;
+  }
 `;
 
 const TogglesWrapper = styled.div`
@@ -80,4 +59,12 @@ const TogglesWrapper = styled.div`
   margin: 2rem auto;
   width: 13rem;
   height: 100%;
+`;
+
+const EditButton = styled.button`
+  padding: 1rem;
+  text-align: center;
+  border-radius: 0.8rem;
+  color: ${({ theme }) => theme.colors.black};
+  background-color: ${({ theme }) => theme.colors.green};
 `;

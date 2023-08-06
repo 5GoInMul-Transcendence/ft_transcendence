@@ -1,10 +1,10 @@
 'use client';
 
-import useSwr from 'swr';
 import { IFriends } from '@/types/IFriends';
+import ProfileImage from '../ProfileImage';
 import fetcher from '@/utils/fetcher';
 import styled from 'styled-components';
-import ProfileImage from '../ProfileImage';
+import useSwr from 'swr';
 
 export default function FriendList() {
   const { data: friends, error } = useSwr('/api/friends', fetcher);
