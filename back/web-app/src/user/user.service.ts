@@ -4,17 +4,31 @@ import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user';
 import { randomUUID } from 'crypto';
+import { CreateSignupOauthDto } from './dto/create-signup-oauth';
+import { SignupOauth } from './signup-oauth.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private userRepository: Repository<User>
+    private userRepository: Repository<User>,
+    @InjectRepository(SignupOauth)
+    private signupOauthRepository: Repository<SignupOauth>
   ) {}
 
   // async getUserById(id: number): Promise<User> {
   //   return await this.userRepository.findOneBy({id});
   // }
+
+  async createSignupOauth(createSignupOauthDto: CreateSignupOauthDto) {
+    const { id } = createSignupOauthDto;
+    const user = this.signupOauthRepository.create({
+      id,
+    });
+
+    await this.signupOauthRepository.save(user);
+    return user;
+  }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const { mail } = createUserDto;

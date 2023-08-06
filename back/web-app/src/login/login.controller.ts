@@ -20,9 +20,7 @@ export class LoginController {
   ftAuthRedirect(@Req() req: any): Promise<User> {
     const user: any = req.user;
 
+    this.userService.createSignupOauth(user);
     return this.userService.createUser(user);
-    // console.log('user', user);
-
-    // return this.loginService.ftLogin(req);
   }
 }
