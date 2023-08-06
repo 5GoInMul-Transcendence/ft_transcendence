@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { FortyTwoAuthGuard } from './ft-auth.guard';
-import { AuthGuard } from '@nestjs/passport';
 import { UserService } from 'src/user/user.service';
+import { User } from 'src/user/user.entity';
 
 @Controller('login')
 export class LoginController {
@@ -17,9 +17,10 @@ export class LoginController {
 
   @Get('redirect')
   @UseGuards(FortyTwoAuthGuard)
-  ftAuthRedirect(@Req() req: any) {
+  ftAuthRedirect(@Req() req: any): Promise<User> {
     const user: any = req.user;
 
+    return this.userService.createUser(user);
     // console.log('user', user);
 
     // return this.loginService.ftLogin(req);

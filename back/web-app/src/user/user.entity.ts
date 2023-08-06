@@ -1,12 +1,12 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { TwoFactorStatus } from "./twoFactor-status.enum";
 
-@Entity()
+@Entity('user')
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar', { length: 12 })
+  @Column('varchar', { length: 36 })
   nickname: string;
   
   @Column('varchar', { length: 64 })
