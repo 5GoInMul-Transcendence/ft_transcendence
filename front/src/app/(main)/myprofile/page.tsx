@@ -1,9 +1,10 @@
 'use client';
 
+import Link from 'next/link';
+import ProfileItem from '../profile/[user]/ProfileItem';
 import AchievementItem from './AchievementItem';
 import MatchItem from './MatchItem';
 import ProfileImage from '@/component/ProfileImage';
-import ProfileItem from '@/app/(main)/profile/ProfileItem';
 import styled from 'styled-components';
 
 export default function Profile() {
@@ -21,7 +22,9 @@ export default function Profile() {
             title='ACHIEVMENT'
             content={['10연승', '10연패..']}
           />
-          <EditButton>EDIT</EditButton>
+          <EditButton>
+            <Link href='/myprofile/edit'>EDIT</Link>
+          </EditButton>
         </Wrapper>
       </TopWrapper>
     </Container>
@@ -52,16 +55,7 @@ const Wrapper = styled.div<{ $width: number }>`
   }
 `;
 
-const TogglesWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin: 2rem auto;
-  width: 13rem;
-  height: 100%;
-`;
-
-const EditButton = styled.button`
+const EditButton = styled.div`
   padding: 1rem;
   text-align: center;
   border-radius: 0.8rem;

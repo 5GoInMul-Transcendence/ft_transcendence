@@ -4,12 +4,12 @@ import AchievementItem from './AchievementItem';
 import Buttons from '@/component/Buttons';
 import MatchItem from './MatchItem';
 import ProfileImage from '@/component/ProfileImage';
-import ProfileItem from '@/app/(main)/profile/ProfileItem';
 import Toggle from '@/component/Toggle';
 import styled from 'styled-components';
 import useToggle from '@/hooks/useToggle';
+import ProfileItem from './ProfileItem';
 
-export default function Profile() {
+export default function Profile({ params }: { params: { user: string } }) {
   const [follw, onChangeFollow] = useToggle(false);
   const [block, onChangeBlock] = useToggle(false);
 
@@ -34,7 +34,7 @@ export default function Profile() {
           </TogglesWrapper>
         </Wrapper>
         <Wrapper $width={7}>
-          <ProfileItem title='NICNAME' content='jabae' />
+          <ProfileItem title='NICNAME' content={`${params.user}`} />
           <ProfileItem title='LADDER LEVEL' content='1' />
           <MatchItem title='WIN/LOSE' content='132/13' />
           <AchievementItem

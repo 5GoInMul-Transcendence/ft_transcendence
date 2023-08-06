@@ -11,8 +11,9 @@ export default function AchievementItem({ title, content }: Props) {
     <Wrapper>
       <div>{title}</div>
       <div>
-        {content.map((data) => (
+        {content.map((data, index) => (
           <Achievement
+            key={index}
             src={gravatar.url('kipark@ki.com', {
               s: `50px`,
               d: 'retro',

@@ -22,30 +22,31 @@ export default function MainLayout({
           <div>
             <Link href='/startgame'>start_game</Link>
             <Link href='/chats'>chat</Link>
-            <Link href='/profile'>profile</Link>
+            <Link href='/myprofile'>profile</Link>
           </div>
         </Menubar>
         <ChildWrapper>{children}</ChildWrapper>
       </MainContainer>
       <SideContainer>
-        <MyZone>
-          <ProfileImage url='' size='45px' /> &nbsp;{name}
-        </MyZone>
-        <FriendZone>
+        <MyProfile>
+          <ProfileImage url='' size='45px' /> &nbsp;
+          <Link href='/myprofile'>{name}</Link>
+        </MyProfile>
+        <FriendProfile>
           <button>+ add friend</button>
           <FriendList />
-        </FriendZone>
+        </FriendProfile>
       </SideContainer>
     </Container>
   );
 }
 
-const MyZone = styled.div`
+const MyProfile = styled.div`
   ${({ theme }) => theme.flex.right};
   margin: 1rem 1rem 1rem 0;
 `;
 
-const FriendZone = styled.div`
+const FriendProfile = styled.div`
   text-align: right;
 `;
 
