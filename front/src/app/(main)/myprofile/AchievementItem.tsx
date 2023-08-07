@@ -13,6 +13,7 @@ export default function AchievementItem({ title, content }: Props) {
       <div>
         {content.map((data) => (
           <Achievement
+            key={data}
             src={gravatar.url('kipark@ki.com', {
               s: `50px`,
               d: 'retro',

@@ -15,7 +15,7 @@ export default function FriendList() {
   return (
     <div>
       {friends.map((e: IFriends, index: number) => (
-        <Link key={index} href={`/profile/${e.name}`}>
+        <Link key={e.name} href={`/profile/${e.name}`}>
           <FriendItem>
             <div>
               <ProfileImage url={e.url} size='35px' />
