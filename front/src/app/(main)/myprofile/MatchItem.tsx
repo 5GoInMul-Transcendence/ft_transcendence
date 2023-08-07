@@ -41,7 +41,6 @@ const MatchHistory = styled.span`
   padding: 1.5rem 2rem;
   border-radius: 0.8rem;
   text-align: center;
-  overflow-x: scroll;
   color: ${({ theme }) => theme.colors.black};
   background: ${({ theme }) => theme.colors.white};
 `;
