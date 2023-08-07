@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { FortyTwoAuthGuard } from './ft-auth.guard';
 import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/user.entity';
+import { CreateSignupOauthDto } from 'src/user/dto/create-signup-oauth';
+import { Builder } from 'builder-pattern';
 
 @Controller('login')
 export class LoginController {
@@ -17,10 +19,23 @@ export class LoginController {
 
   @Get('redirect')
   @UseGuards(FortyTwoAuthGuard)
-  ftAuthRedirect(@Req() req: any): Promise<User> {
-    const user: any = req.user;
+  async ftAuthRedirect(@Req() req: any): Promise<User> {
+    const reqUser: any = req.user;
+    let user: User;
 
-    this.userService.createSignupOauth(user);
-    return this.userService.createUser(user);
+    // user = this.memoryOauthUser.findOneBy({reqUser.id})
+    if (1) { // if (!user) {
+      user = await this.userService.createUser(reqUser);
+      this.userService.createSignupOauth(Builder(CreateSignupOauthDto)
+      .id(reqUser.id)
+      .user(user)
+      .build()); 
+    }
+  
+    if (user.twoFactor !== 0 ) { // twoFactor
+
+    }
+    // session 생성
+    return user;
   }
 }

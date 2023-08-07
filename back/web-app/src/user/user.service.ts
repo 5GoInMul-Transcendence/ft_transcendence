@@ -20,14 +20,18 @@ export class UserService {
   //   return await this.userRepository.findOneBy({id});
   // }
 
-  async createSignupOauth(createSignupOauthDto: CreateSignupOauthDto) {
-    const { id } = createSignupOauthDto;
-    const user = this.signupOauthRepository.create({
+  // createSignupOauthFromObject(id, user_id):  {
+
+  // }
+
+  async createSignupOauth(createSignupOauthDto: CreateSignupOauthDto): Promise<SignupOauth> {
+    const { id, user } = createSignupOauthDto;
+    const createdUser = this.signupOauthRepository.create({
       id,
+      user,
     });
 
-    await this.signupOauthRepository.save(user);
-    return user;
+    return await this.signupOauthRepository.save(createdUser);
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
@@ -38,11 +42,6 @@ export class UserService {
       mail, // 42 로 회원가입 할 때만 null 이 아니다.
     });
 
-    await this.userRepository.save(user);
-    return user;
-  }
-
-  printHello() {
-    console.log('Hello');
+    return await this.userRepository.save(user);
   }
 }

@@ -17,4 +17,4 @@ export class SignupOauth {
     default: ServiceProvider.FT,
   })
   service_provider: ServiceProvider;
-}
+};
