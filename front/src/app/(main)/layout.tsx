@@ -28,10 +28,13 @@ export default function MainLayout({
         <ChildWrapper>{children}</ChildWrapper>
       </MainContainer>
       <SideContainer>
-        <MyProfile>
-          <ProfileImage url='' size='45px' /> &nbsp;
-          <Link href='/myprofile'>{name}</Link>
-        </MyProfile>
+        <Link href='/myprofile'>
+          <MyProfile>
+            <ProfileImage url='' size='45px' />
+            &nbsp;
+            {name}
+          </MyProfile>
+        </Link>
         <FriendProfile>
           <button>+ add friend</button>
           <FriendList />
