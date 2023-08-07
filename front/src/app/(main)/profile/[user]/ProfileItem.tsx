@@ -23,6 +23,6 @@ const Wrapper = styled.div`
     padding: 1.5rem 2rem;
     border-radius: 0.8rem;
     color: ${({ theme }) => theme.colors.black};
-    background: ${({ theme }) => theme.colors.white};
+    background: ${({ theme }) => theme.colors.lightgrey};
   }
 `;

@@ -1,10 +1,11 @@
 'use client';
 
-import useSwr from 'swr';
 import { IFriends } from '@/types/IFriends';
+import ProfileImage from '../ProfileImage';
 import fetcher from '@/utils/fetcher';
 import styled from 'styled-components';
-import ProfileImage from '../ProfileImage';
+import useSwr from 'swr';
+import Link from 'next/link';
 
 export default function FriendList() {
   const { data: friends, error } = useSwr('/api/friends', fetcher);
@@ -14,13 +15,15 @@ export default function FriendList() {
   return (
     <div>
       {friends.map((e: IFriends, index: number) => (
-        <FriendItem key={index}>
-          <div>
-            <ProfileImage url={e.url} size="35px" />
-            &nbsp;{e.name}
-          </div>
-          <StatusDiv $status={e.status} />
-        </FriendItem>
+        <Link key={e.name} href={`/profile/${e.name}`}>
+          <FriendItem>
+            <div>
+              <ProfileImage url={e.url} size='35px' />
+              &nbsp;{e.name}
+            </div>
+            <StatusDiv $status={e.status} />
+          </FriendItem>
+        </Link>
       ))}
     </div>
   );

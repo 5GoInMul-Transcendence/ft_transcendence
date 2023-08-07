@@ -1,13 +1,15 @@
 'use client';
 
-import Toggle from '@/component/Toggle';
+import AchievementItem from './AchievementItem';
 import Buttons from '@/component/Buttons';
+import MatchItem from './MatchItem';
 import ProfileImage from '@/component/ProfileImage';
-import ProfileItem from '@/app/(main)/profile/ProfileItem';
-import useToggle from '@/hooks/useToggle';
+import Toggle from '@/component/Toggle';
 import styled from 'styled-components';
+import useToggle from '@/hooks/useToggle';
+import ProfileItem from './ProfileItem';
 
-export default function Profile() {
+export default function Profile({ params }: { params: { user: string } }) {
   const [follw, onChangeFollow] = useToggle(false);
   const [block, onChangeBlock] = useToggle(false);
 
@@ -15,7 +17,7 @@ export default function Profile() {
     <Container>
       <TopWrapper>
         <Wrapper $width={3}>
-          <ProfileImage url='' size='300px' />
+          <ProfileImage url='' size='250px' />
           <TogglesWrapper>
             <Toggle
               text='follow'
@@ -32,13 +34,13 @@ export default function Profile() {
           </TogglesWrapper>
         </Wrapper>
         <Wrapper $width={7}>
-          <ProfileItem title='NAME' content='jabae' />
-          <ProfileItem title='MAIL' content='jabae@42seoul.com' />
-          <ProfileItem title='Win/Lose' content='32/1' />
-          <HistoryButton>
-            <span>Game History</span>
-            <span>{'>'}</span>
-          </HistoryButton>
+          <ProfileItem title='NICNAME' content={`${params.user}`} />
+          <ProfileItem title='LADDER LEVEL' content='1' />
+          <MatchItem title='WIN/LOSE' content='132/13' />
+          <AchievementItem
+            title='ACHIEVMENT'
+            content={['10연승', '10연패..']}
+          />
         </Wrapper>
       </TopWrapper>
       <Buttons
@@ -52,7 +54,7 @@ export default function Profile() {
 
 const Container = styled.div`
   ${({ theme }) => theme.flex.centerColumn};
-  margin: 10rem 20rem;
+  margin: 5rem 10rem;
 `;
 
 const TopWrapper = styled.div`
@@ -78,12 +80,4 @@ const TogglesWrapper = styled.div`
   margin: 2rem auto;
   width: 13rem;
   height: 100%;
-`;
-
-const HistoryButton = styled.button`
-  padding: 1.5rem 2rem;
-  border-radius: 0.8rem;
-  color: ${({ theme }) => theme.colors.black};
-  background: ${({ theme }) => theme.colors.grey};
-  ${({ theme }) => theme.flex.spaceBetween};
 `;
