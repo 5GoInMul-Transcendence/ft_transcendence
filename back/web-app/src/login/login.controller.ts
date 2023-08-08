@@ -14,11 +14,11 @@ export class LoginController {
     private userService: UserService,
   ) {}
 
-  @Get()
+  @Get('oauth/42')
   @UseGuards(FortyTwoAuthGuard)
   ftAuth(@Req() req: any) {}
 
-  @Get('redirect')
+  @Get('oauth/42/redirect')
   @UseGuards(FortyTwoAuthGuard)
   async ftAuthRedirect(
     @Req() req: any,
@@ -49,6 +49,6 @@ export class LoginController {
       // 2FA
     }
     session.userId = user.id;
-    return user;
+    return user; // /main 리다이렉트 필요
   }
 }
