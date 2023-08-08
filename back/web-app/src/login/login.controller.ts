@@ -21,7 +21,7 @@ export class LoginController {
   @Get('oauth/42/redirect')
   @UseGuards(FortyTwoAuthGuard)
   async ftAuthRedirect(
-    @Req() req: any,
+    @Req() req: any, // 유효성 검사 해야 하나?
     @Session() session: Record<string, any>,
     ): Promise<User> {
     const reqUser: any = req.user;
@@ -49,6 +49,6 @@ export class LoginController {
       // 2FA
     }
     session.userId = user.id;
-    return user; // /main 리다이렉트 필요
+    return user; // Need to redirecte 200, /main
   }
 }
