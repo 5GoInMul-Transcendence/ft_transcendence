@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, Session, UseGuards } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { FortyTwoAuthGuard } from './ft-auth.guard';
 import { UserService } from 'src/user/user.service';
@@ -19,23 +19,29 @@ export class LoginController {
 
   @Get('redirect')
   @UseGuards(FortyTwoAuthGuard)
-  async ftAuthRedirect(@Req() req: any): Promise<User> {
+  async ftAuthRedirect(
+    @Req() req: any,
+    @Session() session: Record<string, any>): Promise<User> {
     const reqUser: any = req.user;
     let user: User;
 
-    // user = this.memoryOauthUser.findOneBy({reqUser.id})
+    console.log('session', session);
+
+    // get user from memoryUser
+
     if (1) { // if (!user) {
       // add memoryUser
-      user = await this.userService.createUser(reqUser);
-      this.userService.createSignupOauth(Builder(CreateSignupOauthDto)
-      .id(reqUser.id)
-      .user(user)
-      .build()); 
+
+      // user = await this.userService.createUser(reqUser);
+      // this.userService.createSignupOauth(Builder(CreateSignupOauthDto)
+      // .id(reqUser.id)
+      // .user(user)
+      // .build()); 
     }
   
-    if (this.loginService.isTwoFaOn(user.twoFactor) == true) {
+    // if (this.loginService.isTwoFaOn(user.twoFactor) == true) {
 
-    }
+    // }
     // session 생성
     return user;
   }
