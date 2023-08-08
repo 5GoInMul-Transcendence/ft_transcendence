@@ -5,6 +5,7 @@ import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/user.entity';
 import { CreateSignupOauthDto } from 'src/user/dto/create-signup-oauth.dto';
 import { Builder } from 'builder-pattern';
+import { SignupOauth } from 'src/user/signup-oauth.entity';
 
 @Controller('login')
 export class LoginController {
@@ -14,35 +15,40 @@ export class LoginController {
   ) {}
 
   @Get()
-  @UseGuards(FortyTwoAuthGuard) // Guards 의 역할은?
-  ftAuth(@Req() req: any) {} // async 일 필요 있나?
+  @UseGuards(FortyTwoAuthGuard)
+  ftAuth(@Req() req: any) {}
 
   @Get('redirect')
   @UseGuards(FortyTwoAuthGuard)
   async ftAuthRedirect(
     @Req() req: any,
-    @Session() session: Record<string, any>): Promise<User> {
+    @Session() session: Record<string, any>,
+    ): Promise<User> {
     const reqUser: any = req.user;
     let user: User;
+    let oauthUser: SignupOauth;
 
-    console.log('session', session);
+    // get user from memoryOauthUser
+    oauthUser = await this.userService.getOauthUserByProfileId(reqUser.id);
+    user = oauthUser.user;
 
-    // get user from memoryUser
-
-    if (1) { // if (!user) {
+    if (!user) {
       // add memoryUser
-
-      // user = await this.userService.createUser(reqUser);
-      // this.userService.createSignupOauth(Builder(CreateSignupOauthDto)
-      // .id(reqUser.id)
-      // .user(user)
-      // .build()); 
+      // add memoryOauthUser
+      user = await this.userService.createUser(reqUser);
+      this.userService.createSignupOauth(Builder(CreateSignupOauthDto)
+      .user(user)
+      .profileId(reqUser.id)
+      .build()); 
+    }
+    else {
+      // 다른 브라우저에서 접근했을 때 이전 세션을 만료 시키고, 현재 요청의 세션으로 업데이트?
     }
   
-    // if (this.loginService.isTwoFaOn(user.twoFactor) == true) {
-
-    // }
-    // session 생성
+    if (this.loginService.isTwoFaOn(user.twoFactor) == true) {
+      // 2FA
+    }
+    session.userId = user.id;
     return user;
   }
 }

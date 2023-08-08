@@ -16,6 +16,17 @@ export class UserService {
     private signupOauthRepository: Repository<SignupOauth>
   ) {}
 
+  async getOauthUserByProfileId(id: number): Promise<SignupOauth> {
+    return await this.signupOauthRepository.findOne({
+      where: {
+        profile_id: id
+      },
+      relations: {
+        user: true // 기본값은 false
+      },
+    });
+  }
+
   // async getUserById(id: number): Promise<User> {
   //   return await this.userRepository.findOneBy({id});
   // }
@@ -25,11 +36,11 @@ export class UserService {
   // }
 
   async createSignupOauth(createSignupOauthDto: CreateSignupOauthDto): Promise<SignupOauth> {
-    const { id, user } = createSignupOauthDto;
+    const { user, profileId } = createSignupOauthDto;
     const createdUser = this.signupOauthRepository.create({
-      id,
       user,
-    });
+      profile_id: profileId,
+    }); // 실제 entity와 column 값이 같아야 한다.
 
     return await this.signupOauthRepository.save(createdUser);
   }

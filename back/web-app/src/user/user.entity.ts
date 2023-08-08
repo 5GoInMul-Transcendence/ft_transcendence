@@ -14,13 +14,15 @@ export class User {
 
   @Column('varchar', { 
     length: 320,
-    default: null
+    nullable: true, // 기본값은 false
+    default: null,
   })
   mail: string;
 
   @Column('varchar', {
     length: 11,
-    default: null
+    nullable: true,
+    default: null,
   })
   phone: string;
   
