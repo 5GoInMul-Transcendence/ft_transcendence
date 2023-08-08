@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user';
+import { CreateUserDto } from './dto/create-user.dto';
 import { randomUUID } from 'crypto';
-import { CreateSignupOauthDto } from './dto/create-signup-oauth';
+import { CreateSignupOauthDto } from './dto/create-signup-oauth.dto';
 import { SignupOauth } from './signup-oauth.entity';
 
 @Injectable()

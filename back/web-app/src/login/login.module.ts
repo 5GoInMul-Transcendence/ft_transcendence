@@ -6,7 +6,8 @@ import { FtStrategy } from './ft.strategy';
 import { UserModule } from 'src/user/user.module';
 
 @Module({
-  imports: [ConfigModule,
+  imports: [
+    ConfigModule,
     UserModule,
   ],
   controllers: [LoginController],
