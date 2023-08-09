@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Req, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -7,13 +7,13 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    console.log('I am app controller');
     return this.appService.getHello();
   }
 
   // test
   @Get('main') 
-  getMain(): string {
+  getMain(@Req() req: any): string {
+    req.session.cookie.expires = new Date(Date.now() + 20000);
     return 'Main';
   }
 }

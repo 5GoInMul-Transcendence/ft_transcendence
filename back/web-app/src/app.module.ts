@@ -10,7 +10,7 @@ import { SignupModule } from './signup/signup.module';
 import * as session from 'express-session';
 import { AuthMiddleware } from './session/auth.middleware';
 import { SessionModule } from './session/session.module';
-import { SessionMiddleware } from './session/session.middleware';
+// import { SessionMiddleware } from './session/session.middleware';
 
 
 @Module({
@@ -32,20 +32,24 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(
-        // session(sessionOPtions),
-        // session({
-        //   secret: this.configService.get<string>('SESSION_SECRET'), // 없으면 암호화 안 되나?
-        //   resave: false,
-        //   saveUninitialized: false,
-        // }),
-        SessionMiddleware,
+        session({
+          secret: this.configService.get<string>('SESSION_SECRET'), // 없으면 암호화 안 되나?
+          resave: true,
+          saveUninitialized: false,
+          cookie: {
+            httpOnly: true,
+            // expires: new Date(Date.now() + 10000),
+            // maxAge: 10000,
+          },
+        }),
+        // SessionMiddleware,
       )
       .forRoutes('*'); // 모든 라우트에 세션 미들웨어를 적용
     consumer
       .apply(
         AuthMiddleware,
       )
-      .exclude('login/(.*)', 'signup/(.*)')
+      .exclude('login/(.*)', 'signup/(.*)', '/') //test '/'
       .forRoutes('*');
   }
 }

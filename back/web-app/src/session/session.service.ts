@@ -19,7 +19,7 @@ export class SessionService {
 
     session.userId = userId;
     //test
-    console.log('session service', session?.id);
+    console.log('SessionService session service', session?.id);
     this.sessions.set(userId, sessionId);
   }
 }

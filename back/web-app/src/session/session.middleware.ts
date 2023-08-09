@@ -1,7 +1,7 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import * as session from 'express-session';
-import { Request, Response, NextFunction } from 'express';
-import { ConfigService } from '@nestjs/config';
+// import { Injectable, NestMiddleware } from '@nestjs/common';
+// import * as session from 'express-session';
+// import { Request, Response, NextFunction } from 'express';
+// import { ConfigService } from '@nestjs/config';
 
 // export const sessionOPtions: any = {
 //   inject: [ConfigService],
@@ -15,15 +15,22 @@ import { ConfigService } from '@nestjs/config';
 //   }
 // }
 
-@Injectable()
-export class SessionMiddleware implements NestMiddleware {
-  constructor(private configService: ConfigService) {}
+// @Injectable()
+// export class SessionMiddleware implements NestMiddleware {
+//   private sessionMid;
+//   constructor(private configService: ConfigService) {
+//   this.sessionMid = session({
+//       secret: configService.get<string>('SESSION_SECRET'),
+//       resave: false,
+//       saveUninitialized: false,
+//       // cookie: {
+//       //   httpOnly: true,
+//       //   expires: new Date(Date.now() + 10000), // 세션 만료
+//       // },
+//     });
+//   }
 
-  use(req: Request, res: Response, next: NextFunction) {
-    session({
-      secret: this.configService.get<string>('SESSION_SECRET'),
-      resave: false,
-      saveUninitialized: false,
-    })(req, res, next);
-  }
-}
+//   use(req: Request, res: Response, next: NextFunction) {
+//     this.sessionMid(req, res, next);
+//   }
+// }
