@@ -37,11 +37,7 @@ export class LoginController {
 
     // get user from memoryOauthUser
     oauthUser = await this.userService.getOauthUserByProfileId(reqUser.id);
-    user = oauthUser.user;
-
-    //test
-    console.log('profile id', req.user.id);
-
+    user = oauthUser?.user; // 유저가 없었다면 oauthUser 는 null 이다.
     if (!user) {
       // add memoryUser
       // add memoryOauthUser
