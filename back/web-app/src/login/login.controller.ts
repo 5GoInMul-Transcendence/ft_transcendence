@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Req, Session, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Req, Session, UseGuards } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { FortyTwoAuthGuard } from './ft-auth.guard';
 import { UserService } from 'src/user/user.service';
@@ -27,6 +27,7 @@ export class LoginController {
 
   @Get('oauth/42/redirect') // 302 redirect
   @UseGuards(FortyTwoAuthGuard)
+  @HttpCode(HttpStatus.FOUND)
   async ftAuthRedirect(
     @Req() req: any, // 유효성 검사 해야 하나?
     @Session() session: Record<string, any>,
