@@ -7,6 +7,13 @@ export class AppController {
 
   @Get()
   getHello(): string {
+    console.log('I am app controller');
     return this.appService.getHello();
+  }
+
+  // test
+  @Get('main') 
+  getMain(): string {
+    return 'Main';
   }
 }

@@ -6,7 +6,11 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './configs/typeorm.config';
 import { UserModule } from './user/user.module';
+import { SignupModule } from './signup/signup.module';
 import * as session from 'express-session';
+import { AuthMiddleware } from './session/auth.middleware';
+import { SessionModule } from './session/session.module';
+import { SessionMiddleware } from './session/session.middleware';
 
 
 @Module({
@@ -16,6 +20,8 @@ import * as session from 'express-session';
     }),
     TypeOrmModule.forRoot(typeOrmConfig),
     UserModule,
+    SignupModule,
+    SessionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -26,12 +32,19 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(
-        session({
-          secret: this.configService.get<string>('SESSION_SECRET'),
-          resave: false,
-          saveUninitialized: false,
-        }),
+        SessionMiddleware,
+        // session({
+        //   secret: this.configService.get<string>('SESSION_SECRET'), // 없으면 암호화 안 되나?
+        //   resave: false,
+        //   saveUninitialized: false,
+        // }),
       )
       .forRoutes('*'); // 모든 라우트에 세션 미들웨어를 적용
+    consumer
+      .apply(
+        AuthMiddleware,
+      )
+      .exclude('login/(.*)', 'signup/(.*)')
+      .forRoutes('*');
   }
 }

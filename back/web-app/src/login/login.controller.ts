@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Session, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Req, Session, UseGuards } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { FortyTwoAuthGuard } from './ft-auth.guard';
 import { UserService } from 'src/user/user.service';
@@ -6,19 +6,26 @@ import { User } from 'src/user/user.entity';
 import { CreateSignupOauthDto } from 'src/user/dto/create-signup-oauth.dto';
 import { Builder } from 'builder-pattern';
 import { SignupOauth } from 'src/user/signup-oauth.entity';
+import { SessionService } from 'src/session/session.service';
 
 @Controller('login')
 export class LoginController {
   constructor(
     private loginService: LoginService,
     private userService: UserService,
+    private sessionService: SessionService,
   ) {}
+
+  // @Get()
+  // loginMemer(@Body()) {
+
+  // }
 
   @Get('oauth/42')
   @UseGuards(FortyTwoAuthGuard)
   ftAuth(@Req() req: any) {}
 
-  @Get('oauth/42/redirect')
+  @Get('oauth/42/redirect') // 302 redirect
   @UseGuards(FortyTwoAuthGuard)
   async ftAuthRedirect(
     @Req() req: any, // 유효성 검사 해야 하나?
@@ -32,23 +39,24 @@ export class LoginController {
     oauthUser = await this.userService.getOauthUserByProfileId(reqUser.id);
     user = oauthUser.user;
 
+    //test
+    console.log('profile id', req.user.id);
+
     if (!user) {
       // add memoryUser
       // add memoryOauthUser
-      user = await this.userService.createUser(reqUser);
+      user = await this.userService.createUser(reqUser.mail);
       this.userService.createSignupOauth(Builder(CreateSignupOauthDto)
       .user(user)
       .profileId(reqUser.id)
       .build()); 
     }
-    else {
-      // 다른 브라우저에서 접근했을 때 이전 세션을 만료 시키고, 현재 요청의 세션으로 업데이트?
-    }
   
     if (this.loginService.isTwoFaOn(user.twoFactor) == true) {
       // 2FA
+      // 세션만 생성하고, userId 는 넣어주면 안 됨
     }
-    session.userId = user.id;
+    this.sessionService.setSession(session, user.id);
     return user; // Need to redirecte 200, /main
   }
 }
