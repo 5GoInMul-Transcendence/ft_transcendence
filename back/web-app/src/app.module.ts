@@ -32,12 +32,13 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(
-        SessionMiddleware,
+        // session(sessionOPtions),
         // session({
         //   secret: this.configService.get<string>('SESSION_SECRET'), // 없으면 암호화 안 되나?
         //   resave: false,
         //   saveUninitialized: false,
         // }),
+        SessionMiddleware,
       )
       .forRoutes('*'); // 모든 라우트에 세션 미들웨어를 적용
     consumer
