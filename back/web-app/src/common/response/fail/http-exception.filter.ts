@@ -12,11 +12,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const message: string = exception.message;
 
     console.log('Exception filter\nSend Response\n');
-    console.log(host);
     if (status == HttpStatus.FOUND) {
-      console.log( response
-        .status(200)
-        .json(ApiResponseForm.redirect(message)));
+      return (
+        response
+          .status(200)
+          .json(ApiResponseForm.redirect(message))
+      );
     }
 
     response
