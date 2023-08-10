@@ -1,8 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { Builder } from 'builder-pattern';
-import { CreateSignupMemberDto } from 'src/user/dto/create-signup-member.dto';
-import { SignupMember } from 'src/user/signup-member.entity';
+import { CreateMemberUserDto } from 'src/user/dto/create-member-user.dto';
+import { MemberUser } from 'src/user/member-user.entity';
 import { User } from 'src/user/user.entity';
 
 @Controller('signup')
@@ -10,9 +10,9 @@ export class SignupController {
   constructor(private userService: UserService) {}
 
   @Post()
-  async signupMember(@Body() createSignupMemberDto: CreateSignupMemberDto) { // dto pipe 검사
-    // user = getMemberUserByIdInMemor(createSignupMemberDto) .  user 에 entity 만들기
-    const { id, password, user } = createSignupMemberDto;
+  async signupMember(@Body() createMemberUserDto: CreateMemberUserDto) { // dto pipe 검사
+    // user = getMemberUserByIdInMemor(createMemberUserDto) .  user 에 entity 만들기
+    const { id, password, user } = createMemberUserDto;
     const memberUser = await this.userService.getMemberUserById(id);
     let savedUser: User;
     // User 테이블에 저장 후 리턴 받을 변수
@@ -24,9 +24,8 @@ export class SignupController {
     // nickname, avatar 랜덤생성
     // 비밀번호 해시화 후 저장
 
-    // 왜 SignupMember 타입 변수는 안 되고, Promise<SignupMember> 티입 변수로만 반환 받아야 하나
     this.userService.createSignupMember(Builder
-      (CreateSignupMemberDto)
+      (CreateMemberUserDto)
       .id(id) // change
       .password(password)
       .user(user)

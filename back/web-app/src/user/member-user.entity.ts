@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
 import { User } from "./user.entity";
 
-@Entity('signup_member')
-export class SignupMember {
+@Entity('member_user')
+export class MemberUser {
   @PrimaryColumn('varchar', { length: 12 })
   id: string;
 

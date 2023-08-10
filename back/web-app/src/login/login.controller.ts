@@ -1,12 +1,12 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Req, Session, UseGuards } from '@nestjs/common';
-import { LoginService } from './login.service';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Session, UseGuards } from '@nestjs/common';
+import { LoginService, RedirectResource } from './login.service';
 import { FortyTwoAuthGuard } from './ft-auth.guard';
 import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/user.entity';
-import { CreateSignupOauthDto } from 'src/user/dto/create-signup-oauth.dto';
 import { Builder } from 'builder-pattern';
-import { SignupOauth } from 'src/user/signup-oauth.entity';
+import { OauthUser } from 'src/user/oauth-user.entity';
 import { SessionService } from 'src/session/session.service';
+import { CreateOauthUserDto } from 'src/user/dto/create-oauth-user.dto';
 
 @Controller('login')
 export class LoginController {
@@ -16,14 +16,9 @@ export class LoginController {
     private sessionService: SessionService,
   ) {}
 
-  // @Get()
-  // loginMemer(@Body()) {
-
-  // }
-
-  @Get('oauth/42')
+  @Get('oauth/42') // POST 요청으로 변경해야 함
   @UseGuards(FortyTwoAuthGuard)
-  ftAuth(@Req() req: any) {}
+  ftAuth() {}
 
   @Get('oauth/42/redirect') // 302 redirect
   @UseGuards(FortyTwoAuthGuard)
@@ -34,7 +29,7 @@ export class LoginController {
     ): Promise<string> {
     const reqUser: any = req.user;
     let user: User;
-    let oauthUser: SignupOauth;
+    let oauthUser: OauthUser;
 
     // get user from memoryOauthUser
     oauthUser = await this.userService.getOauthUserByProfileId(reqUser.id);
@@ -43,7 +38,7 @@ export class LoginController {
       // add memoryUser
       // add memoryOauthUser
       user = await this.userService.createUser(reqUser.mail);
-      this.userService.createSignupOauth(Builder(CreateSignupOauthDto)
+      this.userService.createSignupOauth(Builder(CreateOauthUserDto)
       .user(user)
       .profileId(reqUser.id)
       .build()); 
@@ -55,6 +50,6 @@ export class LoginController {
     }
     this.sessionService.setSession(session, user.id);
     // return user; // Need to redirecte 200, /main
-    return '/main';
+    return this.loginService.getRedirectResource(RedirectResource.MAIN);
   }
 }

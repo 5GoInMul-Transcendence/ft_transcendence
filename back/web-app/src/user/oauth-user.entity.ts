@@ -2,8 +2,8 @@ import { ServiceProvider } from "src/user/service-provider.enum";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
 
-@Entity('signup_oauth')
-export class SignupOauth {
+@Entity('oauth_user')
+export class OauthUser {
   @PrimaryGeneratedColumn()
   id: number;
 

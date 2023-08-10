@@ -4,23 +4,23 @@ import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { randomUUID } from 'crypto';
-import { CreateSignupOauthDto } from './dto/create-signup-oauth.dto';
-import { SignupOauth } from './signup-oauth.entity';
-import { CreateSignupMemberDto } from './dto/create-signup-member.dto';
-import { SignupMember } from './signup-member.entity';
+import { CreateOauthUserDto } from './dto/create-oauth-user.dto';
+import { OauthUser } from './oauth-user.entity';
+import { CreateMemberUserDto } from './dto/create-member-user.dto';
+import { MemberUser } from './member-user.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    @InjectRepository(SignupOauth)
-    private signupOauthRepository: Repository<SignupOauth>,
-    @InjectRepository(SignupMember)
-    private signupMemberRepository: Repository<SignupMember>,
+    @InjectRepository(OauthUser)
+    private signupOauthRepository: Repository<OauthUser>,
+    @InjectRepository(MemberUser)
+    private signupMemberRepository: Repository<MemberUser>,
   ) {}
 
-  async getOauthUserByProfileId(profileId: number): Promise<SignupOauth> {
+  async getOauthUserByProfileId(profileId: number): Promise<OauthUser> {
     return await this.signupOauthRepository.findOne({
       where: {
         profileId
@@ -31,7 +31,7 @@ export class UserService {
     });
   }
 
-  async getMemberUserById(id: string): Promise<SignupMember> {
+  async getMemberUserById(id: string): Promise<MemberUser> {
     return await this.signupMemberRepository.findOne({
       where: {
         id,
@@ -50,8 +50,8 @@ export class UserService {
 
   // }
 
-  async createSignupOauth(createSignupOauthDto: CreateSignupOauthDto): Promise<SignupOauth> {
-    const { user, profileId } = createSignupOauthDto;
+  async createSignupOauth(createOauthUserDto: CreateOauthUserDto): Promise<OauthUser> {
+    const { user, profileId } = createOauthUserDto;
     const createdUser = this.signupOauthRepository.create({
       user,
       profileId,
@@ -60,8 +60,8 @@ export class UserService {
     return await this.signupOauthRepository.save(createdUser);
   }
 
-  async createSignupMember(createSignupMemberDto: CreateSignupMemberDto): Promise<SignupMember> {
-    const { id, password } = createSignupMemberDto;
+  async createSignupMember(createMemberUserDto: CreateMemberUserDto): Promise<MemberUser> {
+    const { id, password } = createMemberUserDto;
     const createdUser = this.signupMemberRepository.create({
       id,
       password,

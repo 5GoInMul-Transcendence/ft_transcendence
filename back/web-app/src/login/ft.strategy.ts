@@ -13,7 +13,7 @@ export class FtStrategy extends PassportStrategy(Strategy, 'ft') {
       clientSecret: configService.get<string>('FT_SECRET'),
       callbackURL: configService.get<string>('FT_REDIRECT'),
       profileFields: {
-        'id': function (obj) { return String(obj.id); }, // oauth 데이터베이스에 들어갈 id 는 이거다.
+        'id': function (obj) { return String(obj.id); }, // profileId in OauthUser table
         'username': 'login',
         'displayName': 'displayname',
         'name.familyName': 'last_name',
