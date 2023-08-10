@@ -51,6 +51,6 @@ export class LoginController {
     }
     this.sessionService.setSession(session, user.id);
     // return user; // Need to redirecte 200, /main
-    return this.loginService.getRedirectResource(RedirectResource.MAIN);
+    return RedirectResource.MAIN;
   }
 }
