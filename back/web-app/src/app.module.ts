@@ -3,13 +3,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoginModule } from './login/login.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeOrmConfig } from './configs/typeorm.config';
 import { UserModule } from './user/user.module';
 import { SignupModule } from './signup/signup.module';
 import * as session from 'express-session';
 import { AuthMiddleware } from './session/auth.middleware';
 import { SessionModule } from './session/session.module';
+import { DatabaseModule } from './common/database/database.module';
 
 
 @Module({
@@ -17,10 +16,10 @@ import { SessionModule } from './session/session.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot(typeOrmConfig),
     UserModule,
     SignupModule,
     SessionModule,
+    DatabaseModule,
   ],
 
   controllers: [AppController],
