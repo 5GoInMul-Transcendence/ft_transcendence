@@ -1,5 +1,5 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Session, UseGuards } from '@nestjs/common';
-import { LoginService, RedirectResource } from './login.service';
+import { Controller, Get, HttpCode, HttpStatus, Post, Req, Session, UseGuards } from '@nestjs/common';
+import { LoginService } from './login.service';
 import { FortyTwoAuthGuard } from './ft-auth.guard';
 import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/user.entity';
@@ -7,6 +7,7 @@ import { Builder } from 'builder-pattern';
 import { OauthUser } from 'src/user/oauth-user.entity';
 import { SessionService } from 'src/session/session.service';
 import { CreateOauthUserDto } from 'src/user/dto/create-oauth-user.dto';
+import { RedirectResource } from 'src/common/response/redirect-resource.enum';
 
 @Controller('login')
 export class LoginController {

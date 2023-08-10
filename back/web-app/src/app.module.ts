@@ -10,7 +10,6 @@ import { SignupModule } from './signup/signup.module';
 import * as session from 'express-session';
 import { AuthMiddleware } from './session/auth.middleware';
 import { SessionModule } from './session/session.module';
-// import { SessionMiddleware } from './session/session.middleware';
 
 
 @Module({
