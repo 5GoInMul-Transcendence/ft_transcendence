@@ -39,7 +39,7 @@ export class AppModule implements NestModule {
           cookie: {
             httpOnly: true,
             // expires: new Date(Date.now() + 10000),
-            // maxAge: 10000,
+            maxAge: 360000,
           },
         }),
         // SessionMiddleware,

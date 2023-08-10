@@ -13,7 +13,7 @@ export class AppController {
   // test
   @Get('main') 
   getMain(@Req() req: any): string {
-    req.session.cookie.expires = new Date(Date.now() + 20000);
+    // req.session.cookie.expires = new Date(Date.now() + 20000);
     return 'Main';
   }
 }
