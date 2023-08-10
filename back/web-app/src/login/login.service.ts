@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'; 
+import { RedirectResource } from 'src/common/response/redirect-resource.enum';
 import { TwoFactorStatus } from 'src/user/twoFactor-status.enum';
 
 @Injectable()
@@ -8,19 +9,19 @@ export class LoginService {
     return twoFactorStatus != TwoFactorStatus.DISABLED;
   }
 
-  // ftLogin(req: any): {message: string; user: any} {
-  //   const userData: {message: string; user: any;} = {
-  //     message: "",
-  //     user: null,
-  //   }
+  getRedirectResource(num: RedirectResource): string {
+    let resource: string;
 
-  //   if (!req || !req.user) {
-  //     userData.message = 'No user from ft';
-  //   }
-  //   else {
-  //     userData.message = 'User information from ft';
-  //     userData.user = req.user;
-  //   }
-  //   return userData;
-  // }
+    switch (num) {
+      case RedirectResource.MAIN:
+        resource = 'main';
+        break;
+      case RedirectResource.LOGIN:
+        resource = 'login';
+        break;
+      default:
+        resource = 'You give a invalid value!';
+    }
+    return resource;
+  }
 }
