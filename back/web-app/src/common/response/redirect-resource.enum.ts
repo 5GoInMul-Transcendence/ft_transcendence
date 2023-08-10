@@ -1,4 +1,4 @@
 export enum RedirectResource {
-  MAIN,
-  LOGIN,
+  MAIN = '/main',
+  LOGIN = '/login',
 };

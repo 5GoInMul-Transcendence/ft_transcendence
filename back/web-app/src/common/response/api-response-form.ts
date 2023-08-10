@@ -1,7 +1,7 @@
 export class ApiResponseForm {
   static ok(data: any = {}) {
     return {
-      data: data,
+      data,
       resStatus: {
         code : '0000',
         message: '',
@@ -11,7 +11,7 @@ export class ApiResponseForm {
 
   static redirect(data: any = {}) {
     return {
-      data: data,
+      data,
       resStatus: {
         code : '0002',
         message: '',

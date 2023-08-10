@@ -9,15 +9,16 @@ export class LoginService {
     return twoFactorStatus != TwoFactorStatus.DISABLED;
   }
 
+  // 해당 서비스는 로그인에서만 사용할 것이 아니기 때문에 다른 곳으로 옮겨질 예정
   getRedirectResource(num: RedirectResource): string {
     let resource: string;
 
     switch (num) {
       case RedirectResource.MAIN:
-        resource = 'main';
+        resource = RedirectResource.MAIN;
         break;
       case RedirectResource.LOGIN:
-        resource = 'login';
+        resource = RedirectResource.LOGIN;
         break;
       default:
         resource = 'You give a invalid value!';

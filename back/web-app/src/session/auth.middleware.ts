@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
+import { RedirectResource } from 'src/common/response/redirect-resource.enum';
 import { SessionService } from 'src/session/session.service';
 
 @Injectable()
@@ -12,10 +13,10 @@ export class AuthMiddleware implements NestMiddleware {
     //test
     console.log('AuthMiddleware session:', session?.id);
     if (!session?.userId) {
-      throw new HttpException('/login', HttpStatus.FOUND); // status 는 다음에 다시 정하기
+      throw new HttpException(RedirectResource.LOGIN, HttpStatus.FOUND); // status 는 다음에 다시 정하기
     }
     if (this.sessionService.isDifferentSessionId(session.userId, session.id)) {
-      throw new HttpException('/login', HttpStatus.FOUND);
+      throw new HttpException(RedirectResource.LOGIN, HttpStatus.FOUND);
     }
     // 만료된 세션을 다시 부여
     // req.session.cookie.expires = new Date(Date.now() + 20000);
