@@ -31,7 +31,7 @@ export class LoginController {
   async ftAuthRedirect(
     @Req() req: any, // 유효성 검사 해야 하나?
     @Session() session: Record<string, any>,
-    ): Promise<User> {
+    ): Promise<string> {
     const reqUser: any = req.user;
     let user: User;
     let oauthUser: SignupOauth;
@@ -54,6 +54,7 @@ export class LoginController {
       // 세션만 생성하고, userId 는 넣어주면 안 됨
     }
     this.sessionService.setSession(session, user.id);
-    return user; // Need to redirecte 200, /main
+    // return user; // Need to redirecte 200, /main
+    return '/main';
   }
 }

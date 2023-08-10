@@ -30,6 +30,8 @@ export class AppModule implements NestModule {
   constructor(private configService: ConfigService) {}
 
   configure(consumer: MiddlewareConsumer) {
+    // test
+    console.log('Session middleware: Receive request');
     consumer
       .apply(
         session({

@@ -1,12 +1,13 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler, HttpStatus } from '@nestjs/common';
 import { Observable,map } from 'rxjs';
-import { Res } from './response';
+import { ApiResponseForm } from '../api-response-form';
 
 @Injectable()
 export class ResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    console.log('Before...');
-
+    // test
+    console.log('Pre interceptor');
+    console.log('Controller');
     const now = Date.now();
     return next
       .handle()
@@ -15,12 +16,15 @@ export class ResponseInterceptor implements NestInterceptor {
           const response = context.switchToHttp().getResponse();
           const status = context.switchToHttp().getResponse().statusCode;
 
+          // test
+          console.log('Post interceptor\nSend Response\n');
+
           if (status == HttpStatus.FOUND) {
             response.status(HttpStatus.OK);
-            return Res.redirect(data);
+            return ApiResponseForm.redirect(data);
           }
 
-          return Res.ok(data);
+          return ApiResponseForm.ok(data);
         }),
       );
   }

@@ -11,7 +11,7 @@ export class AuthMiddleware implements NestMiddleware {
     const session: any = req.session;
 
     //test
-    console.log('AuthMiddleware session', session?.id);
+    console.log('AuthMiddleware session:', session?.id);
     if (!session?.userId) {
       throw new HttpException('/login', HttpStatus.FOUND); // status 는 다음에 다시 정하기
     }

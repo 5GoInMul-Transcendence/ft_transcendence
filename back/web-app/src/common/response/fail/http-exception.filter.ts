@@ -1,6 +1,6 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { Res } from '../response/response';
+import { ApiResponseForm } from '../api-response-form';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -11,21 +11,21 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
     const message: string = exception.message;
 
-    // 세션 만료 로그인으로 리다이렉트 0002
-    // 인증코드가 틀렸을 때 0001
+    console.log('Exception filter\nSend Response\n');
+    console.log(host);
     if (status == HttpStatus.FOUND) {
-      return response
+      console.log( response
         .status(200)
-        .json(Res.redirect(message));
+        .json(ApiResponseForm.redirect(message)));
     }
 
     response
-      .status(status)
-      .json({
-        statusCode: status,
-        message,
+      .json(ApiResponseForm.bad(message));
+
+      /**
+        // This is default codes in json method
         timestamp: new Date().toISOString(),
         path: request.url,
-      });
+       */
   }
 }
