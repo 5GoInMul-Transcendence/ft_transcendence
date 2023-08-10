@@ -3,15 +3,10 @@ import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { SignupOauth } from './signup-oauth.entity';
-import { SignupMember } from './signup-member.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      User,
-      SignupOauth,
-      SignupMember,
-    ]),
+    TypeOrmModule.forFeature([User, SignupOauth]),
   ],
   providers: [UserService],
   exports: [UserService],

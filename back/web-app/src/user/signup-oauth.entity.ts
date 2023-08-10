@@ -1,4 +1,4 @@
-import { ServiceProvider } from "src/user/service-provider.enum";
+import { ServiceProvider } from "src/service-provider.enum";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
 
@@ -18,6 +18,6 @@ export class SignupOauth {
   })
   service_provider: ServiceProvider;
 
-  @Column( {name: 'profile_id'} )
-  profileId: number; // oauth 로부터 받는 id
+  @Column()
+  profile_id: number; // oauth 로부터 받는 id
 };
