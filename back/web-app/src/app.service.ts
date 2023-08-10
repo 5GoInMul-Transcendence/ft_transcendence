@@ -7,6 +7,6 @@ export class AppService {
   }
 
   returnMainContents(): string {
-    return 'This is main page!';
+    return 'This is a main page!';
   }
 }

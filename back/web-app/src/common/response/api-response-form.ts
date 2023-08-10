@@ -21,10 +21,10 @@ export class ApiResponseForm {
 
   static bad(message: string = '', data: any = {}) {
     return {
-      data: data,
+      data,
       resStatus: {
         code : '0001',
-        message: message,
+        message,
       },
     }
   }
