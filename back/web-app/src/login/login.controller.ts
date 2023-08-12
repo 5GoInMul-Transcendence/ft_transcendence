@@ -2,9 +2,9 @@ import { Controller, Get, HttpCode, HttpStatus, Post, Req, Session, UseGuards } 
 import { LoginService } from './login.service';
 import { FortyTwoAuthGuard } from './ft-auth.guard';
 import { UserService } from 'src/users/user.service';
-import { User } from 'src/users/user.entity';
+import { User } from 'src/users/entities/user.entity';
 import { Builder } from 'builder-pattern';
-import { OauthUser } from 'src/users/oauth-user.entity';
+import { OauthUser } from 'src/users/entities/oauth-user.entity';
 import { SessionService } from 'src/session/session.service';
 import { CreateOauthUserDto } from 'src/users/dto/create-oauth-user.dto';
 import { RedirectResource } from 'src/common/response/redirect-resource.enum';

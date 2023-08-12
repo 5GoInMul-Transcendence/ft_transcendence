@@ -2,8 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from 'src/users/user.service';
 import { Builder } from 'builder-pattern';
 import { CreateMemberUserDto } from 'src/users/dto/create-member-user.dto';
-import { MemberUser } from 'src/users/member-user.entity';
-import { User } from 'src/users/user.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Controller('signup')
 export class SignupController {

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { randomUUID } from 'crypto';
 import { CreateOauthUserDto } from './dto/create-oauth-user.dto';
-import { OauthUser } from './oauth-user.entity';
+import { OauthUser } from './entities/oauth-user.entity';
 import { CreateMemberUserDto } from './dto/create-member-user.dto';
-import { MemberUser } from './member-user.entity';
+import { MemberUser } from './entities/member-user.entity';
 
 @Injectable()
 export class UserService {
