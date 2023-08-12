@@ -1,7 +1,7 @@
 import { Controller, Get, HttpCode, HttpStatus, Post, Req, Session, UseGuards } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { FortyTwoAuthGuard } from './ft-auth.guard';
-import { UserService } from 'src/users/user.service';
+import { UserService } from 'src/users/user/user.service';
 import { User } from 'src/users/entities/user.entity';
 import { Builder } from 'builder-pattern';
 import { OauthUser } from 'src/users/entities/oauth-user.entity';
