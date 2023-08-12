@@ -81,12 +81,12 @@ export class UserService {
   }
   // async createUser(createUserDto: CreateUserDto): Promise<User> {
   //   const { mail } = createUserDto;
-  //   const user = this.userRepository.create({
+  //   const users = this.userRepository.create({
   //     nickname: randomUUID(),
   //     avatar: 'avatar', // 이미지가 저장된 url 의 id 값만 넣는다.
   //     mail, // 42 로 회원가입 할 때만 null 이 아니다.
   //   });
 
-  //   return await this.userRepository.save(user);
+  //   return await this.userRepository.save(users);
   // }
 }

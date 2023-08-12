@@ -1,9 +1,9 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/users/user.service';
 import { Builder } from 'builder-pattern';
-import { CreateMemberUserDto } from 'src/user/dto/create-member-user.dto';
-import { MemberUser } from 'src/user/member-user.entity';
-import { User } from 'src/user/user.entity';
+import { CreateMemberUserDto } from 'src/users/dto/create-member-user.dto';
+import { MemberUser } from 'src/users/member-user.entity';
+import { User } from 'src/users/user.entity';
 
 @Controller('signup')
 export class SignupController {
@@ -11,7 +11,7 @@ export class SignupController {
 
   @Post()
   async signupMember(@Body() createMemberUserDto: CreateMemberUserDto) { // dto pipe 검사
-    // user = getMemberUserByIdInMemor(createMemberUserDto) .  user 에 entity 만들기
+    // users = getMemberUserByIdInMemor(createMemberUserDto) .  users 에 entity 만들기
     const { id, password, user } = createMemberUserDto;
     const memberUser = await this.userService.getMemberUserById(id);
     let savedUser: User;
@@ -19,7 +19,7 @@ export class SignupController {
 
     if (memberUser) {
       // throw 이미 있는 경우 예외
-      return 'Member user 가 이미 존재합니다!';
+      return 'Member users 가 이미 존재합니다!';
     }
     // nickname, avatar 랜덤생성
     // 비밀번호 해시화 후 저장

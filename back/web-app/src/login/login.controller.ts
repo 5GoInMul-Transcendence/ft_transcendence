@@ -1,12 +1,12 @@
 import { Controller, Get, HttpCode, HttpStatus, Post, Req, Session, UseGuards } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { FortyTwoAuthGuard } from './ft-auth.guard';
-import { UserService } from 'src/user/user.service';
-import { User } from 'src/user/user.entity';
+import { UserService } from 'src/users/user.service';
+import { User } from 'src/users/user.entity';
 import { Builder } from 'builder-pattern';
-import { OauthUser } from 'src/user/oauth-user.entity';
+import { OauthUser } from 'src/users/oauth-user.entity';
 import { SessionService } from 'src/session/session.service';
-import { CreateOauthUserDto } from 'src/user/dto/create-oauth-user.dto';
+import { CreateOauthUserDto } from 'src/users/dto/create-oauth-user.dto';
 import { RedirectResource } from 'src/common/response/redirect-resource.enum';
 
 @Controller('login')
@@ -32,7 +32,7 @@ export class LoginController {
     let user: User;
     let oauthUser: OauthUser;
 
-    // get user from memoryOauthUser
+    // get users from memoryOauthUser
     oauthUser = await this.userService.getOauthUserByProfileId(reqUser.id);
     user = oauthUser?.user; // 유저가 없었다면 oauthUser 는 null 이다.
     if (!user) {
@@ -50,7 +50,7 @@ export class LoginController {
       // 세션만 생성하고, userId 는 넣어주면 안 됨
     }
     this.sessionService.setSession(session, user.id);
-    // return user; // Need to redirecte 200, /main
+    // return users; // Need to redirecte 200, /main
     return RedirectResource.MAIN;
   }
 }

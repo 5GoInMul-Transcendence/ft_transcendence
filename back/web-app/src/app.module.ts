@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { LoginModule } from './login/login.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserModule } from './user/user.module';
+import { UserModule } from './users/user.module';
 import { SignupModule } from './signup/signup.module';
 import * as session from 'express-session';
 import { AuthMiddleware } from './session/auth.middleware';
