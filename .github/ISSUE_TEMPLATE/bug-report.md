@@ -14,6 +14,7 @@ assignees: ''
 - [ ] 이슈 책임자(Assignees)를 추가했나요?
 - [ ] Labels에는 해당 이슈의 성향을 잘 나타내나요?
 - [ ] Labels에는 자신의 파트(front-end 또는 back-end)를 잘 나타내나요?
+- [ ] 해당 Issue가 파트(front-end 또는 back-end)에 종속된다면 Labels에 파트를 표시했나요?
 
 # Description
 - 
