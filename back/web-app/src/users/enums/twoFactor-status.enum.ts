@@ -1,5 +1,5 @@
 export enum TwoFactorStatus {
-  DISABLED = 0,
-  MAIL,
-  PHONE
-};
+  DISABLED = 'disabled',
+  MAIL = 'mail',
+  PHONE = 'phone',
+}
