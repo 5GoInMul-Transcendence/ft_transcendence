@@ -10,7 +10,7 @@ import { plainToClass } from 'class-transformer';
 import { UserStatus } from '../enums/user-status.enum';
 
 @Injectable()
-export class MemoryUsers
+export class MemoryUserProvider
   extends Map<number, MemoryUser>
   implements OnModuleInit
 {
@@ -50,13 +50,13 @@ export class MemoryUsers
       blocks.map((block) => [block.userId, new Set(block.blocks)]),
     );
 
-    const memoryUserEntries = users.map((user) => {
+    const memoryUserEntries: [number, MemoryUser][] = users.map((user) => {
       const memoryUser = plainToClass(MemoryUser, user);
       memoryUser.status = UserStatus.OFFLIEN;
       memoryUser.followers = userFriends.get(user.id);
       memoryUser.friends = userFollowers.get(user.id);
       memoryUser.blocks = userBlocks.get(user.id);
-      return [user.id, memoryUser] as [number, MemoryUser];
+      return [user.id, memoryUser];
     });
 
     for (const [id, memoryUser] of memoryUserEntries) {

@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { FindUserDto } from './dto/find-user.dto';
-import { MemoryUsers } from './memory-user-provider';
+ import { MemoryUserProvider } from './memory-user.provider';
 import { MemoryUser } from './memory-user';
 import { FindUserByNicknameDto } from './dto/find-user-by-nickname.dto';
 import { UserStatus } from '../enums/user-status.enum';
@@ -14,11 +14,7 @@ import { Builder } from 'builder-pattern';
 import _ from 'lodash';
 @Injectable()
 export class MemoryUserService {
-  private memoryUsers: MemoryUsers;
-
-  constructor(memoryUsers: MemoryUsers) {
-    this.memoryUsers = memoryUsers;
-  }
+  constructor(private memoryUsers: MemoryUserProvider) {}
 
   findUser(dto: FindUserDto): MemoryUser {
     const user = this.memoryUsers.get(dto.userId);
@@ -55,7 +51,7 @@ export class MemoryUserService {
     this.memoryUsers.set(user.id, user);
   }
 
-  updateUser(dto: Partial<UpdateMemoryUserDto> & { userId: number }) {
+  updateUser(dto: UpdateMemoryUserDto) {
     const user = this.memoryUsers.get(dto.userId);
 
     if (user) {
