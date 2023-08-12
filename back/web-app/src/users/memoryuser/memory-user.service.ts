@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { FindUserDto } from './dto/find-user.dto';
- import { MemoryUserProvider } from './memory-user.provider';
+import { MemoryUserProvider } from './memory-user.provider';
 import { MemoryUser } from './memory-user';
 import { FindUserByNicknameDto } from './dto/find-user-by-nickname.dto';
 import { UserStatus } from '../enums/user-status.enum';
@@ -51,7 +51,7 @@ export class MemoryUserService {
     this.memoryUsers.set(user.id, user);
   }
 
-  updateUser(dto: UpdateMemoryUserDto) {
+  updateUser(dto: Partial<UpdateMemoryUserDto> & { userId: number }) {
     const user = this.memoryUsers.get(dto.userId);
 
     if (user) {
