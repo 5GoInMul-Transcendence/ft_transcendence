@@ -43,7 +43,7 @@ export class MemoryUserService {
       .mail(dto.mail)
       .phone(dto.phone)
       .twoFactor(dto.twoFactor)
-      .status(UserStatus.OFFLIEN)
+      .status(UserStatus.OFFLINE)
       .friends(new Set<number>())
       .followers(new Set<number>())
       .blocks(new Set<number>())

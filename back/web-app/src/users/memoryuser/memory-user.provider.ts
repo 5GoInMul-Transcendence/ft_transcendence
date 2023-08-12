@@ -52,7 +52,7 @@ export class MemoryUserProvider
 
     const memoryUserEntries: [number, MemoryUser][] = users.map((user) => {
       const memoryUser = plainToClass(MemoryUser, user);
-      memoryUser.status = UserStatus.OFFLIEN;
+      memoryUser.status = UserStatus.OFFLINE;
       memoryUser.followers = userFriends.get(user.id);
       memoryUser.friends = userFollowers.get(user.id);
       memoryUser.blocks = userBlocks.get(user.id);
