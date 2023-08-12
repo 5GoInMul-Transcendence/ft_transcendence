@@ -1,8 +1,8 @@
 ---
-name: Implementation report
-about: 구현 및 설계를 위해 작성하는 템플릿
-title: "[Feat] "
-labels: enhancement
+name: Chore report
+about: Update packages(include managers), build files, templates or position of files
+title: "[Chore] "
+labels: chore
 assignees: ''
 
 ---
@@ -14,7 +14,9 @@ assignees: ''
 - [ ] 이슈 책임자(Assignees)를 추가했나요?
 - [ ] Labels에는 해당 이슈의 성향을 잘 나타내나요?
 - [ ] Labels에는 자신의 파트(front-end 또는 back-end)를 잘 나타내나요?
+
 # Description
 - 
+
 # To do
 - [ ] 
