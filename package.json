@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@nestjs-modules/mailer": "^1.9.1",
+    "ejs": "^3.1.9",
+    "nodemailer": "^6.9.4"
+  }
+}
