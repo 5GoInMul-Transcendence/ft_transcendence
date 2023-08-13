@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { User } from '../entities/user.entity';
 import { Repository } from 'typeorm';
 import { randomUUID } from 'crypto';
-import { CreateOauthUserDto } from './dto/create-oauth-user.dto';
-import { OauthUser } from './oauth-user.entity';
-import { CreateMemberUserDto } from './dto/create-member-user.dto';
-import { MemberUser } from './member-user.entity';
+import { CreateOauthUserDto } from '../dto/create-oauth-user.dto';
+import { OauthUser } from '../entities/oauth-user.entity';
+import { CreateMemberUserDto } from '../dto/create-member-user.dto';
+import { MemberUser } from '../entities/member-user.entity';
 
 @Injectable()
 export class UserService {
@@ -81,12 +81,12 @@ export class UserService {
   }
   // async createUser(createUserDto: CreateUserDto): Promise<User> {
   //   const { mail } = createUserDto;
-  //   const user = this.userRepository.create({
+  //   const users = this.userRepository.create({
   //     nickname: randomUUID(),
   //     avatar: 'avatar', // 이미지가 저장된 url 의 id 값만 넣는다.
   //     mail, // 42 로 회원가입 할 때만 null 이 아니다.
   //   });
 
-  //   return await this.userRepository.save(user);
+  //   return await this.userRepository.save(users);
   // }
 }

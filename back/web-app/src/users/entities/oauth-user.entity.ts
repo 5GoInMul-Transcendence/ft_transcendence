@@ -1,4 +1,4 @@
-import { ServiceProvider } from "src/user/service-provider.enum";
+import { ServiceProvider } from "src/users/enums/service-provider.enum";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./user.entity";
 
