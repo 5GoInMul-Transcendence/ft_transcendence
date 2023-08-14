@@ -35,6 +35,7 @@ export class AppModule implements NestModule {
       .apply(
         session({
           secret: this.configService.get<string>('SESSION_SECRET'), // 없으면 암호화 안 되나?
+          name: 'sessionid',
           resave: true,
           saveUninitialized: false,
           cookie: {
@@ -50,7 +51,7 @@ export class AppModule implements NestModule {
       .apply(
         AuthMiddleware,
       )
-      .exclude('login/(.*)', 'signup/(.*)', '/') //test '/'
+      .exclude('login(.*)', 'signup(.*)', '/') //test '/'
       .forRoutes('*');
   }
 }
