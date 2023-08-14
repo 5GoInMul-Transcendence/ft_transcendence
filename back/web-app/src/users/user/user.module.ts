@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '../entities/user.entity';
-import { OauthUser } from '../entities/oauth-user.entity';
-import { MemberUser } from '../entities/member-user.entity';
+import { User } from './entities/user.entity';
+import { OauthUser } from './entities/oauth-user.entity';
+import { MemberUser } from './entities/member-user.entity';
 import { MeController } from '../me/me.controller';
 import { MemoryUserService } from '../memoryuser/memory-user.service';
 import { MemoryUserProvider } from '../memoryuser/memory-user.provider';

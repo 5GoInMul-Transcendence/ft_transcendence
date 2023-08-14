@@ -1,8 +1,8 @@
 ---
-name: Docs report
-about: 구현과 버그가 아닌 기록을 위한 템플릿
-title: "[Docs] "
-labels: documentation
+name: Refactor report
+about: 리팩토링 시 작성하는 템플릿
+title: "[Refactor] "
+labels: refactor
 assignees: ''
 
 ---
