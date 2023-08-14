@@ -4,6 +4,7 @@ import { Builder } from 'builder-pattern';
 import { FindUserDto } from '../memoryuser/dto/find-user.dto';
 import { GetUserProfileResDto } from './dto/get-user-profile-res.dto';
 import { GameRecordDto } from './dto/game-record.dto';
+import { GetUserProfileDetailsResDto } from './dto/get-user-profile-details-res.dto';
 
 @Controller('me')
 export class MeController {
@@ -26,6 +27,22 @@ export class MeController {
       .avatar(me.avatar)
       .nickname(me.nickname)
       .gameRecord(gameRecordDto)
+      .build();
+  }
+
+  @Get('details')
+  getUserProfileDetails(@Session() session) {
+    const me = this.memoryUserService.findUser(
+      Builder(FindUserDto).userId(session.userId).build(),
+    );
+
+    return Builder(GetUserProfileDetailsResDto)
+      .id(me.id)
+      .nickname(me.nickname)
+      .avatar(me.avatar)
+      .mail(me.mail)
+      .phone(me.phone)
+      .twoFactor(me.twoFactor)
       .build();
   }
 }
