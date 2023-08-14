@@ -3,29 +3,43 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import ChannelItem from './ChannelItem';
-import { useParams } from 'next/navigation';
+
+const myChannels = [
+  {
+    channel_id: '11jei3',
+    channel_name: 'letsplayPingPong',
+    lastChat: '뭐라뭐라',
+  },
+];
+const channels = [
+  { channel_id: 'sjfie', channel_name: 'helloEveryone', lastChat: '뭐라뭐라' },
+];
 
 export default function ChannelList() {
-  const { channelid } = useParams();
-  const [channelOption, setChannelOption] = useState(true);
+  const [myChannelOption, setmyChannelOption] = useState(true);
   const showAllChannels = () => {
-    setChannelOption(false);
+    setmyChannelOption(false);
   };
   const showMyChannels = () => {
-    setChannelOption(true);
+    setmyChannelOption(true);
   };
   return (
     <Container>
       <ChannelOptions>
-        <OptionButton onClick={showAllChannels} $status={!channelOption}>
+        <OptionButton onClick={showAllChannels} $status={!myChannelOption}>
           All
         </OptionButton>
-        <OptionButton onClick={showMyChannels} $status={channelOption}>
+        <OptionButton onClick={showMyChannels} $status={myChannelOption}>
           My
         </OptionButton>
       </ChannelOptions>
-      {/* {channelOption ? <div>my channels</div> : <div>all channels</div>} */}
-      <ChannelItem />
+      {myChannelOption
+        ? myChannels.map((e) => (
+            <ChannelItem key={e.channel_id} channelName={e.channel_name} />
+          ))
+        : channels.map((e) => (
+            <ChannelItem key={e.channel_id} channelName={e.channel_name} />
+          ))}
     </Container>
   );
 }

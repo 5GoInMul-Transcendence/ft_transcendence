@@ -43,5 +43,9 @@ const StatusDiv = styled.div<{ $status: string }>`
   height: 10px;
   border-radius: 100%;
   background-color: ${({ $status, theme }) =>
-    $status === 'online' ? theme.colors.green : theme.colors.pink};
+    $status === 'online'
+      ? theme.colors.green
+      : 'offline'
+      ? theme.colors.pink
+      : theme.colors.yellow};
 `;
