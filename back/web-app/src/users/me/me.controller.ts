@@ -30,7 +30,7 @@ export class MeController {
       .build();
   }
 
-  @Get('me/details')
+  @Get('details')
   getUserProfileDetails(@Session() session) {
     const me = this.memoryUserService.findUser(
       Builder(FindUserDto).userId(session.userId).build(),
