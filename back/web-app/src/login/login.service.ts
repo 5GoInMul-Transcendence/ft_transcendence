@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'; 
-import { TwoFactorStatus } from 'src/user/twoFactor-status.enum';
+import { TwoFactorStatus } from 'src/users/enums/twoFactor-status.enum';
 
 @Injectable()
 export class LoginService {

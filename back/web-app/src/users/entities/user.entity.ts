@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { TwoFactorStatus } from "./twoFactor-status.enum";
+import { TwoFactorStatus } from "../enums/twoFactor-status.enum";
 
 @Entity('user')
 export class User {
@@ -8,11 +8,11 @@ export class User {
 
   @Column('varchar', { length: 36 }) // length: 12
   nickname: string;
-  
+
   @Column('varchar', { length: 64 })
   avatar: string;
 
-  @Column('varchar', { 
+  @Column('varchar', {
     length: 320,
     nullable: true, // 기본값은 false
     default: null,
@@ -25,9 +25,10 @@ export class User {
     default: null,
   })
   phone: string;
-  
+
   @Column({
     type: 'enum',
+    name: 'two_factor',
     enum: TwoFactorStatus,
     default: TwoFactorStatus.DISABLED,
   })
