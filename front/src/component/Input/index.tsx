@@ -17,9 +17,10 @@ export default function Input({
 }: Props) {
   return (
     <Wrapper>
-      <label>{label}</label>
+      <label htmlFor={label}>{label}</label>
       <input
         type={type}
+        id={label}
         value={value}
         onChange={onChange}
         maxLength={maxLength}
