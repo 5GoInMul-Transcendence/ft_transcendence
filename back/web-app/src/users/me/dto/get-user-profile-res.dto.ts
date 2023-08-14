@@ -1,6 +1,6 @@
 import { GameRecordDto } from './game-record.dto';
 
-export class GetUserResDto {
+export class GetUserProfileResDto {
   readonly id: number;
   readonly nickname: string;
   readonly avatar: string;
