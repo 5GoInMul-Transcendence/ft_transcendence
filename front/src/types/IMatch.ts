@@ -1,4 +1,5 @@
 export interface IMatch {
+  gameid: number;
   user1: string;
   user1Image: string;
   score1: number;

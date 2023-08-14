@@ -1,3 +1,5 @@
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import styled from 'styled-components';
 
 interface Props {
@@ -6,13 +8,17 @@ interface Props {
 }
 
 export default function MatchItem({ title, content }: Props) {
+  const path = usePathname();
+
   return (
     <MatchWrapper>
       <div>{title}</div>
       <div>
         <Match>{content}</Match>
         <MatchHistory>
-          <span>{`HISTORY >`}</span>
+          <Link href={`${path}/history`}>
+            <span>{`HISTORY >`}</span>
+          </Link>
         </MatchHistory>
       </div>
     </MatchWrapper>

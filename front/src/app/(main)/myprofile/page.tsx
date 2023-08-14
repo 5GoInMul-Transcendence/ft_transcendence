@@ -51,7 +51,7 @@ const Wrapper = styled.div<{ $width: number }>`
   margin: 0 2rem;
   height: 100%;
   div {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
 `;
 

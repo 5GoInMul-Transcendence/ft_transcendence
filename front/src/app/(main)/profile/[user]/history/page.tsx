@@ -13,7 +13,7 @@ export default function History() {
 
   return (
     <Container>
-      <Title>Player Game History</Title>
+      <Title>player's Game History</Title>
       <Wrapper>
         {match.map((match: IMatch) => (
           <MatchResult

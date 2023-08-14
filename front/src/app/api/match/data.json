@@ -1,122 +1,92 @@
 [
   {
+    "gameid": 1,
     "user1": "Alice",
-    "user1Image": "https://example.com/alice.jpg",
-    "score1": 85,
+    "user1Image": "alice.jpg",
+    "score1": 10,
     "user2": "Bob",
-    "user2Image": "https://example.com/bob.jpg",
-    "score2": 72
+    "user2Image": "bob.jpg",
+    "score2": 8
   },
   {
+    "gameid": 2,
     "user1": "Charlie",
-    "user1Image": "https://example.com/charlie.jpg",
-    "score1": 91,
+    "user1Image": "charlie.jpg",
+    "score1": 5,
     "user2": "David",
-    "user2Image": "https://example.com/david.jpg",
-    "score2": 68
+    "user2Image": "david.jpg",
+    "score2": 5
   },
   {
+    "gameid": 3,
     "user1": "Eve",
-    "user1Image": "https://example.com/eve.jpg",
-    "score1": 78,
+    "user1Image": "eve.jpg",
+    "score1": 15,
     "user2": "Frank",
-    "user2Image": "https://example.com/frank.jpg",
-    "score2": 85
+    "user2Image": "frank.jpg",
+    "score2": 12
   },
   {
+    "gameid": 4,
     "user1": "Grace",
-    "user1Image": "https://example.com/grace.jpg",
-    "score1": 60,
-    "user2": "Henry",
-    "user2Image": "https://example.com/henry.jpg",
-    "score2": 72
+    "user1Image": "grace.jpg",
+    "score1": 20,
+    "user2": "Helen",
+    "user2Image": "helen.jpg",
+    "score2": 18
   },
   {
-    "user1": "Charlie",
-    "user1Image": "https://example.com/charlie.jpg",
-    "score1": 91,
-    "user2": "David",
-    "user2Image": "https://example.com/david.jpg",
-    "score2": 68
+    "gameid": 5,
+    "user1": "Ivan",
+    "user1Image": "ivan.jpg",
+    "score1": 7,
+    "user2": "Jack",
+    "user2Image": "jack.jpg",
+    "score2": 9
   },
   {
-    "user1": "Charlie",
-    "user1Image": "https://example.com/charlie.jpg",
-    "score1": 91,
-    "user2": "David",
-    "user2Image": "https://example.com/david.jpg",
-    "score2": 68
+    "gameid": 6,
+    "user1": "Kelly",
+    "user1Image": "kelly.jpg",
+    "score1": 14,
+    "user2": "Liam",
+    "user2Image": "liam.jpg",
+    "score2": 14
   },
   {
-    "user1": "Charlie",
-    "user1Image": "https://example.com/charlie.jpg",
-    "score1": 91,
-    "user2": "David",
-    "user2Image": "https://example.com/david.jpg",
-    "score2": 68
+    "gameid": 7,
+    "user1": "Mia",
+    "user1Image": "mia.jpg",
+    "score1": 3,
+    "user2": "Nathan",
+    "user2Image": "nathan.jpg",
+    "score2": 1
   },
   {
-    "user1": "Charlie",
-    "user1Image": "https://example.com/charlie.jpg",
-    "score1": 91,
-    "user2": "David",
-    "user2Image": "https://example.com/david.jpg",
-    "score2": 68
+    "gameid": 8,
+    "user1": "Olivia",
+    "user1Image": "olivia.jpg",
+    "score1": 9,
+    "user2": "Patrick",
+    "user2Image": "patrick.jpg",
+    "score2": 9
   },
   {
-    "user1": "Charlie",
-    "user1Image": "https://example.com/charlie.jpg",
-    "score1": 91,
-    "user2": "David",
-    "user2Image": "https://example.com/david.jpg",
-    "score2": 68
+    "gameid": 9,
+    "user1": "Quinn",
+    "user1Image": "quinn.jpg",
+    "score1": 18,
+    "user2": "Rachel",
+    "user2Image": "rachel.jpg",
+    "score2": 20
   },
   {
-    "user1": "Charlie",
-    "user1Image": "https://example.com/charlie.jpg",
-    "score1": 91,
-    "user2": "David",
-    "user2Image": "https://example.com/david.jpg",
-    "score2": 68
-  },
-  {
-    "user1": "Charlie",
-    "user1Image": "https://example.com/charlie.jpg",
-    "score1": 91,
-    "user2": "David",
-    "user2Image": "https://example.com/david.jpg",
-    "score2": 68
-  },
-  {
-    "user1": "Charlie",
-    "user1Image": "https://example.com/charlie.jpg",
-    "score1": 91,
-    "user2": "David",
-    "user2Image": "https://example.com/david.jpg",
-    "score2": 68
-  },
-  {
-    "user1": "Charlie",
-    "user1Image": "https://example.com/charlie.jpg",
-    "score1": 91,
-    "user2": "David",
-    "user2Image": "https://example.com/david.jpg",
-    "score2": 68
-  },
-  {
-    "user1": "Charlie",
-    "user1Image": "https://example.com/charlie.jpg",
-    "score1": 91,
-    "user2": "David",
-    "user2Image": "https://example.com/david.jpg",
-    "score2": 68
-  },
-  {
-    "user1": "Charlie",
-    "user1Image": "https://example.com/charlie.jpg",
-    "score1": 91,
-    "user2": "David",
-    "user2Image": "https://example.com/david.jpg",
-    "score2": 68
+    "gameid": 10,
+    "user1": "Samuel",
+    "user1Image": "samuel.jpg",
+    "score1": 11,
+    "user2": "Tina",
+    "user2Image": "tina.jpg",
+    "score2": 13
   }
 ]
