@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import useInput from '@/hooks/useInput';
 import useSocket from '@/hooks/useSocket';
 import ChatMessageBox from './ChatMessageBox';
-import styled from 'styled-components';
 
 export default function Chats() {
   const [socket] = useSocket('/');
@@ -29,7 +29,7 @@ export default function Chats() {
       <br />
       <form onSubmit={onClientMessageSubmit}>
         <ChatInputBox
-          id="text"
+          id='text'
           value={clientMessage}
           onChange={onChangeClientMessage}
         ></ChatInputBox>

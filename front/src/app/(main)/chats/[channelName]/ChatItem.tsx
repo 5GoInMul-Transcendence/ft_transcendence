@@ -1,6 +1,7 @@
 'use client';
 
 import ProfileImage from '@/component/ProfileImage';
+import Link from 'next/link';
 import styled from 'styled-components';
 
 interface ChatItemProps {
@@ -12,11 +13,11 @@ export default function ChatItem({ nickname, content }: ChatItemProps) {
   const mynick = 'jiyokim';
   return (
     <Container $me={mynick === nickname}>
-      <div>
+      <Link href={`/profile/${nickname}`}>
         <ProfileImage url='' size='30px' />
-      </div>
+      </Link>
       <div>
-        <div>{nickname}</div>
+        <NicknameDiv $me={mynick === nickname}>{nickname}</NicknameDiv>
         <ContentDiv>{content}</ContentDiv>
       </div>
     </Container>
@@ -31,6 +32,11 @@ const Container = styled.div<{ $me: boolean }>`
     margin: 0.1rem;
   }
 `;
+
+const NicknameDiv = styled.div<{ $me: boolean }>`
+  text-align: ${({ $me }) => ($me ? 'right' : 'left')};
+`;
+
 const ContentDiv = styled.div`
   background-color: ${({ theme }) => theme.colors.darkgrey};
   padding: 0.4rem;
