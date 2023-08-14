@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { TwoFactorStatus } from "../enums/twoFactor-status.enum";
+import { TwoFactorStatus } from "../../enums/twoFactor-status.enum";
 
 @Entity('user')
 export class User {

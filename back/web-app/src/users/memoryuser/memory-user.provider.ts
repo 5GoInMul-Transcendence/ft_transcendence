@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { MemoryUser } from './memory-user';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../entities/user.entity';
+import { User } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Friend } from '../../friend/entities/friend.entity';
 import { Follower } from '../../friend/entities/follower.entity';
