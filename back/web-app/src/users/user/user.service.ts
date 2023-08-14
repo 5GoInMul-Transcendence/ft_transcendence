@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { randomUUID } from 'crypto';
-import { CreateOauthUserDto } from '../dto/create-oauth-user.dto';
+import { CreateOauthUserDto } from './dto/create-oauth-user.dto';
 import { OauthUser } from './entities/oauth-user.entity';
 import { CreateMemberUserDto } from './dto/create-member-user.dto';
 import { MemberUser } from './entities/member-user.entity';

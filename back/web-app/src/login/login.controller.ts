@@ -6,7 +6,7 @@ import { User } from 'src/users/user/entities/user.entity';
 import { Builder } from 'builder-pattern';
 import { OauthUser } from 'src/users/user/entities/oauth-user.entity';
 import { SessionService } from 'src/session/session.service';
-import { CreateOauthUserDto } from 'src/users/dto/create-oauth-user.dto';
+import { CreateOauthUserDto } from 'src/users/user/dto/create-oauth-user.dto';
 import { RedirectResource } from 'src/common/response/redirect-resource.enum';
 
 @Controller('login')
