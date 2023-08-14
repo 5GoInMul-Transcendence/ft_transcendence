@@ -2,6 +2,11 @@
 
 import styled from 'styled-components';
 import ChatItem from './ChatItem';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { FormEvent, useEffect, useRef } from 'react';
+import useInput from '@/hooks/useInput';
 
 const chats = [
   { nickname: 'jiyokim', content: 'hello~', createdAt: '20230728' },
@@ -28,31 +33,61 @@ const chats = [
 ];
 
 export default function Channel() {
+  const { channelName } = useParams();
+  const [input, setInput, onChangeInput] = useInput('');
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const onExitChannel = () => {};
+  const onScroll = (e: React.UIEvent<HTMLDivElement>) => {};
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setInput('');
+  };
+  useEffect(() => {
+    if (scrollRef.current)
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+  }, []);
   return (
-    <>
+    <Container>
       <ChannelNameDiv>
-        <button>channel1</button>
+        <div style={{ width: '20px', height: '20px' }} />
+        <Link href={`/chats/${channelName}/edit`}>{channelName}</Link>
+        <button onClick={onExitChannel}>
+          <Image
+            src='/right-from-bracket-solid.svg'
+            alt='exit'
+            width={20}
+            height={20}
+          />
+        </button>
       </ChannelNameDiv>
-      <ChatZone>
-        {chats.map((chat) => (
-          <ChatItem nickname={chat.nickname} content={chat.content} />
+      <ChatZone ref={scrollRef} onScroll={onScroll}>
+        {chats.map((chat, i) => (
+          <ChatItem key={i} nickname={chat.nickname} content={chat.content} />
         ))}
       </ChatZone>
-      <ChatBoxDiv>
-        <input />
-        <button>send</button>
-      </ChatBoxDiv>
-    </>
+      <ChatBox onSubmit={onSubmit}>
+        <input value={input} onChange={onChangeInput} />
+        <button type='submit'>
+          <Image src='/send.svg' alt='send' width={20} height={20} />
+        </button>
+      </ChatBox>
+    </Container>
   );
 }
 
+const Container = styled.div`
+  background-color: ${({ theme }) => theme.colors.lightgrey};
+  height: 100%;
+  width: 70%;
+`;
+
 const ChannelNameDiv = styled.div`
+  ${({ theme }) => theme.flex.spaceBetween}
   width: 100%;
-  text-align: center;
   padding: 0.6rem;
 `;
 
-const ChatBoxDiv = styled.div`
+const ChatBox = styled.form`
   width: 100%;
   display: flex;
   justify-content: center;
@@ -60,8 +95,9 @@ const ChatBoxDiv = styled.div`
     border: solid 1px black;
     border-radius: 5px;
     color: black;
-    width: 60%;
+    width: 70%;
     height: 2rem;
+    margin-right: 10px;
   }
 `;
 

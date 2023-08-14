@@ -13,7 +13,7 @@ export default function ChatsLayout({
     <>
       <Container>
         <ChannelList />
-        <ChatRoom>{children}</ChatRoom>
+        {children}
       </Container>
       <CreateChannelButton> + create channel</CreateChannelButton>
     </>
@@ -26,12 +26,6 @@ const Container = styled.div`
   width: 100%;
   height: calc(100% - 1.5rem);
   padding: 1rem 1rem 0 1rem;
-`;
-
-const ChatRoom = styled.div`
-  width: 70%;
-  background-color: ${({ theme }) => theme.colors.lightgrey};
-  height: 100%;
 `;
 
 const CreateChannelButton = styled.button`

@@ -4,13 +4,17 @@ import styled from 'styled-components';
 import ProfileImage from '@/component/ProfileImage';
 import Link from 'next/link';
 
-export default function ChannelItem() {
+interface ChannelItemProps {
+  channelName: string;
+}
+
+export default function ChannelItem({ channelName }: ChannelItemProps) {
   return (
-    <Link href={`/chats/channel1`}>
+    <Link href={`/chats/${channelName}`}>
       <Container>
         <ProfileImage url='' size='50px' />
         <ChannelDiv>
-          <ChannelNameDiv>channel1</ChannelNameDiv>
+          <ChannelNameDiv>{channelName}</ChannelNameDiv>
           <LastChatDiv>jiyokim: lastChat</LastChatDiv>
         </ChannelDiv>
       </Container>
