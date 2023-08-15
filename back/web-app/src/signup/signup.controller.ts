@@ -24,7 +24,7 @@ export class SignupController {
     let user: User;
     // User 테이블에 저장 후 리턴 받을 변수
 
-    memberUser = await this.userService.getMemberUserById(id)
+    memberUser = await this.userService.getMemberUserByAccountId(id)
     if (memberUser) {
       throw new HttpException("이미 등록된 아이디입니다.", HttpStatus.OK);
     }

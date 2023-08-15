@@ -30,7 +30,7 @@ export class UserService {
     });
   }
 
-  async getMemberUserById(id: string): Promise<MemberUser> {
+  async getMemberUserByAccountId(id: string): Promise<MemberUser> {
     return await this.signupMemberRepository.findOne({
       where: {
         id,

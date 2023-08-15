@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, HttpStatus, Post, Req, Session, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Post, Req, Session, UseGuards } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { FortyTwoAuthGuard } from './ft-auth.guard';
 import { UserService } from 'src/users/user/user.service';
@@ -8,6 +8,8 @@ import { OauthUser } from 'src/users/user/entities/oauth-user.entity';
 import { SessionService } from 'src/session/session.service';
 import { CreateOauthUserDto } from 'src/users/user/dto/create-oauth-user.dto';
 import { RedirectResource } from 'src/common/response/redirect-resource.enum';
+import { LoginMemberUserReqDto } from './dto/login-member-user-req.dto';
+import { MemberUser } from 'src/users/user/entities/member-user.entity';
 
 @Controller('login')
 export class LoginController {
@@ -17,11 +19,35 @@ export class LoginController {
     private sessionService: SessionService,
   ) {}
 
-  @Get('oauth/42') // POST 요청으로 변경해야 함
+  @Post()
+  @HttpCode(HttpStatus.FOUND)
+  async loginMemberUser(
+    @Body() loginMemberUserReqDto: LoginMemberUserReqDto,
+    @Session() session: Record<string, any>,
+    ) {
+    const { id, password } = loginMemberUserReqDto;
+    let memberUser: MemberUser;
+
+    memberUser = await this.userService.getMemberUserByAccountId(id);
+    if (!memberUser) {
+      throw new HttpException('ID가 존재하지 않습니다!', HttpStatus.OK);
+    }
+    if (memberUser.password !== password) {
+      throw new HttpException('Password가 일치하지 않습니다!', HttpStatus.OK);
+    }
+    if (this.loginService.isTwoFaOn(memberUser.user.twoFactor) == true) {
+      // 2FA
+      // 세션만 생성하고, userId 는 넣어주면 안 됨
+    }
+    this.sessionService.setSession(session, memberUser.user.id);
+    return RedirectResource.MAIN;
+  }
+
+  @Post('oauth/42')
   @UseGuards(FortyTwoAuthGuard)
   ftAuth() {}
 
-  @Get('oauth/42/redirect') // 302 redirect
+  @Get('oauth/42/redirect')
   @UseGuards(FortyTwoAuthGuard)
   @HttpCode(HttpStatus.FOUND)
   async ftAuthRedirect(
