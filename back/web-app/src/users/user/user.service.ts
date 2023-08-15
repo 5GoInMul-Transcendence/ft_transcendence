@@ -60,8 +60,9 @@ export class UserService {
   }
 
   async createSignupMember(createMemberUserDto: CreateMemberUserDto): Promise<MemberUser> {
-    const { id, password } = createMemberUserDto;
+    const { user, id, password } = createMemberUserDto;
     const createdUser = this.signupMemberRepository.create({
+      user,
       id,
       password,
     });

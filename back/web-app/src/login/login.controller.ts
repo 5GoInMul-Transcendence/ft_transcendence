@@ -39,10 +39,12 @@ export class LoginController {
       // add memoryUser
       // add memoryOauthUser
       user = await this.userService.createUser(reqUser.mail);
-      this.userService.createSignupOauth(Builder(CreateOauthUserDto)
-      .user(user)
-      .profileId(reqUser.id)
-      .build()); 
+      this.userService.createSignupOauth(
+        Builder(CreateOauthUserDto)
+        .user(user)
+        .profileId(reqUser.id)
+        .build()
+      ); 
     }
   
     if (this.loginService.isTwoFaOn(user.twoFactor) == true) {
