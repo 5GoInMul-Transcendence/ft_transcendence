@@ -24,6 +24,6 @@ import { Friend } from '../../friend/entities/friend.entity';
   ],
   controllers: [MeController],
   providers: [UserService, MemoryUserService, MemoryUserProvider],
-  exports: [UserService],
+  exports: [UserService, MemoryUserService],
 })
 export class UserModule {}
