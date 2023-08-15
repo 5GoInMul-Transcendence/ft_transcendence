@@ -16,7 +16,7 @@ import _ from 'lodash';
 export class MemoryUserService {
   constructor(private memoryUsers: MemoryUserProvider) {}
 
-  findUser(dto: FindUserDto): MemoryUser {
+  findUserByUserId(dto: FindUserDto): MemoryUser {
     const user = this.memoryUsers.get(dto.userId);
 
     if (!user) {
