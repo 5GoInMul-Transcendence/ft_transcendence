@@ -12,9 +12,6 @@
 - [ ] Labels에는 해당 이슈의 성향을 잘 나타내나요?
 - [ ] 해당 pull-request가 파트(front-end 또는 back-end)에 종속된다면 Labels에 파트를 표시했나요?
 
-# Summary(키워드 위주로 서술해주세요!)
-- 
-
 # Describe your changes
 - 
 
