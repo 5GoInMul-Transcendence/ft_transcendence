@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, Session } from '@nestjs/common';
+import { Controller, Get, Session } from '@nestjs/common';
 import { MemoryUserService } from '../memoryuser/memory-user.service';
 import { Builder } from 'builder-pattern';
 import { FindUserDto } from '../memoryuser/dto/find-user.dto';
