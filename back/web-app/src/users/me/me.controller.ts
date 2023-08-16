@@ -12,7 +12,7 @@ export class MeController {
 
   @Get()
   getUserProfile(@Session() session) {
-    const me = this.memoryUserService.findUser(
+    const me = this.memoryUserService.findUserByUserId(
       Builder(FindUserDto).userId(session.userId).build(),
     );
 
@@ -32,7 +32,7 @@ export class MeController {
 
   @Get('details')
   getUserProfileDetails(@Session() session) {
-    const me = this.memoryUserService.findUser(
+    const me = this.memoryUserService.findUserByUserId(
       Builder(FindUserDto).userId(session.userId).build(),
     );
 
