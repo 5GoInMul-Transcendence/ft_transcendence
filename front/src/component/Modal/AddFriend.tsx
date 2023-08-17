@@ -8,7 +8,7 @@ export default function AddFriend() {
   const [keyword, , onChangeKeyword] = useInput('');
   const [inValidMsg, setInValidMsg] = useState<string>('');
 
-  const onClickAdd = async () => {
+  const addFriendHandler = async () => {
     /* todo: 검색 data 요청, response에 따라 inValidMsg 설정 
 		예시)
 		'No such user.'
@@ -30,7 +30,7 @@ export default function AddFriend() {
         maxLength={12}
       />
       <InvalidMsg text={inValidMsg} />
-      <Button text='Add' color='green' onClick={onClickAdd} />
+      <Button text='Add' color='green' onClick={addFriendHandler} />
     </>
   );
 }
