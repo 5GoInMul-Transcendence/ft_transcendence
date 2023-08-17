@@ -30,7 +30,7 @@ export default function AddFriend() {
         maxLength={12}
       />
       <InvalidMsg text={inValidMsg} />
-      <Button text='Add' color='green' onClick={addFriendHandler} />
+      <Button text='add' color='green' onClick={addFriendHandler} />
     </>
   );
 }

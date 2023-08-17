@@ -7,8 +7,8 @@ export default function InvMatch() {
 
   return (
     <Wrapper>
-      <Button text='Classic' color='green' onClick={invClassicMatchHandler} />
-      <Button text='Short' color='green' onClick={invShortMatchHandler} />
+      <Button text='classic' color='green' onClick={invClassicMatchHandler} />
+      <Button text='short' color='green' onClick={invShortMatchHandler} />
     </Wrapper>
   );
 }
