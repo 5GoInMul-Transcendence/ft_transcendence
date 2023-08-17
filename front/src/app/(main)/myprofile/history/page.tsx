@@ -1,10 +1,10 @@
 'use client';
 
-import styled from 'styled-components';
-import { MatchResult } from './MatchResult';
 import useSwr from 'swr';
-import fetcher from '@/utils/fetcher';
+import { MatchResult } from './MatchResult';
 import { IMatch } from '@/types/IMatch';
+import fetcher from '@/utils/fetcher';
+import styled from 'styled-components';
 
 export default function History() {
   const { data: match, error } = useSwr('/api/match', fetcher);

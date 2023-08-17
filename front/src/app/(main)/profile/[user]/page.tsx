@@ -1,13 +1,13 @@
 'use client';
 
 import AchievementItem from './AchievementItem';
+import ProfileItem from './ProfileItem';
 import Buttons from '@/component/Buttons';
 import MatchItem from './MatchItem';
 import ProfileImage from '@/component/ProfileImage';
 import Toggle from '@/component/Toggle';
-import styled from 'styled-components';
 import useToggle from '@/hooks/useToggle';
-import ProfileItem from './ProfileItem';
+import styled from 'styled-components';
 
 export default function Profile({ params }: { params: { user: string } }) {
   const [follw, onChangeFollow] = useToggle(false);
