@@ -53,14 +53,15 @@ const BackDrop = styled.div`
 const ModalWrap = styled.div`
   position: relative;
   width: 30rem;
-  padding: 1rem;
+  padding: 3rem 2rem;
   color: ${({ theme }) => theme.colors.black};
   background-color: ${({ theme }) => theme.colors.lightgrey};
 `;
 
 const TitleDiv = styled.div`
   ${({ theme }) => theme.flex.center};
-  margin-bottom: 2.5rem;
+  margin-bottom: 3rem;
+  font-size: ${({ theme }) => theme.fontSize.normal};
 `;
 
 const CloseDiv = styled.div`
