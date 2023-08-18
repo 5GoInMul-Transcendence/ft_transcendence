@@ -16,7 +16,7 @@ export default function InvedMatch() {
       <Buttons
         leftButton={{
           text: 'decline',
-          color: 'white',
+          color: 'pink',
           onClick: declineMatchHandler,
         }}
         rightButton={{
