@@ -6,7 +6,7 @@ import InvalidMsg from './InvalidMsg';
 
 export default function AddFriend() {
   const [keyword, , onChangeKeyword] = useInput('');
-  const [inValidMsg, setInValidMsg] = useState<string>('');
+  const [invalidMsg, setInvalidMsg] = useState<string>('');
 
   const addFriendHandler = async () => {
     /* todo: 검색 data 요청, response에 따라 inValidMsg 설정 
@@ -17,7 +17,7 @@ export default function AddFriend() {
 		'You have already sent a friend request.'
 		...
 		*/
-    setInValidMsg(() => 'No such user.');
+    setInvalidMsg(() => 'No such user.');
   };
 
   return (
@@ -29,7 +29,7 @@ export default function AddFriend() {
         onChange={onChangeKeyword}
         maxLength={12}
       />
-      <InvalidMsg text={inValidMsg} />
+      <InvalidMsg text={invalidMsg} />
       <Button text='add' color='green' onClick={addFriendHandler} />
     </>
   );

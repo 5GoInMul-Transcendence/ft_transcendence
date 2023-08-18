@@ -6,7 +6,7 @@ import InvalidMsg from './InvalidMsg';
 
 export default function SetNick() {
   const [keyword, , onChangeKeyword] = useInput('');
-  const [inValidMsg, setInValidMsg] = useState<string>('');
+  const [invalidMsg, setInvalidMsg] = useState<string>('');
 
   const setNickHandler = async () => {
     /* todo: 검색 data 요청, response에 따라 inValidMsg 설정 
@@ -14,7 +14,7 @@ export default function SetNick() {
 		'Nickname already exist'
 		...
 		*/
-    setInValidMsg(() => 'Nickname already exist');
+    setInvalidMsg(() => 'Nickname already exist');
   };
 
   return (
@@ -26,7 +26,7 @@ export default function SetNick() {
         onChange={onChangeKeyword}
         maxLength={12}
       />
-      <InvalidMsg text={inValidMsg} />
+      <InvalidMsg text={invalidMsg} />
       <Button text='submit' color='green' onClick={setNickHandler} />
     </>
   );
