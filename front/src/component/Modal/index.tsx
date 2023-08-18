@@ -7,17 +7,23 @@ import InvedMatch from './InvedMatch';
 import SetNick from './SetNick';
 import SetUser from './SetUser';
 import styled from 'styled-components';
+import EnterChannel from './EnterChannel';
+import CreateChannel from './CreateChannel';
+import SetChannel from './SetChannel';
 
 export default function Modal() {
   /*todo: 추후 recoil로 여러 페이지 및 컴포넌트에서 관리 */
-  const [modal, setModal] = useState<string | null>('ADD-Friend');
+  const [modal, setModal] = useState<string | null>('');
 
   const modalStorage: Record<string, Record<string, string | JSX.Element>> = {
     'ADD-Friend': { title: 'Add Friend', child: <AddFriend /> },
-    'INV-Match': { title: '1:1 match', child: <InvMatch /> },
+    'INV-Match': { title: '', child: <InvMatch /> },
     'INVED-Match': { title: '1:1 match', child: <InvedMatch /> },
     'SET-User': { title: 'user setting', child: <SetUser /> },
     'SET-Nick': { title: 'Change Nickname', child: <SetNick /> },
+    'SET-Channel': { title: 'channel setting', child: <SetChannel /> },
+    'CREATE-Channel': { title: 'create channel', child: <CreateChannel /> },
+    'ENTER-Channel': { title: '', child: <EnterChannel /> },
     'AUTH-Mail': { title: 'Mail Authentication', child: <AuthMail /> },
     'AUTH-Phone': { title: 'Phone Authentication', child: <AuthPhone /> },
   };
@@ -52,7 +58,7 @@ const BackDrop = styled.div`
 
 const ModalWrap = styled.div`
   position: relative;
-  width: 30rem;
+  width: 35rem;
   padding: 3rem 2rem;
   color: ${({ theme }) => theme.colors.black};
   background-color: ${({ theme }) => theme.colors.lightgrey};
