@@ -9,6 +9,7 @@ import * as session from 'express-session';
 import { AuthMiddleware } from './session/auth.middleware';
 import { SessionModule } from './session/session.module';
 import { DatabaseModule } from './common/database/database.module';
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -20,6 +21,7 @@ import { DatabaseModule } from './common/database/database.module';
     SignupModule,
     SessionModule,
     DatabaseModule,
+    AuthModule,
   ],
 
   controllers: [AppController],
