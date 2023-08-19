@@ -30,7 +30,7 @@ export class UserService {
     });
   }
 
-  async getMemberUserById(id: string): Promise<MemberUser> {
+  async getMemberUserByAccountId(id: string): Promise<MemberUser> {
     return await this.signupMemberRepository.findOne({
       where: {
         id,
@@ -60,8 +60,9 @@ export class UserService {
   }
 
   async createSignupMember(createMemberUserDto: CreateMemberUserDto): Promise<MemberUser> {
-    const { id, password } = createMemberUserDto;
+    const { user, id, password } = createMemberUserDto;
     const createdUser = this.signupMemberRepository.create({
+      user,
       id,
       password,
     });
