@@ -9,6 +9,7 @@ import * as session from 'express-session';
 import { AuthMiddleware } from './session/auth.middleware';
 import { SessionModule } from './session/session.module';
 import { DatabaseModule } from './common/database/database.module';
+import { AuthModule } from './auth/auth.module';
 import { FriendController } from './friend/friend.controller';
 import { FriendModule } from './friend/friend.module';
 
@@ -22,6 +23,7 @@ import { FriendModule } from './friend/friend.module';
     SignupModule,
     SessionModule,
     DatabaseModule,
+    AuthModule,
     FriendModule,
   ],
 
