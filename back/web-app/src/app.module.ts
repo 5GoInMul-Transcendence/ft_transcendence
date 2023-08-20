@@ -10,6 +10,8 @@ import { AuthMiddleware } from './session/auth.middleware';
 import { SessionModule } from './session/session.module';
 import { DatabaseModule } from './common/database/database.module';
 import { AuthModule } from './auth/auth.module';
+import { FriendController } from './friend/friend.controller';
+import { FriendModule } from './friend/friend.module';
 
 
 @Module({
@@ -22,6 +24,7 @@ import { AuthModule } from './auth/auth.module';
     SessionModule,
     DatabaseModule,
     AuthModule,
+    FriendModule,
   ],
 
   controllers: [AppController],
