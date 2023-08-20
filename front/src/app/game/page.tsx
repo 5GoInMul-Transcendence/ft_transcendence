@@ -3,10 +3,10 @@ import fetcher from '@/utils/fetcher';
 import styled from 'styled-components';
 import useSwr from 'swr';
 import { ScoreBoard } from './ScoreBoard';
-import { GameBoard } from './GameBoard';
+import GameBoard from './GameBoard';
 
 export default function Game() {
-  const { data: match, error } = useSwr('/api/match', fetcher);
+  // const { data: match, error } = useSwr('/api/match', fetcher);
 
   return (
     <Container>
@@ -35,9 +35,9 @@ const Container = styled.div`
 
 const ScoreBoardDiv = styled.div`
   ${({ theme }) => theme.flex.center}
-  height: 15%;
+  height: 20%;
 `;
 
 const GameBoardDiv = styled.div`
-  height: 85%;
+  height: 80%;
 `;
