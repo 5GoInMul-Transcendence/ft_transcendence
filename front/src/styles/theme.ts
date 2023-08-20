@@ -36,6 +36,8 @@ const colors = {
 };
 
 const fontSize = {
+  xxxxlarge: '64px',
+  xxxlarge: '48px',
   xxlarge: '32px',
   xlarge: '28px',
   large: '24px',
