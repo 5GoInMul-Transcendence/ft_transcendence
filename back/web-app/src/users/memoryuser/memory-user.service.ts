@@ -85,7 +85,7 @@ export class MemoryUserService {
   checkDuplicateNickname(dto: CheckDuplicateNicknameDto) {
     for (const user of this.memoryUsers.values()) {
       if (user.nickname == dto.nickname) {
-        throw new HttpException('이미 존재하는 닉네임입니다.', 200);
+        throw new HttpException('이미 사용중인 닉네임입니다.', 200);
       }
     }
   }
