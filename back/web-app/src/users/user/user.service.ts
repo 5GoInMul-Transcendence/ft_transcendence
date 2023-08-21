@@ -7,6 +7,10 @@ import { CreateOauthUserDto } from './dto/create-oauth-user.dto';
 import { OauthUser } from './entities/oauth-user.entity';
 import { CreateMemberUserDto } from './dto/create-member-user.dto';
 import { MemberUser } from './entities/member-user.entity';
+import { FindUserDto } from '../memoryuser/dto/find-user.dto';
+import { Builder } from 'builder-pattern';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { MemoryUserService } from '../memoryuser/memory-user.service';
 
 @Injectable()
 export class UserService {
@@ -17,15 +21,16 @@ export class UserService {
     private signupOauthRepository: Repository<OauthUser>,
     @InjectRepository(MemberUser)
     private signupMemberRepository: Repository<MemberUser>,
+    private memoryUserService: MemoryUserService,
   ) {}
 
   async getOauthUserByProfileId(profileId: number): Promise<OauthUser> {
     return await this.signupOauthRepository.findOne({
       where: {
-        profileId
+        profileId,
       },
       relations: {
-        user: true // 기본값은 false
+        user: true, // 기본값은 false
       },
     });
   }
@@ -49,7 +54,9 @@ export class UserService {
 
   // }
 
-  async createSignupOauth(createOauthUserDto: CreateOauthUserDto): Promise<OauthUser> {
+  async createSignupOauth(
+    createOauthUserDto: CreateOauthUserDto,
+  ): Promise<OauthUser> {
     const { user, profileId } = createOauthUserDto;
     const createdUser = this.signupOauthRepository.create({
       user,
@@ -59,7 +66,9 @@ export class UserService {
     return await this.signupOauthRepository.save(createdUser);
   }
 
-  async createSignupMember(createMemberUserDto: CreateMemberUserDto): Promise<MemberUser> {
+  async createSignupMember(
+    createMemberUserDto: CreateMemberUserDto,
+  ): Promise<MemberUser> {
     const { user, id, password } = createMemberUserDto;
     const createdUser = this.signupMemberRepository.create({
       user,
@@ -90,4 +99,19 @@ export class UserService {
 
   //   return await this.userRepository.save(users);
   // }
+
+  updateUser(dto: Partial<UpdateUserDto> & { userId: number }): void {
+    const beforeUser = this.memoryUserService.findUserByUserId(
+      Builder(FindUserDto).userId(dto.userId).build(),
+    );
+
+    this.memoryUserService.updateUser(dto);
+
+    this.userRepository.update(dto.userId, { ...dto }).catch(() => {
+      Object.keys(dto).forEach((key) => {
+        dto[key] = beforeUser[key];
+      });
+      this.memoryUserService.updateUser(dto);
+    });
+  }
 }
