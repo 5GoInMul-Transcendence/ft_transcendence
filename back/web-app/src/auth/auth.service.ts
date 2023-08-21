@@ -46,6 +46,7 @@ export class AuthService {
         .code(code)
         .build(),
     );
+  }
 
   checkAuthCode(dto: CheckAuthCodeDto) {
     const authInfo = this.authInfos.get(dto.userId);
