@@ -1,3 +1,3 @@
 export class UpdateNicknameReqDto {
-  nickname: string;
+  readonly nickname: string;
 }

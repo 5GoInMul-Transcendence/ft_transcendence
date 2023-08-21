@@ -1,3 +1,3 @@
 export class CheckDuplicateNicknameDto {
-  nickname: string;
+  readonly nickname: string;
 }
