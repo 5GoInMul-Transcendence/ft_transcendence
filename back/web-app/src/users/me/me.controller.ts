@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Put, Session } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, Session } from '@nestjs/common';
 import { MemoryUserService } from '../memoryuser/memory-user.service';
 import { Builder } from 'builder-pattern';
 import { FindUserDto } from '../memoryuser/dto/find-user.dto';
@@ -57,7 +57,7 @@ export class MeController {
   }
 
   @Put('nickname')
-  updateNickname(@Session() session, @Param() dto: UpdateNicknameDto) {
+  updateNickname(@Session() session, @Body() dto: UpdateNicknameDto) {
     this.memoryUserService.checkDuplicateNickname(
       Builder(CheckDuplicateNicknameDto).nickname(dto.nickname).build(),
     );
