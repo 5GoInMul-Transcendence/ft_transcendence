@@ -9,7 +9,7 @@ import { GetUserProfileByNicknameReqDto } from './dto/get-user-profile-by-nickna
 import { FindUserByNicknameDto } from '../memoryuser/dto/find-user-by-nickname.dto';
 import { GetUserProfileByNicknameResDto } from './dto/get-user-profile-by-nickname-res.dto';
 import { CheckDuplicateNicknameDto } from '../memoryuser/dto/check-duplicate-nickname.dto';
-import { UpdateNicknameDto } from './dto/update-nickname.dto';
+ import { UpdateNicknameReqDto } from './dto/update-nickname-req.dto';
 import { UserService } from '../user/user.service';
 import { UpdateUserDto } from '../user/dto/update-user.dto';
 
@@ -57,7 +57,7 @@ export class MeController {
   }
 
   @Put('nickname')
-  updateNickname(@Session() session, @Body() dto: UpdateNicknameDto) {
+  updateNickname(@Session() session, @Body() dto: UpdateNicknameReqDto) {
     this.memoryUserService.checkDuplicateNickname(
       Builder(CheckDuplicateNicknameDto).nickname(dto.nickname).build(),
     );
