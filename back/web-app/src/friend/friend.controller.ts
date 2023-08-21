@@ -5,11 +5,11 @@ import { Builder } from 'builder-pattern';
 import { FriendService } from './friend.service';
 import { GetFriendsInfoDto } from './dto/get-friends-info.dto';
 
-@Controller()
+@Controller('friend')
 export class FriendController {
   constructor(private friendService: FriendService) {}
 
-  @Post('friend')
+  @Post()
   addFriend(@Session() session, @Body() dto: AddFriendReqDto) {
     return this.friendService.addFriend(
       Builder(AddFriendDto)
@@ -19,7 +19,7 @@ export class FriendController {
     );
   }
 
-  @Get('friendlist')
+  @Get('list')
   getFriendsInfo(@Session() session) {
     return this.friendService.getFriendsInfo(
       Builder(GetFriendsInfoDto).userId(session.userId).build(),
