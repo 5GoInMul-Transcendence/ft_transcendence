@@ -23,6 +23,8 @@ export class AuthController {
   authPhone(@Session() session, @Body() dto: AuthPhoneReqDto) {
     this.authService.authPhone(
       Builder(AuthPhoneDto).userId(session.userId).phone(dto.phone).build(),
+    );
+  }
 
   @Post()
   checkAuthCode(@Session() session, @Body() dto: CheckAuthCodeReqDto) {
