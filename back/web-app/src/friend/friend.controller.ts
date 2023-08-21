@@ -1,8 +1,9 @@
-import { Body, Controller, Post, Session } from '@nestjs/common';
+import { Body, Controller, Post, Get, Session } from '@nestjs/common';
 import { AddFriendReqDto } from './dto/add-friend-req.dto';
 import { AddFriendDto } from './dto/add-friend.dto';
 import { Builder } from 'builder-pattern';
 import { FriendService } from './friend.service';
+import { GetFriendsInfoDto } from './dto/get-friends-info.dto';
 
 @Controller('friend')
 export class FriendController {
@@ -15,6 +16,13 @@ export class FriendController {
         .userId(session.userId)
         .nickname(dto.nickname)
         .build(),
+    );
+  }
+
+  @Get('list')
+  getFriendsInfo(@Session() session) {
+    return this.friendService.getFriendsInfo(
+      Builder(GetFriendsInfoDto).userId(session.userId).build(),
     );
   }
 }
