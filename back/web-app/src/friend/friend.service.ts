@@ -13,6 +13,8 @@ import { Friend } from './entities/friend.entity';
 import { Follower } from './entities/follower.entity';
 import { DeleteUserFriendDto } from '../users/memoryuser/dto/delete-user-friend.dto';
 import { DeleteUserFollowerDto } from '../users/memoryuser/dto/delete-user-follower.dto';
+import { GetFriendsInfoDto } from './dto/get-friends-info.dto';
+import { FriendInfo } from './friend-info';
 
 @Injectable()
 export class FriendService {
@@ -20,6 +22,31 @@ export class FriendService {
     private memoryUserService: MemoryUserService,
     private dataSource: DataSource,
   ) {}
+
+  getFriendsInfo(dto: GetFriendsInfoDto) {
+    const user = this.memoryUserService.findUserByUserId(
+      Builder(FindUserDto).userId(dto.userId).build(),
+    );
+
+    const friendsInfo: FriendInfo[] = [];
+
+    for (const friendId of user.friends.values()) {
+      const friend = this.memoryUserService.findUserByUserId(
+        Builder(FindUserDto).userId(friendId).build(),
+      );
+
+      friendsInfo.push(
+        Builder(FriendInfo)
+          .id(friend.id)
+          .nickname(friend.nickname)
+          .avatar(friend.avatar)
+          .status(friend.status)
+          .build(),
+      );
+    }
+
+    return friendsInfo;
+  }
 
   async addFriend(dto: AddFriendDto): Promise<AddFriendResDto> {
     const user = this.memoryUserService.findUserByUserId(
