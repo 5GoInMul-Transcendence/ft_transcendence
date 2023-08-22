@@ -5,7 +5,7 @@ import { LoginModule } from './login/login.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './users/user/user.module';
 import { SignupModule } from './signup/signup.module';
-import * as session from 'express-session';
+import session from 'express-session';
 import { AuthMiddleware } from './session/auth.middleware';
 import { SessionModule } from './session/session.module';
 import { DatabaseModule } from './common/database/database.module';
