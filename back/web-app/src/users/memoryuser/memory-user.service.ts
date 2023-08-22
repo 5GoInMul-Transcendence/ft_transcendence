@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FindUserDto } from './dto/find-user.dto';
 import { MemoryUserProvider } from './memory-user.provider';
 import { MemoryUser } from './memory-user';
@@ -9,9 +9,13 @@ import { AddUserFollowerDto } from './dto/add-user-follower.dto';
 import { DeleteUserFollowerDto } from './dto/delete-user-follower.dto';
 import { AddUserFriendDto } from './dto/add-user-friend.dto';
 import { DeleteUserFriendDto } from './dto/delete-user-friend.dto';
+import { CheckDuplicateNicknameDto } from './dto/check-duplicate-nickname.dto';
 import { UserDto } from '../user/dto/user.dto';
 import { Builder } from 'builder-pattern';
 import _ from 'lodash';
+import { CheckAvailableTwofactorDto } from './dto/check-available-twofactor.dto';
+import { TwoFactorStatus } from '../enums/twoFactor-status.enum';
+
 @Injectable()
 export class MemoryUserService {
   constructor(private memoryUsers: MemoryUserProvider) {}
@@ -79,5 +83,26 @@ export class MemoryUserService {
   deleteUserFriend(dto: DeleteUserFriendDto) {
     const user = this.memoryUsers.get(dto.userId);
     user.friends.delete(dto.friendId);
+  }
+
+  checkAvailableTwoFactor(dto: CheckAvailableTwofactorDto) {
+    const user = this.memoryUsers.get(dto.userId);
+
+    if (dto.twoFactor === TwoFactorStatus.MAIL && user.mail == null) {
+      throw new HttpException('잘못된 요청입니다.', HttpStatus.OK);
+    }
+    if (dto.twoFactor === TwoFactorStatus.PHONE && user.phone == null) {
+      throw new HttpException('잘못된 요청입니다.', HttpStatus.OK);
+    }
+
+    return;
+  }
+  
+  checkDuplicateNickname(dto: CheckDuplicateNicknameDto) {
+    for (const user of this.memoryUsers.values()) {
+      if (user.nickname === dto.nickname) {
+        throw new HttpException('이미 사용중인 닉네임입니다.', 200);
+      }
+    }
   }
 }

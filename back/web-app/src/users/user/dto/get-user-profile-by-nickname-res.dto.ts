@@ -1,4 +1,4 @@
-import { GameRecordDto } from './game-record.dto';
+import { GameRecordDto } from '../../me/dto/game-record.dto';
 
 export class GetUserProfileByNicknameResDto {
   readonly id: number;
