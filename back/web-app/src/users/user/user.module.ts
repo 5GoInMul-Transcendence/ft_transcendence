@@ -10,6 +10,7 @@ import { MemoryUserProvider } from '../memoryuser/memory-user.provider';
 import { Block } from '../../block/block.entity';
 import { Follower } from '../../friend/entities/follower.entity';
 import { Friend } from '../../friend/entities/friend.entity';
+import { UserController } from './user.controller';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { Friend } from '../../friend/entities/friend.entity';
       Block,
     ]),
   ],
-  controllers: [MeController],
+  controllers: [MeController, UserController],
   providers: [UserService, MemoryUserService, MemoryUserProvider],
   exports: [UserService, MemoryUserService],
 })
