@@ -4,12 +4,14 @@ import { Builder } from 'builder-pattern';
 import { FindUserDto } from '../memoryuser/dto/find-user.dto';
 import { GetUserProfileResDto } from './dto/get-user-profile-res.dto';
 import { GameRecordDto } from './dto/game-record.dto';
-// import { GetUserProfileDetailsResDto } from './dto/get-user-profile-details-res.dto';
+import { GetUserProfileDetailsResDto } from './dto/get-user-profile-details-res.dto';
 import { GetUserProfileByNicknameReqDto } from './dto/get-user-profile-by-nickname-req.dto';
 import { FindUserByNicknameDto } from '../memoryuser/dto/find-user-by-nickname.dto';
 import { GetUserProfileByNicknameResDto } from './dto/get-user-profile-by-nickname-res.dto';
+import { UpdateTwofactorReqDto } from './dto/update-twofactor-req.dto';
+import { CheckAvailableTwofactorDto } from '../memoryuser/dto/check-available-twofactor.dto';
 import { CheckDuplicateNicknameDto } from '../memoryuser/dto/check-duplicate-nickname.dto';
- import { UpdateNicknameReqDto } from './dto/update-nickname-req.dto';
+import { UpdateNicknameReqDto } from './dto/update-nickname-req.dto';
 import { UserService } from '../user/user.service';
 import { UpdateUserDto } from '../user/dto/update-user.dto';
 
@@ -46,14 +48,14 @@ export class MeController {
       Builder(FindUserDto).userId(session.userId).build(),
     );
 
-    // return Builder(GetUserProfileDetailsResDto)
-    //   .id(me.id)
-    //   .nickname(me.nickname)
-    //   .avatar(me.avatar)
-    //   .mail(me.mail)
-    //   .phone(me.phone)
-    //   .twoFactor(me.twoFactor)
-    //   .build();
+    return Builder(GetUserProfileDetailsResDto)
+      .id(me.id)
+      .nickname(me.nickname)
+      .avatar(me.avatar)
+      .mail(me.mail)
+      .phone(me.phone)
+      .twoFactor(me.twoFactor)
+      .build();
   }
 
   @Put('nickname')
@@ -66,6 +68,22 @@ export class MeController {
       Builder(UpdateUserDto)
         .userId(session.userId)
         .nickname(dto.nickname)
+        .build(),
+    );
+  }
+
+  @Put('twofactor')
+  updateTwoFactor(@Session() session, @Body() dto: UpdateTwofactorReqDto) {
+    this.memoryUserService.checkAvailableTwoFactor(
+      Builder(CheckAvailableTwofactorDto)
+        .userId(session.userId)
+        .twoFactor(dto.twofactor)
+        .build(),
+    );
+    this.userService.updateUser(
+      Builder(UpdateUserDto)
+        .userId(session.userId)
+        .twoFactor(dto.twofactor)
         .build(),
     );
   }
