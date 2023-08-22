@@ -87,10 +87,10 @@ export class MemoryUserService {
   checkAvailableTwoFactor(dto: CheckAvailableTwofactorDto) {
     const user = this.memoryUsers.get(dto.userId);
 
-    if (dto.twoFactor == TwoFactorStatus.MAIL && user.mail == null) {
+    if (dto.twoFactor === TwoFactorStatus.MAIL && user.mail == null) {
       throw new HttpException('잘못된 요청입니다.', HttpStatus.OK);
     }
-    if (dto.twoFactor == TwoFactorStatus.PHONE && user.phone == null) {
+    if (dto.twoFactor === TwoFactorStatus.PHONE && user.phone == null) {
       throw new HttpException('잘못된 요청입니다.', HttpStatus.OK);
     }
 
