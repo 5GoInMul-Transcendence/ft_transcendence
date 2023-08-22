@@ -84,7 +84,7 @@ export class MemoryUserService {
 
   checkDuplicateNickname(dto: CheckDuplicateNicknameDto) {
     for (const user of this.memoryUsers.values()) {
-      if (user.nickname == dto.nickname) {
+      if (user.nickname === dto.nickname) {
         throw new HttpException('이미 사용중인 닉네임입니다.', 200);
       }
     }
