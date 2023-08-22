@@ -1,9 +1,9 @@
 import { Controller, Get, Param, Session } from "@nestjs/common";
-import { GetUserProfileByNicknameReqDto } from "../me/dto/get-user-profile-by-nickname-req.dto";
+import { GetUserProfileByNicknameReqDto } from "./dto/get-user-profile-by-nickname-req.dto";
 import { FindUserDto } from "../memoryuser/dto/find-user.dto";
 import { FindUserByNicknameDto } from "../memoryuser/dto/find-user-by-nickname.dto";
 import { GameRecordDto } from "../me/dto/game-record.dto";
-import { GetUserProfileByNicknameResDto } from "../me/dto/get-user-profile-by-nickname-res.dto";
+import { GetUserProfileByNicknameResDto } from "./dto/get-user-profile-by-nickname-res.dto";
 import { Builder } from "builder-pattern";
 import { MemoryUserService } from "../memoryuser/memory-user.service";
 
