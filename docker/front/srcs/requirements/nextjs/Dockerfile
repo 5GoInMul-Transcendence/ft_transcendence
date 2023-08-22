@@ -8,6 +8,12 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+
+# dependencies does not catch this lib
+RUN yarn add bufferutil
+RUN yarn add utf-8-validate
+
+
 RUN \
   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
   elif [ -f package-lock.json ]; then npm ci; \
@@ -55,5 +61,7 @@ USER nextjs
 EXPOSE 3000
 
 ENV PORT 3000
+# set hostname to localhost
+ENV HOSTNAME "0.0.0.0"
 
-CMD ["node", "server.js"]
+CMD ["node", "server.js"]s

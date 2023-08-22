@@ -1,7 +1,13 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
 
 module.exports = {
-  // ... rest of the configuration.
-  output: 'standalone',
+  // output: 'standalone',
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  reactStrictMode: true,
+  experimental: { appDir: true },
+  compiler: {
+    styledComponents: true,
+  },
 };
