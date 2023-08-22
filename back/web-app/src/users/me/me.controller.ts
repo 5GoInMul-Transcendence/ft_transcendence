@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Session } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, Session } from '@nestjs/common';
 import { MemoryUserService } from '../memoryuser/memory-user.service';
 import { Builder } from 'builder-pattern';
 import { FindUserDto } from '../memoryuser/dto/find-user.dto';
@@ -8,10 +8,17 @@ import { GameRecordDto } from './dto/game-record.dto';
 import { GetUserProfileByNicknameReqDto } from './dto/get-user-profile-by-nickname-req.dto';
 import { FindUserByNicknameDto } from '../memoryuser/dto/find-user-by-nickname.dto';
 import { GetUserProfileByNicknameResDto } from './dto/get-user-profile-by-nickname-res.dto';
+import { CheckDuplicateNicknameDto } from '../memoryuser/dto/check-duplicate-nickname.dto';
+ import { UpdateNicknameReqDto } from './dto/update-nickname-req.dto';
+import { UserService } from '../user/user.service';
+import { UpdateUserDto } from '../user/dto/update-user.dto';
 
 @Controller('me')
 export class MeController {
-  constructor(private memoryUserService: MemoryUserService) {}
+  constructor(
+    private memoryUserService: MemoryUserService,
+    private userService: UserService,
+  ) {}
 
   @Get()
   getUserProfile(@Session() session) {
@@ -47,6 +54,20 @@ export class MeController {
     //   .phone(me.phone)
     //   .twoFactor(me.twoFactor)
     //   .build();
+  }
+
+  @Put('nickname')
+  updateNickname(@Session() session, @Body() dto: UpdateNicknameReqDto) {
+    this.memoryUserService.checkDuplicateNickname(
+      Builder(CheckDuplicateNicknameDto).nickname(dto.nickname).build(),
+    );
+
+    this.userService.updateUser(
+      Builder(UpdateUserDto)
+        .userId(session.userId)
+        .nickname(dto.nickname)
+        .build(),
+    );
   }
 
   @Get('users/:nickname')
