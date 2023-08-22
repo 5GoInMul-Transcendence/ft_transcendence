@@ -8,8 +8,10 @@ import { GetUserProfileDetailsResDto } from './dto/get-user-profile-details-res.
 import { GetUserProfileByNicknameReqDto } from './dto/get-user-profile-by-nickname-req.dto';
 import { FindUserByNicknameDto } from '../memoryuser/dto/find-user-by-nickname.dto';
 import { GetUserProfileByNicknameResDto } from './dto/get-user-profile-by-nickname-res.dto';
+import { UpdateTwofactorReqDto } from './dto/update-twofactor-req.dto';
+import { CheckAvailableTwofactorDto } from '../memoryuser/dto/check-available-twofactor.dto';
 import { CheckDuplicateNicknameDto } from '../memoryuser/dto/check-duplicate-nickname.dto';
- import { UpdateNicknameReqDto } from './dto/update-nickname-req.dto';
+import { UpdateNicknameReqDto } from './dto/update-nickname-req.dto';
 import { UserService } from '../user/user.service';
 import { UpdateUserDto } from '../user/dto/update-user.dto';
 
@@ -66,6 +68,22 @@ export class MeController {
       Builder(UpdateUserDto)
         .userId(session.userId)
         .nickname(dto.nickname)
+        .build(),
+    );
+  }
+
+  @Put('twofactor')
+  updateTwoFactor(@Session() session, @Body() dto: UpdateTwofactorReqDto) {
+    this.memoryUserService.checkAvailableTwoFactor(
+      Builder(CheckAvailableTwofactorDto)
+        .userId(session.userId)
+        .twoFactor(dto.twofactor)
+        .build(),
+    );
+    this.userService.updateUser(
+      Builder(UpdateUserDto)
+        .userId(session.userId)
+        .twoFactor(dto.twofactor)
         .build(),
     );
   }
