@@ -4,12 +4,14 @@ import { Builder } from 'builder-pattern';
 import { FindUserDto } from '../memoryuser/dto/find-user.dto';
 import { GetUserProfileResDto } from './dto/get-user-profile-res.dto';
 import { GameRecordDto } from './dto/game-record.dto';
-// import { GetUserProfileDetailsResDto } from './dto/get-user-profile-details-res.dto';
+import { GetUserProfileDetailsResDto } from './dto/get-user-profile-details-res.dto';
 import { GetUserProfileByNicknameReqDto } from './dto/get-user-profile-by-nickname-req.dto';
 import { FindUserByNicknameDto } from '../memoryuser/dto/find-user-by-nickname.dto';
 import { GetUserProfileByNicknameResDto } from './dto/get-user-profile-by-nickname-res.dto';
 import { UpdateTwofactorReqDto } from './dto/update-twofactor-req.dto';
 import { CheckAvailableTwofactorDto } from '../memoryuser/dto/check-available-twofactor.dto';
+import { CheckDuplicateNicknameDto } from '../memoryuser/dto/check-duplicate-nickname.dto';
+import { UpdateNicknameReqDto } from './dto/update-nickname-req.dto';
 import { UserService } from '../user/user.service';
 import { UpdateUserDto } from '../user/dto/update-user.dto';
 
@@ -46,14 +48,28 @@ export class MeController {
       Builder(FindUserDto).userId(session.userId).build(),
     );
 
-    // return Builder(GetUserProfileDetailsResDto)
-    //   .id(me.id)
-    //   .nickname(me.nickname)
-    //   .avatar(me.avatar)
-    //   .mail(me.mail)
-    //   .phone(me.phone)
-    //   .twoFactor(me.twoFactor)
-    //   .build();
+    return Builder(GetUserProfileDetailsResDto)
+      .id(me.id)
+      .nickname(me.nickname)
+      .avatar(me.avatar)
+      .mail(me.mail)
+      .phone(me.phone)
+      .twoFactor(me.twoFactor)
+      .build();
+  }
+
+  @Put('nickname')
+  updateNickname(@Session() session, @Body() dto: UpdateNicknameReqDto) {
+    this.memoryUserService.checkDuplicateNickname(
+      Builder(CheckDuplicateNicknameDto).nickname(dto.nickname).build(),
+    );
+
+    this.userService.updateUser(
+      Builder(UpdateUserDto)
+        .userId(session.userId)
+        .nickname(dto.nickname)
+        .build(),
+    );
   }
 
   @Put('twofactor')

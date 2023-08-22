@@ -9,6 +9,7 @@ import { AddUserFollowerDto } from './dto/add-user-follower.dto';
 import { DeleteUserFollowerDto } from './dto/delete-user-follower.dto';
 import { AddUserFriendDto } from './dto/add-user-friend.dto';
 import { DeleteUserFriendDto } from './dto/delete-user-friend.dto';
+import { CheckDuplicateNicknameDto } from './dto/check-duplicate-nickname.dto';
 import { UserDto } from '../user/dto/user.dto';
 import { Builder } from 'builder-pattern';
 import _ from 'lodash';
@@ -95,5 +96,13 @@ export class MemoryUserService {
     }
 
     return;
+  }
+  
+  checkDuplicateNickname(dto: CheckDuplicateNicknameDto) {
+    for (const user of this.memoryUsers.values()) {
+      if (user.nickname === dto.nickname) {
+        throw new HttpException('이미 사용중인 닉네임입니다.', 200);
+      }
+    }
   }
 }
