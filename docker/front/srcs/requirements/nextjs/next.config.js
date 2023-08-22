@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 
 module.exports = {
-  // output: 'standalone',
+  // 베포 전용 옵션
+  output: 'standalone',
   eslint: {
     ignoreDuringBuilds: true,
   },
