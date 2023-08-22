@@ -4,7 +4,7 @@ import { Builder } from 'builder-pattern';
 import { FindUserDto } from '../memoryuser/dto/find-user.dto';
 import { GetUserProfileResDto } from './dto/get-user-profile-res.dto';
 import { GameRecordDto } from './dto/game-record.dto';
-// import { GetUserProfileDetailsResDto } from './dto/get-user-profile-details-res.dto';
+import { GetUserProfileDetailsResDto } from './dto/get-user-profile-details-res.dto';
 import { GetUserProfileByNicknameReqDto } from './dto/get-user-profile-by-nickname-req.dto';
 import { FindUserByNicknameDto } from '../memoryuser/dto/find-user-by-nickname.dto';
 import { GetUserProfileByNicknameResDto } from './dto/get-user-profile-by-nickname-res.dto';
@@ -46,14 +46,14 @@ export class MeController {
       Builder(FindUserDto).userId(session.userId).build(),
     );
 
-    // return Builder(GetUserProfileDetailsResDto)
-    //   .id(me.id)
-    //   .nickname(me.nickname)
-    //   .avatar(me.avatar)
-    //   .mail(me.mail)
-    //   .phone(me.phone)
-    //   .twoFactor(me.twoFactor)
-    //   .build();
+    return Builder(GetUserProfileDetailsResDto)
+      .id(me.id)
+      .nickname(me.nickname)
+      .avatar(me.avatar)
+      .mail(me.mail)
+      .phone(me.phone)
+      .twoFactor(me.twoFactor)
+      .build();
   }
 
   @Put('nickname')
