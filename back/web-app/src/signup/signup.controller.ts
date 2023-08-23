@@ -7,6 +7,7 @@ import { MemoryUserService } from 'src/users/memoryuser/memory-user.service';
 import { RedirectResource } from 'src/common/response/redirect-resource.enum';
 import { SignupMemberRepDto } from './dto/signup-member-req.dto';
 import { MemberUser } from 'src/users/user/entities/member-user.entity';
+import { UserDto } from 'src/users/user/dto/user.dto';
 
 @Controller('signup')
 export class SignupController {
@@ -32,6 +33,16 @@ export class SignupController {
     // 비밀번호 해시화 후 저장
 
     user = await this.userService.createUser(null);
+    this.memoryUserService.addUser(
+      Builder(UserDto)
+      .avatar(user.avatar)
+      .mail(user.mail)
+      .nickname(user.nickname)
+      .phone(user.phone)
+      .twoFactor(user.twoFactor)
+      .userId(user.id)
+      .build()
+    );
 
     this.userService.createSignupMember(
       Builder(CreateMemberUserDto)
