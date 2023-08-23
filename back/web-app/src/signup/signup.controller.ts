@@ -8,6 +8,7 @@ import { RedirectResource } from 'src/common/response/redirect-resource.enum';
 import { SignupMemberRepDto } from './dto/signup-member-req.dto';
 import { MemberUser } from 'src/users/user/entities/member-user.entity';
 import { CreateUserDto } from 'src/users/user/dto/create-user.dto';
+import { UserDto } from 'src/users/user/dto/user.dto';
 
 @Controller('signup')
 export class SignupController {
@@ -34,6 +35,14 @@ export class SignupController {
     user = await this.userService.createUser(
       Builder(CreateUserDto)
       .mail(null)
+    this.memoryUserService.addUser(
+      Builder(UserDto)
+      .avatar(user.avatar)
+      .mail(user.mail)
+      .nickname(user.nickname)
+      .phone(user.phone)
+      .twoFactor(user.twoFactor)
+      .userId(user.id)
       .build()
     );
 
