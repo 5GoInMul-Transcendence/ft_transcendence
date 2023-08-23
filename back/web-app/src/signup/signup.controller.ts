@@ -7,6 +7,7 @@ import { MemoryUserService } from 'src/users/memoryuser/memory-user.service';
 import { RedirectResource } from 'src/common/response/redirect-resource.enum';
 import { SignupMemberRepDto } from './dto/signup-member-req.dto';
 import { MemberUser } from 'src/users/user/entities/member-user.entity';
+import { CreateUserDto } from 'src/users/user/dto/create-user.dto';
 import { UserDto } from 'src/users/user/dto/user.dto';
 
 @Controller('signup')
@@ -23,7 +24,6 @@ export class SignupController {
     const { id, password } = signupMemberReqDto;
     let memberUser: MemberUser;
     let user: User;
-    // User 테이블에 저장 후 리턴 받을 변수
 
     memberUser = await this.userService.getMemberUserByAccountId(id)
     if (memberUser) {
@@ -32,7 +32,9 @@ export class SignupController {
     // nickname, avatar 랜덤생성
     // 비밀번호 해시화 후 저장
 
-    user = await this.userService.createUser(null);
+    user = await this.userService.createUser(
+      Builder(CreateUserDto)
+      .mail(null)
     this.memoryUserService.addUser(
       Builder(UserDto)
       .avatar(user.avatar)
@@ -47,8 +49,8 @@ export class SignupController {
     this.userService.createSignupMember(
       Builder(CreateMemberUserDto)
       .user(user)
-      .id(id) // change
-      .password(password) // 해시와 필요
+      .id(id)
+      .password(password) // 해시화 필요
       .build()
     );
 
