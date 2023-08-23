@@ -10,6 +10,8 @@ import { CreateOauthUserDto } from 'src/users/user/dto/create-oauth-user.dto';
 import { RedirectResource } from 'src/common/response/redirect-resource.enum';
 import { LoginMemberUserReqDto } from './dto/login-member-user-req.dto';
 import { MemberUser } from 'src/users/user/entities/member-user.entity';
+import { MemoryUserService } from 'src/users/memoryuser/memory-user.service';
+import { UserDto } from 'src/users/user/dto/user.dto';
 
 @Controller('login')
 export class LoginController {
@@ -17,6 +19,7 @@ export class LoginController {
     private loginService: LoginService,
     private userService: UserService,
     private sessionService: SessionService,
+    private memoryUserService: MemoryUserService,
   ) {}
 
   @Post()
@@ -62,8 +65,6 @@ export class LoginController {
     oauthUser = await this.userService.getOauthUserByProfileId(reqUser.id);
     user = oauthUser?.user; // 유저가 없었다면 oauthUser 는 null 이다.
     if (!user) {
-      // add memoryUser
-      // add memoryOauthUser
       user = await this.userService.createUser(reqUser.mail);
       this.userService.createSignupOauth(
         Builder(CreateOauthUserDto)
@@ -71,6 +72,16 @@ export class LoginController {
         .profileId(reqUser.id)
         .build()
       ); 
+      this.memoryUserService.addUser(
+        Builder(UserDto)
+        .avatar(user.avatar)
+        .mail(user.mail)
+        .nickname(user.nickname)
+        .phone(user.phone)
+        .twoFactor(user.twoFactor)
+        .userId(user.id)
+        .build()
+      );
     }
   
     if (this.loginService.isTwoFaOn(user.twoFactor) == true) {
