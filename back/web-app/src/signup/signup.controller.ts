@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpException, HttpStatus, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpException, HttpStatus, Post } from '@nestjs/common';
 import { UserService } from 'src/users/user/user.service';
 import { Builder } from 'builder-pattern';
 import { CreateMemberUserDto } from 'src/users/user/dto/create-member-user.dto';
