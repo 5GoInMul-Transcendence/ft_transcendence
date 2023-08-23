@@ -12,7 +12,7 @@ import { DeleteUserFriendDto } from './dto/delete-user-friend.dto';
 import { CheckDuplicateNicknameDto } from './dto/check-duplicate-nickname.dto';
 import { UserDto } from '../user/dto/user.dto';
 import { Builder } from 'builder-pattern';
-import _ from 'lodash';
+import cloneDeep from 'lodash';
 import { CheckAvailableTwofactorDto } from './dto/check-available-twofactor.dto';
 import { TwoFactorStatus } from '../enums/twoFactor-status.enum';
 
@@ -27,7 +27,7 @@ export class MemoryUserService {
       throw new HttpException('존재하지 않은 유저입니다.', 200);
     }
 
-    return _.cloneDeep(user);
+    return cloneDeep(user);
   }
 
   findUserByNickname(dto: FindUserByNicknameDto): MemoryUser {
