@@ -1,13 +1,19 @@
 'use client';
 
+import useSocket from '@/hooks/useSocket';
+import { gameObject } from '@/types/IGameObject';
 import { useEffect, useRef } from 'react';
+import { io } from 'socket.io-client';
 import styled from 'styled-components';
 
 export default function GameBoard() {
   // 각 HtmlElelment 에 해당하는 dom 객체 가져오기
-  const gameBoardDiv = useRef<HTMLCanvasElement>(null);
-  const resetBtn = useRef<HTMLButtonElement>(null);
+  const [socket] = useSocket('8081');
+  const startGame = () => {
+    socket?.emit('startGame');
+  };
 
+  const gameBoardDiv = useRef<HTMLCanvasElement>(null);
   let ctx: any;
   let gameWidth: any;
   let gameHeight: any;
@@ -16,14 +22,7 @@ export default function GameBoard() {
   let paddleBorder: any;
   let ballColor: any;
   let ballRadius: any;
-  let paddleSpeed: number;
-  let itervalId: any;
-  let ballSpeed: any;
   let ballBorderColor = 'green';
-  let ballX: number;
-  let ballY: number;
-  let ballXDirection: any;
-  let ballYDirection: any;
   let boardBackground = 'blue';
   let player1Score: any;
   let player2Score: any;
@@ -39,16 +38,6 @@ export default function GameBoard() {
       paddle2Color = 'red';
       paddleBorder = 'black';
       ballColor = 'yellow';
-      ballRadius = 12.5;
-      paddleSpeed = 50;
-      itervalId;
-      ballSpeed = 10;
-      ballX = gameWidth / 2;
-      ballY = gameHeight / 2;
-      ballXDirection = 0;
-      ballYDirection = 0;
-      player1Score = 0;
-      player2Score = 0;
       boardBackground = 'black';
       paddle1 = {
         width: 25,
@@ -63,65 +52,24 @@ export default function GameBoard() {
         y: gameHeight - 100,
       };
       window.addEventListener('keydown', changeDirection);
-      resetBtn.current?.addEventListener('click', resetGame);
-      gameStart();
-      drawPaddles();
     }
   });
-
-  function gameStart() {
-    createBall();
-    nextTick();
-  }
-
-  function nextTick() {
-    itervalId = setTimeout(() => {
-      clearBoard();
-      drawPaddles();
-      moveBall();
-      drawBall(ballX, ballY);
-      checkCollision();
-      nextTick();
-    }, 10);
-  }
 
   function clearBoard() {
     ctx.fillStyle = boardBackground;
     ctx.fillRect(0, 0, gameWidth, gameHeight);
   }
 
-  function drawPaddles() {
+  function drawPaddles(p1_x: number, p1_y: number, p2_x: number, p2_y: number) {
     ctx.strokeStyle = paddleBorder;
     ctx.fillStyle = paddle1Color;
-    ctx.fillRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
-    ctx.strokeRect(paddle1.x, paddle1.y, paddle1.width, paddle1.height);
+    ctx.fillRect(p1_x, p1_y, paddle1.width, paddle1.height);
+    ctx.strokeRect(p1_x, p1_y, paddle1.width, paddle1.height);
 
     ctx.fillStyle = paddle2Color;
-    ctx.fillRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
-    ctx.strokeRect(paddle2.x, paddle2.y, paddle2.width, paddle2.height);
-  }
-
-  function createBall() {
-    ballSpeed = 3;
-    if (Math.round(Math.random()) === 1) {
-      ballXDirection = 1;
-    } else {
-      ballXDirection = -1;
-    }
-    if (Math.round(Math.random()) === 1) {
-      ballYDirection = 1;
-    } else {
-      ballYDirection = -1;
-    }
-    ballX = gameWidth / 2;
-    ballY = gameHeight / 2;
-    drawBall(ballX, ballY);
-  }
-
-  function moveBall() {
-    // ball 위치 지정
-    ballX += ballSpeed * ballXDirection;
-    ballY += ballSpeed * ballYDirection;
+    console.log(p1_x, p1_y);
+    ctx.fillRect(p2_x, p2_y, paddle2.width, paddle2.height);
+    ctx.strokeRect(p2_x, p2_y, paddle2.width, paddle2.height);
   }
 
   function drawBall(ballX: number, ballY: number) {
@@ -136,84 +84,39 @@ export default function GameBoard() {
     ctx.fill();
   }
 
-  function checkCollision() {
-    if (ballY <= 0 + ballRadius) {
-      ballYDirection *= -1;
-    }
-    if (ballY >= gameHeight - ballRadius) {
-      ballYDirection *= -1;
-    }
-    if (ballX <= 0) {
-      // 게임 로직
-      player1Score += 1;
-      updateScore();
-      createBall();
-
-      // 시각용
-      ballXDirection *= -1;
-
-      return;
-    }
-    if (ballX >= gameWidth) {
-      // 게임 로직
-      player2Score += 1;
-      updateScore();
-      createBall();
-
-      // 무한 게임 로직 시각용
-      ballXDirection *= -1;
-
-      return;
-    }
-    if (ballX <= paddle1.x + paddle1.width + ballRadius) {
-      if (ballY > paddle1.y && ballY < paddle1.y + paddle1.height) {
-        ballXDirection *= -1;
-        ballSpeed += 0.05;
-      }
-    }
-
-    if (ballX >= paddle2.x) {
-      if (ballY > paddle2.y && ballY < paddle2.y + paddle2.height) {
-        ballXDirection *= -1;
-        ballSpeed += 0.05;
-      }
-    }
-  }
-
   function changeDirection(event: any) {
     const keyPressed = event.keyCode;
     const paddle1Up = 87;
     const paddle1Down = 83;
     const paddle2Up = 38;
     const paddle2Down = 40;
-
     switch (keyPressed) {
       case paddle1Up:
-        if (paddle1.y > 0) {
-          paddle1.y -= paddleSpeed;
-        }
+        socket?.emit('updatePaddle', { paddle: 'paddle1Up' });
         break;
       case paddle1Down:
-        if (paddle1.y < gameHeight - paddle1.height) {
-          paddle1.y += paddleSpeed;
-        }
+        socket?.emit('updatePaddle', { paddle: 'paddle1Down' });
         break;
       case paddle2Up:
-        if (paddle2.y > 0) {
-          paddle2.y -= paddleSpeed;
-        }
+        socket?.emit('updatePaddle', { paddle: 'paddle2Up' });
         break;
       case paddle2Down:
-        if (paddle2.y < gameHeight - paddle2.height) {
-          paddle2.y += paddleSpeed;
-        }
+        socket?.emit('updatePaddle', { paddle: 'paddle2Down' });
         break;
     }
   }
 
-  function updateScore() {}
+  useEffect(() => {
+    socket?.on('updateObject', (res: gameObject) => {
+      const p1 = res.data.p1;
+      const p2 = res.data.p2;
+      const ball = res.data.b;
 
-  function resetGame() {}
+      clearBoard();
+      drawPaddles(p1.x, p1.y, p2.x, p2.y);
+      drawBall(ball.x, ball.y);
+    });
+  }, [socket]);
 
   return (
     <GameContainer id='gameContainer'>
@@ -223,6 +126,7 @@ export default function GameBoard() {
         height='700'
         ref={gameBoardDiv}
       ></GameBoardDiv>
+      <button onClick={startGame}>startGame</button>
     </GameContainer>
   );
 }

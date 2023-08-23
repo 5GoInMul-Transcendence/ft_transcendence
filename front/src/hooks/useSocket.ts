@@ -1,26 +1,26 @@
 import { useCallback } from 'react';
 import { Socket, io } from 'socket.io-client';
 
-const backUrl = 'ws://localhost:8080';
+const backUrl = 'ws://localhost';
 
 const sockets: { [key: string]: Socket } = {};
-const useSocket = (workspace?: string): [Socket | undefined, () => void] => {
+const useSocket = (port?: string): [Socket | undefined, () => void] => {
   const disconnect = useCallback(() => {
-    if (workspace) {
-      sockets[workspace].disconnect();
-      delete sockets[workspace];
+    if (port) {
+      sockets[port].disconnect();
+      delete sockets[port];
     }
-  }, [workspace]);
-  if (!workspace) {
+  }, [port]);
+  if (!port) {
     return [undefined, disconnect];
   }
-  if (!sockets[workspace]) {
-    sockets[workspace] = io(`${backUrl}/`, {
+  if (!sockets[port]) {
+    sockets[port] = io(`${backUrl}:${port}/`, {
       transports: ['websocket'],
     });
   }
 
-  return [sockets[workspace], disconnect];
+  return [sockets[port], disconnect];
 };
 
 export default useSocket;

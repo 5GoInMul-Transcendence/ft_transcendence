@@ -7,7 +7,7 @@ import useSocket from '@/hooks/useSocket';
 import ChatMessageBox from './ChatMessageBox';
 
 export default function Chats() {
-  const [socket] = useSocket('/');
+  const [socket] = useSocket('8080');
   const [clientMessage, setClientMessage, onChangeClientMessage] = useInput('');
   const [clientMessageList, setClientMessageList] = useState(['']);
   const onClientMessageSubmit = (e: any) => {
