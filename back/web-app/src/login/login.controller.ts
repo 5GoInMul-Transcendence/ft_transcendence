@@ -33,10 +33,10 @@ export class LoginController {
 
     memberUser = await this.userService.getMemberUserByAccountId(id);
     if (!memberUser) {
-      throw new HttpException('ID가 존재하지 않습니다!', HttpStatus.OK);
+      throw new HttpException('아이디 또는 비밀번호가 올바르지 않습니다!', HttpStatus.OK);
     }
     if (memberUser.password !== password) {
-      throw new HttpException('Password가 일치하지 않습니다!', HttpStatus.OK);
+      throw new HttpException('아이디 또는 비밀번호가 올바르지 않습니다!', HttpStatus.OK);
     }
     if (this.loginService.isTwoFaOn(memberUser.user.twoFactor) == true) {
       // 2FA
