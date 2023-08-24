@@ -1,0 +1,29 @@
+{
+		"id": "1",
+    "name": "OwnerJiyoChannel",
+    "role": "owner",
+    "env": "public",
+		"recentMessage": [
+			{ "id":1, "nickname": "jiyokim", "content": "hello~"},
+			{ "id":2, "nickname": "jiyokim", "content": "hi~"},
+			{ "id":3, "nickname": "kipark", "content": "hello~"},
+			{ "id":4, "nickname": "jayoon", "content": "hello~"},
+			{ "id":5, "nickname": "donghyuk", "content": "hello~"},
+			{ "id":6, "nickname": "jabae", "content": "hello~"},
+			{ "id":7, "nickname": "jiyokim", "content": "haheaf~"},
+			{ "id":8, "nickname": "donghyuk", "content": "ehflwijfwlie"},
+			{ "id":9, "nickname": "jiyokim", "content": "아ㄴㄴ여영ㅇ~"},
+			{ "id":10, "nickname": "jiyokim", "content": "헤헤헤헤ㅔ 꿀ㅐㅁ~하하하하하"},
+			{ "id":11, "nickname": "kipark", "content": "핑퐁핑퐁 화이팅~~"},
+			{ "id":12, "nickname": "jayoon", "content": "hahaha~"},
+			{ "id":13, "nickname": "jiyokim", "content": "hahaha~"},
+			{ "id":14, "nickname": "jiyokim", "content": "뭐라뭐라~"},
+			{ "id":15, "nickname": "jiyokim", "content": "어쩌구저쩌구~"},
+			{ "id":16, "nickname": "jiyokim", "content": "어쩌구저쩌구~"},
+			{ "id":17, "nickname": "jiyokim", "content": "어쩌구저쩌구~" }
+		],
+	"resStatus": {
+			"code": "0000",
+			"message": ""
+	}
+}

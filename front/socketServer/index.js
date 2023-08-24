@@ -28,4 +28,16 @@ io.sockets.on('connection', function (socket) {
     };
     io.emit('server', message);
   });
+  setTimeout(() => {
+    io.emit('addAllChannel', {
+      data: {
+        id: +new Date() % 100000000,
+        name: 'addChannel',
+      },
+      resStatus: {
+        code: '0000',
+        message: '',
+      },
+    });
+  }, 10000);
 });
