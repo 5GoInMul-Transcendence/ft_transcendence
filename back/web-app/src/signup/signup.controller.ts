@@ -35,6 +35,8 @@ export class SignupController {
     user = await this.userService.createUser(
       Builder(CreateUserDto)
       .mail(null)
+      .build()
+    );
     this.memoryUserService.addUser(
       Builder(UserDto)
       .avatar(user.avatar)
