@@ -14,14 +14,7 @@ export class FtStrategy extends PassportStrategy(Strategy, 'ft') {
       callbackURL: configService.get<string>('FT_REDIRECT'),
       profileFields: {
         'id': function (obj) { return String(obj.id); }, // profileId in OauthUser table
-        'username': 'login',
-        'displayName': 'displayname',
-        'name.familyName': 'last_name',
-        'name.givenName': 'first_name',
-        'profileUrl': 'url',
         'emails.0.value': 'email',
-        'phoneNumbers.0.value': 'phone',
-        'photos.0.value': 'image.link'
       },
     });
   }
