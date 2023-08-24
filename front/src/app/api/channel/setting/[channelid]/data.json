@@ -1,0 +1,27 @@
+{
+    "data": [
+      {
+        "id": 1,
+        "nickname": "jayoon",
+        "avatar": "",
+        "role": "owner"
+      },
+      {
+        "id": 2,
+        "nickname": "jiyo",
+        "avatar": "",
+        "role": "admin"
+      },
+			{
+        "id": 3,
+        "nickname": "parki",
+        "avatar": "",
+        "role": "user"
+      }
+    ],
+  "resStatus" :
+  {
+    "code"   : "0000",
+    "message": ""
+  }
+}

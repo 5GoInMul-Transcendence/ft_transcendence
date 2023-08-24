@@ -9,13 +9,18 @@ export default function ChatsLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const onClickCreateChannel = () => {
+    //TODO: create channel 모달
+  };
   return (
     <>
       <Container>
         <ChannelList />
         {children}
       </Container>
-      <CreateChannelButton> + create channel</CreateChannelButton>
+      <CreateChannelButton onClick={onClickCreateChannel}>
+        + create channel
+      </CreateChannelButton>
     </>
   );
 }
