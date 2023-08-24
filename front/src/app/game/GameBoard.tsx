@@ -49,8 +49,10 @@ export default function GameBoard() {
         y: gameHeight - 100,
       };
       window.addEventListener('keydown', changeDirection);
+      // 게임이 종료될 때 삭제해야함
+      // window.removeEventListener('keyDown', changeDirection);
     }
-  });
+  }, []);
 
   function clearBoard() {
     ctx.fillStyle = boardBackground;
