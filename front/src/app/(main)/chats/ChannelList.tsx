@@ -1,28 +1,41 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ChannelItem from './ChannelItem';
-
-const myChannels = [
-  {
-    channel_id: '11jei3',
-    channel_name: 'letsplayPingPong',
-    lastChat: '뭐라뭐라',
-  },
-];
-const channels = [
-  { channel_id: 'sjfie', channel_name: 'helloEveryone', lastChat: '뭐라뭐라' },
-];
+import axios from 'axios';
+// import { Socket, io } from 'socket.io-client';
+import { IAllChannel, IMyChannel } from '@/types/IChannel';
 
 export default function ChannelList() {
+  // const socket = io('ws://localhost:8080', {
+  //   transports: ['websocket'],
+  // });
   const [myChannelOption, setmyChannelOption] = useState(true);
+  const [myChannels, setMyChannels] = useState<IMyChannel[]>([]);
+  const [allChannels, setAllChannels] = useState<IAllChannel[]>([]);
   const showAllChannels = () => {
     setmyChannelOption(false);
   };
   const showMyChannels = () => {
     setmyChannelOption(true);
   };
+  useEffect(() => {
+    axios.get('/api/me/channels').then((data) => {
+      if (data.data.resStatus.code === '0000') setMyChannels(data.data.data);
+    });
+    axios.get('/api/channels').then((data) => {
+      if (data.data.resStatus.code === '0000') setAllChannels(data.data.data);
+    });
+  }, []);
+
+  // useEffect(() => {
+  //   socket.on('addAllChannel', ({ data }: { data: IAllChannel }) => {
+  //     setAllChannels((cur) => [...cur, data]);
+  //     console.log(data);
+  //   });
+  // }, [socket]);
+
   return (
     <Container>
       <ChannelOptions>
@@ -35,10 +48,15 @@ export default function ChannelList() {
       </ChannelOptions>
       {myChannelOption
         ? myChannels.map((e) => (
-            <ChannelItem key={e.channel_id} channelName={e.channel_name} />
+            <ChannelItem
+              key={e.id}
+              channelId={e.id}
+              channelName={e.name}
+              recentMessage={e.recentMessage}
+            />
           ))
-        : channels.map((e) => (
-            <ChannelItem key={e.channel_id} channelName={e.channel_name} />
+        : allChannels.map((e) => (
+            <ChannelItem key={e.id} channelId={e.id} channelName={e.name} />
           ))}
     </Container>
   );
@@ -48,6 +66,7 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.lightgrey};
   width: 30%;
   height: 100%;
+  overflow-y: scroll;
 `;
 
 const ChannelOptions = styled.div`

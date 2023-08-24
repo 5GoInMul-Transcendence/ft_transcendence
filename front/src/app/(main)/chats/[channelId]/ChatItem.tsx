@@ -23,6 +23,7 @@ export default function ChatItem({ nickname, content }: ChatItemProps) {
     </Container>
   );
 }
+
 const Container = styled.div<{ $me: boolean }>`
   display: flex;
   flex-direction: ${({ $me }) => ($me ? 'row-reverse' : 'row')};

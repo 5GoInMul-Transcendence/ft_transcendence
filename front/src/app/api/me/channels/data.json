@@ -1,0 +1,17 @@
+{ 
+  "data" : [
+    {
+        "id": 1,
+        "name": "OwnerJiyoChannel",
+        "recentMessage": {
+          "nickname": "jiyokim",
+          "message": "최근 메시지"
+        }
+    }
+  ],
+  "resStatus" :
+  {
+    "code"   : "0000",
+    "message": ""
+  }
+}

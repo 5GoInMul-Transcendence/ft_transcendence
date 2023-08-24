@@ -27,6 +27,18 @@ io.sockets.on('connection', function (socket) {
   // match socket
   // 매칭 등록은 하지 않음
   // . . .
+  setTimeout(() => {
+    io.emit('addAllChannel', {
+      data: {
+        id: +new Date() % 100000000,
+        name: 'addChannel',
+      },
+      resStatus: {
+        code: '0000',
+        message: '',
+      },
+    });
+  }, 10000);
 });
 
 // game socket
