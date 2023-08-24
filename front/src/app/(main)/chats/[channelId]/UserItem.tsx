@@ -1,35 +1,29 @@
 'use client';
 
 import ProfileImage from '@/component/ProfileImage';
+import Link from 'next/link';
 import styled from 'styled-components';
 
 interface UserItemProps {
   nickname: string;
   role: string;
-  status: string;
-  imgurl: string;
+  avatar: string;
 }
 
-export default function UserItem({
-  nickname,
-  role,
-  status,
-  imgurl,
-}: UserItemProps) {
+export default function UserItem({ nickname, role, avatar }: UserItemProps) {
   return (
     <Container>
       <ProfileContainer>
-        <ProfileImage url={imgurl} size='50px' />
+        <ProfileImage url={avatar} size='50px' />
         <NicknameWrapper>
           <span>{nickname}</span>
-          <span>{role}</span>
+          <span>{role !== 'user' && role}</span>
         </NicknameWrapper>
       </ProfileContainer>
       <StatusContainer>
-        <span>
-          <StatusDiv $status={status} /> {status}
-        </span>
-        {'>'}
+        <ProfileLink href={`/profile/${nickname}`}>profile</ProfileLink>
+        <GameMatchButton>game</GameMatchButton>
+        <button>{'>'}</button>
       </StatusContainer>
     </Container>
   );
@@ -44,27 +38,12 @@ const Container = styled.div`
   margin: 0.4rem 0.6rem;
 `;
 
-const StatusDiv = styled.div<{ $status: string }>`
-  width: 10px;
-  height: 10px;
-  border-radius: 100%;
-  background-color: ${({ $status, theme }) =>
-    $status === 'online'
-      ? theme.colors.green
-      : 'offline'
-      ? theme.colors.pink
-      : theme.colors.yellow};
-`;
-
 const StatusContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  span {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-  }
+  color: ${({ theme }) => theme.colors.black};
+  font-size: ${({ theme }) => theme.fontSize.xsmall};
 `;
 
 const NicknameWrapper = styled.div`
@@ -80,4 +59,20 @@ const NicknameWrapper = styled.div`
 
 const ProfileContainer = styled.div`
   display: flex;
+`;
+
+const ProfileLink = styled(Link)`
+  ${({ theme }) => theme.flex.center};
+  background-color: ${({ theme }) => theme.colors.white};
+  width: 6rem;
+  height: 2rem;
+  border-radius: 10px;
+`;
+
+const GameMatchButton = styled.button`
+  ${({ theme }) => theme.flex.center};
+  background-color: ${({ theme }) => theme.colors.green};
+  width: 6rem;
+  height: 2rem;
+  border-radius: 10px;
 `;
