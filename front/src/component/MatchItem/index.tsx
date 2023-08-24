@@ -11,42 +11,41 @@ export default function MatchItem({ title, content }: Props) {
   const path = usePathname();
 
   return (
-    <MatchWrapper>
+    <MatchContainer>
       <div>{title}</div>
-      <div>
+      <MatchWrapper>
         <Match>{content}</Match>
-        <MatchHistory>
-          <Link href={`${path}/history`}>
-            <span>{`HISTORY >`}</span>
-          </Link>
-        </MatchHistory>
-      </div>
-    </MatchWrapper>
+        <MatchHistory href={`${path}/history`}>{`HISTORY >`}</MatchHistory>
+      </MatchWrapper>
+    </MatchContainer>
   );
 }
 
-const MatchWrapper = styled.div`
+const MatchContainer = styled.div`
+  width: 100%;
   div:first-child {
     margin-bottom: 1rem;
   }
-  div:last-child {
-    ${({ theme }) => theme.flex.spaceBetween};
-  }
+`;
+
+const MatchWrapper = styled.div`
+  ${({ theme }) => theme.flex.spaceBetween};
 `;
 
 const Match = styled.span`
-  width: 45%;
-  padding: 1.5rem 2rem;
+  ${({ theme }) => theme.flex.center};
+  width: 47%;
+  height: 4rem;
   border-radius: 0.8rem;
   color: ${({ theme }) => theme.colors.black};
   background: ${({ theme }) => theme.colors.lightgrey};
 `;
 
-const MatchHistory = styled.span`
-  width: 45%;
-  padding: 1.5rem 2rem;
+const MatchHistory = styled(Link)`
+  ${({ theme }) => theme.flex.center};
+  width: 47%;
+  height: 4rem;
   border-radius: 0.8rem;
-  text-align: center;
   color: ${({ theme }) => theme.colors.black};
   background: ${({ theme }) => theme.colors.white};
 `;

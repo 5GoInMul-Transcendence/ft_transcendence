@@ -31,8 +31,7 @@ const Wrapper = styled.div`
   div:first-child {
     margin-bottom: 1rem;
   }
-  div:last-child {
-  }
+  margin: 1rem 0;
 `;
 
 const Achievement = styled.img`

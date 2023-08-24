@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import ProfileItem from '../profile/[user]/ProfileItem';
 import AchievementItem from './AchievementItem';
-import MatchItem from './MatchItem';
+import MatchItem from '@/component/MatchItem';
 import ProfileImage from '@/component/ProfileImage';
 import styled from 'styled-components';
 
@@ -32,15 +32,17 @@ export default function Profile() {
 }
 
 const Container = styled.div`
-  ${({ theme }) => theme.flex.centerColumn};
-  margin: 5rem 10rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin: 2rem 0;
 `;
 
 const TopWrapper = styled.div`
-  ${({ theme }) => theme.flex.center};
-  width: 100%;
-  height: 28rem;
-  margin-bottom: 10rem;
+  display: flex;
+  width: 80%;
 `;
 
 const Wrapper = styled.div<{ $width: number }>`
