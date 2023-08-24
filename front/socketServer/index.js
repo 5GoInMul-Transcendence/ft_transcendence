@@ -1,18 +1,18 @@
 'use strict';
 
-var nodeStatic = require('node-static');
-var http = require('http');
-var socketIO = require('socket.io');
+let nodeStatic = require('node-static');
+let http = require('http');
+let socketIO = require('socket.io');
 
-var fileServer = new nodeStatic.Server();
-var app = http
+let fileServer = new nodeStatic.Server();
+let app = http
   .createServer(function (req, res) {
     fileServer.serve(req, res);
   })
   .listen(8080);
 
 // main socket
-var io = socketIO(app);
+let io = socketIO(app);
 io.sockets.on('connection', function (socket) {
   // chat socket
   socket.on('client', (clientMessage) => {
@@ -42,18 +42,18 @@ io.sockets.on('connection', function (socket) {
 });
 
 // game socket
-var gameServer = http
+let gameServer = http
   .createServer(function (req, res) {
     fileServer.serve(req, res);
   })
   .listen(8081);
 
-var gameIo = socketIO(gameServer);
-var playerCount = 0;
-var loopGameIntervalID;
+let gameIo = socketIO(gameServer);
+let playerCount = 0;
+let loopGameIntervalID;
 gameIo.sockets.on('connection', function (socket) {
   function updateInfoGameStatus(str) {
-    var data = {
+    let data = {
       status: str,
     };
     socket.emit('infoGame', data);
