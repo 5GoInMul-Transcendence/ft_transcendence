@@ -27,6 +27,7 @@ export default function Toggle({ text, color, checked, onToggle }: Props) {
 const Wrapper = styled.div`
   ${({ theme }) => theme.flex.spaceBetween};
   justify-content: flex-start;
+  margin-bottom: 1rem;
 `;
 
 const SwitchSpan = styled.span`

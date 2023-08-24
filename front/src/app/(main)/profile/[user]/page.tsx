@@ -3,7 +3,7 @@
 import AchievementItem from './AchievementItem';
 import ProfileItem from './ProfileItem';
 import Buttons from '@/component/Buttons';
-import MatchItem from './MatchItem';
+import MatchItem from '@/component/MatchItem';
 import ProfileImage from '@/component/ProfileImage';
 import Toggle from '@/component/Toggle';
 import useToggle from '@/hooks/useToggle';
@@ -53,22 +53,24 @@ export default function Profile({ params }: { params: { user: string } }) {
 }
 
 const Container = styled.div`
-  ${({ theme }) => theme.flex.centerColumn};
-  margin: 5rem 10rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem 0;
+  width: 100%;
+  height: 100%;
+  margin: 2rem 0;
 `;
 
 const TopWrapper = styled.div`
   ${({ theme }) => theme.flex.center};
-  width: 100%;
+  width: 80%;
   height: 28rem;
-  margin-bottom: 10rem;
+  margin-bottom: 4rem;
 `;
 
 const Wrapper = styled.div<{ $width: number }>`
   flex: ${({ $width }) => $width};
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   margin: 0 2rem;
   height: 100%;
 `;
@@ -76,7 +78,6 @@ const Wrapper = styled.div<{ $width: number }>`
 const TogglesWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   margin: 2rem auto;
   width: 13rem;
   height: 100%;

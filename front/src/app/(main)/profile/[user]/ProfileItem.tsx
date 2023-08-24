@@ -20,9 +20,13 @@ const Wrapper = styled.div`
   }
 
   div:last-child {
-    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    height: 4rem;
+    padding: 0 2rem;
     border-radius: 0.8rem;
     color: ${({ theme }) => theme.colors.black};
     background: ${({ theme }) => theme.colors.lightgrey};
   }
+  margin-bottom: 1rem;
 `;
