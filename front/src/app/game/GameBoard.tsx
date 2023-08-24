@@ -3,11 +3,9 @@
 import useSocket from '@/hooks/useSocket';
 import { gameObject } from '@/types/IGameObject';
 import { useEffect, useRef } from 'react';
-import { io } from 'socket.io-client';
 import styled from 'styled-components';
 
 export default function GameBoard() {
-  // 각 HtmlElelment 에 해당하는 dom 객체 가져오기
   const [socket] = useSocket('8081');
   const startGame = () => {
     socket?.emit('startGame');
@@ -24,18 +22,17 @@ export default function GameBoard() {
   let ballRadius: any;
   let ballBorderColor = 'green';
   let boardBackground = 'blue';
-  let player1Score: any;
-  let player2Score: any;
   let paddle1: any;
   let paddle2: any;
+
   useEffect(() => {
-    // Dom 객체가 정상적으로 가져와졌나 확인
     if (gameBoardDiv.current) {
       ctx = gameBoardDiv.current.getContext('2d');
       gameWidth = gameBoardDiv.current.width;
       gameHeight = gameBoardDiv.current.height;
       paddle1Color = 'white';
       paddle2Color = 'red';
+      ballRadius = 15;
       paddleBorder = 'black';
       ballColor = 'yellow';
       boardBackground = 'black';
@@ -67,18 +64,16 @@ export default function GameBoard() {
     ctx.strokeRect(p1_x, p1_y, paddle1.width, paddle1.height);
 
     ctx.fillStyle = paddle2Color;
-    console.log(p1_x, p1_y);
     ctx.fillRect(p2_x, p2_y, paddle2.width, paddle2.height);
     ctx.strokeRect(p2_x, p2_y, paddle2.width, paddle2.height);
   }
 
   function drawBall(ballX: number, ballY: number) {
-    // ball의 색, 크기 지정 및 그리기
     ctx.fillStyle = ballColor;
     ctx.strokeStyle = ballBorderColor;
     ctx.lineWidth = 2;
-    // 이거 없으면 원이 안없어지고 계속 그려짐
     ctx.beginPath();
+    console.log(ballX, ballY);
     ctx.arc(ballX, ballY, ballRadius, 0, 2 * Math.PI);
     ctx.stroke();
     ctx.fill();
@@ -131,11 +126,11 @@ export default function GameBoard() {
   );
 }
 
-let GameContainer = styled.div`
+const GameContainer = styled.div`
   text-align: center;
 `;
 
-let GameBoardDiv = styled.canvas`
+const GameBoardDiv = styled.canvas`
   border: 3px solid;
   border-color: white;
 `;

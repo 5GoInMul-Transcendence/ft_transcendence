@@ -36,7 +36,7 @@ var gameServer = http
   })
   .listen(8081);
 
-var gameIo = socketIO(game_server);
+var gameIo = socketIO(gameServer);
 var playerCount = 0;
 var loopGameIntervalID;
 gameIo.sockets.on('connection', function (socket) {
@@ -125,9 +125,6 @@ let paddle2;
 const GameBoard = () => {
   gameWidth = 1200;
   gameHeight = 700;
-  paddle1Color = 'white';
-  paddle2Color = 'red';
-  paddleBorder = 'black';
   ballColor = 'yellow';
   ballRadius = 12.5;
   paddleSpeed = 50;
@@ -138,7 +135,6 @@ const GameBoard = () => {
   ballYDirection = 0;
   player1Score = 0;
   player2Score = 0;
-  boardBackground = 'black';
   paddle1 = {
     width: 25,
     height: 100,
