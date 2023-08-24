@@ -1,9 +1,8 @@
 'use client';
-import fetcher from '@/utils/fetcher';
-import styled from 'styled-components';
-import useSwr from 'swr';
+
 import { ScoreBoard } from './ScoreBoard';
 import GameBoard from './GameBoard';
+import styled from 'styled-components';
 
 export default function Game() {
   // const { data: match, error } = useSwr('/api/match', fetcher);
