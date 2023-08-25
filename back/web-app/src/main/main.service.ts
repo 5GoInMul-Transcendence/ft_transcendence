@@ -76,6 +76,7 @@ export class MainService {
       .id(user.id)
       .status(UserStatus.ONLINE)
       .build();
+
     this.mainUserService.broadcastMessage(
       Builder(BroadcastMessageDto)
         .target(user.followers.values())
@@ -108,6 +109,7 @@ export class MainService {
       .id(user.id)
       .status(UserStatus.OFFLINE)
       .build();
+
     this.mainUserService.broadcastMessage(
       Builder(BroadcastMessageDto)
         .target(user.followers.values())
