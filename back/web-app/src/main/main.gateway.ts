@@ -22,12 +22,12 @@ export class MainGateway
   @WebSocketServer() server;
 
   constructor(
-    @Inject('SESSION_MIDDLEWARE') private sessionMiddleWare: any,
+    @Inject('SESSION_MIDDLEWARE') private sessionMiddleware: any,
     private mainService: MainService,
   ) {}
 
   afterInit(server: any) {
-    server.use(sharedSession(this.sessionMiddleWare, { autoSave: true }));
+    server.use(sharedSession(this.sessionMiddleware));
   }
 
   handleConnection(client: any) {

@@ -6,7 +6,7 @@ export const sessionMiddleware = {
   inject: [ConfigService],
   useFactory: (configService: ConfigService) =>
     session({
-      secret: configService.get<string>('SESSION_SECRET'), // 없으면 암호화 안 되나?
+      secret: configService.get<string>('SESSION_SECRET'),
       name: 'sessionid',
       resave: true,
       saveUninitialized: false,
