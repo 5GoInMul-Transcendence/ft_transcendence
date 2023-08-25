@@ -38,7 +38,7 @@ export class MainUserService {
   }
 
   findUserByUserId(dto: FindUserDto) {
-    return _.cloneDeep(this.mainUsers.get(dto.userId));
+    return this.mainUsers.get(dto.userId);
   }
 
   broadcastMessage(dto: BroadcastMessageDto) {
