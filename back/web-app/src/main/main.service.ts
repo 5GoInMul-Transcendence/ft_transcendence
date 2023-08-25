@@ -8,13 +8,14 @@ import { UserStatus } from '../users/enums/user-status.enum';
 import { UpdateFriendResDto } from '../friend/dto/update-friend-res.dto';
 import { DisconnectionDto } from './dto/disconnection.dto';
 import { MainUserService } from './main-user.service';
-import { SetUserDto } from './dto/set-user.dto';
+import { AddMainUserDto } from './dto/add-main-user.dto';
 import { BroadcastMessageDto } from './dto/broadcast-message.dto';
-import { DeleteUserDto } from './dto/delete-user.dto';
+import { DeleteMainUserDto } from './dto/delete-main-user.dto';
 import { WsException } from '@nestjs/websockets';
 import { CheckReconnectionDto } from './dto/check-reconnection.dto';
 import { CheckDisconnectionByReconnectionDto } from './dto/check-disconnection-by-reconnection.dto';
 import { CheckSessionDto } from './dto/check-session.dto';
+import { UpdateMainUserDto } from './dto/update-main-user.dto';
 
 @Injectable()
 export class MainService {
@@ -40,8 +41,11 @@ export class MainService {
     if (prevUser) {
       prevUser.client[this.reconnection] = true;
       prevUser.client.disconnect();
-      this.mainUserService.setUser(
-        Builder(SetUserDto).userId(dto.userId).client(dto.client).build(),
+      this.mainUserService.updateUser(
+        Builder(UpdateMainUserDto)
+          .userId(dto.userId)
+          .client(dto.client)
+          .build(),
       );
 
       throw new WsException('');
@@ -81,8 +85,8 @@ export class MainService {
     );
 
     // 메인 유저 저장
-    this.mainUserService.setUser(
-      Builder(SetUserDto).userId(dto.userId).client(dto.client).build(),
+    this.mainUserService.addUser(
+      Builder(AddMainUserDto).userId(dto.userId).client(dto.client).build(),
     );
   }
 
@@ -114,7 +118,7 @@ export class MainService {
 
     // 메인 유저 삭제
     this.mainUserService.deleteUser(
-      Builder(DeleteUserDto).userId(dto.userId).build(),
+      Builder(DeleteMainUserDto).userId(dto.userId).build(),
     );
   }
 }

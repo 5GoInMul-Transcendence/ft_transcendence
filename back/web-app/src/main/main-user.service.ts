@@ -2,11 +2,13 @@ import { MemoryUserService } from '../users/memoryuser/memory-user.service';
 import { Injectable } from '@nestjs/common';
 import { MainUser } from './main-user';
 import { FindUserDto } from '../users/memoryuser/dto/find-user.dto';
-import { SetUserDto } from './dto/set-user.dto';
+import { AddMainUserDto } from './dto/add-main-user.dto';
 import { Builder } from 'builder-pattern';
 import { BroadcastMessageDto } from './dto/broadcast-message.dto';
 import { ApiResponseForm } from '../common/response/api-response-form';
-import { DeleteUserDto } from './dto/delete-user.dto';
+import { DeleteMainUserDto } from './dto/delete-main-user.dto';
+import { UpdateMainUserDto } from './dto/update-main-user.dto';
+import _ from 'lodash';
 
 @Injectable()
 export class MainUserService {
@@ -16,19 +18,27 @@ export class MainUserService {
     this.mainUsers = new Map<number, MainUser>();
   }
 
-  setUser(dto: SetUserDto) {
+  addUser(dto: AddMainUserDto) {
     this.mainUsers.set(
       dto.userId,
       Builder(MainUser).userId(dto.userId).client(dto.client).build(),
     );
   }
 
-  deleteUser(dto: DeleteUserDto) {
+  deleteUser(dto: DeleteMainUserDto) {
     this.mainUsers.delete(dto.userId);
   }
 
+  updateUser(dto: Partial<UpdateMainUserDto> & { userId: number }) {
+    const mainUser = this.mainUsers.get(dto.userId);
+
+    Object.keys(mainUser).forEach((key) => {
+      mainUser[key] = dto[key];
+    });
+  }
+
   findUserByUserId(dto: FindUserDto) {
-    return this.mainUsers.get(dto.userId);
+    return _.cloneDeep(this.mainUsers.get(dto.userId));
   }
 
   broadcastMessage(dto: BroadcastMessageDto) {

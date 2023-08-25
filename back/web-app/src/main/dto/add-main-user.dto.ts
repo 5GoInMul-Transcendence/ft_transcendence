@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 
-export class SetUserDto {
+export class AddMainUserDto {
   userId: number;
   client: Socket;
 }
