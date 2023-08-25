@@ -32,7 +32,7 @@ export class MainUserService {
   updateUser(dto: Partial<UpdateMainUserDto> & { userId: number }) {
     const mainUser = this.mainUsers.get(dto.userId);
 
-    Object.keys(mainUser).forEach((key) => {
+    Object.keys(dto).forEach((key) => {
       mainUser[key] = dto[key];
     });
   }
