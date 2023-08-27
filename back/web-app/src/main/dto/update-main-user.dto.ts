@@ -1,12 +1,10 @@
-import { UserStatus } from '../../enums/user-status.enum';
+import { MainUserStatus } from '../enums/main-user-status.enum';
+import { Socket } from 'socket.io';
 
-export class UpdateMemoryUserDto {
-  readonly userId: number;
-  nickname: string;
-  avatar: string;
-  mail: string;
-  phone: string;
-  status: UserStatus;
+export class UpdateMainUserDto {
+  userId: number;
+  status: MainUserStatus;
+  client: Socket;
 
   constructor() {
     // 클래스 생성자 내부에서 프로퍼티 플래그 설정

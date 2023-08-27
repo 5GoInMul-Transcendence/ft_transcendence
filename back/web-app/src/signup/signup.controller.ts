@@ -40,6 +40,7 @@ export class SignupController {
       .nickname(this.signupService.getRandomNickname()) // generate random ID
       .build()
     );
+
     this.memoryUserService.addUser(
       Builder(UserDto)
       .avatar(user.avatar)
