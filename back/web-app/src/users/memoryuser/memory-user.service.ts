@@ -15,6 +15,7 @@ import { Builder } from 'builder-pattern';
 import cloneDeep from 'lodash';
 import { CheckAvailableTwofactorDto } from './dto/check-available-twofactor.dto';
 import { TwoFactorStatus } from '../enums/twoFactor-status.enum';
+import { GetUserByNicknameDto } from './dto/get-user-by-nickname.dto';
 
 @Injectable()
 export class MemoryUserService {
@@ -39,6 +40,16 @@ export class MemoryUserService {
 
     throw new HttpException('존재하지 않은 유저입니다.', 200);
   }
+
+  getUserByNickname(dto: GetUserByNicknameDto): MemoryUser | undefined {
+    for (const user of this.memoryUsers.values()) {
+      if (user.nickname == dto.nickname) {
+        return user;
+      }
+    }
+    return undefined;
+  }
+
   addUser(dto: UserDto) {
     const user = Builder(MemoryUser)
       .id(dto.userId)
