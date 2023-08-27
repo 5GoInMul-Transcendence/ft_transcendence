@@ -46,7 +46,7 @@ export class LoginController {
     return RedirectResource.MAIN;
   }
 
-  @Post('oauth/42')
+  @Get('oauth/42')
   @UseGuards(FortyTwoAuthGuard)
   ftAuth() {}
 

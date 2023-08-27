@@ -11,7 +11,10 @@ services:
     volumes:
       - app-volume:/usr/src/web-app
     ports: 
-      - 8080:8080
+      - "8080:8080"
+      - "10001:10001"
+    networks:
+      - back_end_net
     restart: always
 
   postgres:
@@ -22,6 +25,8 @@ services:
       - 5432:5432
     env_file:
       - .env
+    networks:
+      - back_end_net
     restart: always
 
 volumes:

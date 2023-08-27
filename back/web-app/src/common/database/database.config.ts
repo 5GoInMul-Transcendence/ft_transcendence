@@ -9,7 +9,6 @@ export const databaseConfig = {
       type: 'postgres',
       host: configService.get('DB_HOST'),
       port: configService.get('DB_PORT'),
-      schema: configService.get('DB_SCHEMA'),
       database: configService.get('DB_NAME'),
       username: configService.get('DB_USERNAME'),
       password: configService.get('DB_PASSWORD'),
