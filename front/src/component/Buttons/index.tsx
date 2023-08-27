@@ -21,5 +21,5 @@ export default function Buttons({ button: b, leftButton, rightButton }: Props) {
 
 const Wrapper = styled.div`
   ${({ theme }) => theme.flex.spaceBetween};
-  width: 80%;
+  width: 70%;
 `;
