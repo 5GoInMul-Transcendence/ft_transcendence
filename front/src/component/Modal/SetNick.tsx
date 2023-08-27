@@ -9,6 +9,10 @@ export default function SetNick() {
   const [invalidMsg, setInvalidMsg] = useState<string>('');
 
   const setNickHandler = async () => {
+    if (keyword === '') {
+      setInvalidMsg(() => 'nickname is empty');
+      return;
+    }
     /* todo: 검색 data 요청, response에 따라 inValidMsg 설정 
 		예시)
 		'Nickname already exist'

@@ -12,6 +12,10 @@ export default function EnterChannel() {
   const channelName = '11';
 
   const setPasswordHandler = async () => {
+    if (keyword === '') {
+      setInvalidMsg(() => 'password is empty');
+      return;
+    }
     /* todo: 비밀번호 data 요청, response에 따라 inValidMsg 설정 
 		예시)
 		'invalid passowrd'
