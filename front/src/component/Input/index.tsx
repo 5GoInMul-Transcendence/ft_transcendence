@@ -38,7 +38,7 @@ const Wrapper = styled.div`
     color: ${({ theme }) => theme.colors.black};
   }
   input {
-    margin: 1rem 0;
+    margin: 1rem 0 2rem;
     padding: 0.8rem 0.5rem;
     border-radius: 0.8rem;
     font-size: ${({ theme }) => theme.fontSize.small};
