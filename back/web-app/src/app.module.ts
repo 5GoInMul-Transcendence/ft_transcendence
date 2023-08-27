@@ -12,6 +12,7 @@ import { DatabaseModule } from './common/database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { FriendController } from './friend/friend.controller';
 import { FriendModule } from './friend/friend.module';
+import { ChannelsModule } from './channels/channels.module';
 
 
 @Module({
@@ -25,6 +26,7 @@ import { FriendModule } from './friend/friend.module';
     DatabaseModule,
     AuthModule,
     FriendModule,
+    ChannelsModule,
   ],
 
   controllers: [AppController],
