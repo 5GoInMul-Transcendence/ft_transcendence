@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { FtStrategy } from './ft.strategy';
 import { UserModule } from 'src/users/user/user.module';
 import { SessionModule } from 'src/session/session.module';
+import { SignupService } from 'src/signup/signup.service';
 
 @Module({
   imports: [
@@ -13,6 +14,10 @@ import { SessionModule } from 'src/session/session.module';
     SessionModule,
   ],
   controllers: [LoginController],
-  providers: [LoginService, FtStrategy,]
+  providers: [
+    LoginService,
+    FtStrategy,
+    SignupService,
+  ]
 })
 export class LoginModule {}

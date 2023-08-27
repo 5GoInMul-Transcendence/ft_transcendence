@@ -12,6 +12,8 @@ import { LoginMemberUserReqDto } from './dto/login-member-user-req.dto';
 import { MemberUser } from 'src/users/user/entities/member-user.entity';
 import { MemoryUserService } from 'src/users/memoryuser/memory-user.service';
 import { UserDto } from 'src/users/user/dto/user.dto';
+import { CreateUserDto } from 'src/users/user/dto/create-user.dto';
+import { SignupService } from 'src/signup/signup.service';
 
 @Controller('login')
 export class LoginController {
@@ -20,6 +22,7 @@ export class LoginController {
     private userService: UserService,
     private sessionService: SessionService,
     private memoryUserService: MemoryUserService,
+    private signupService: SignupService,
   ) {}
 
   @Post()
@@ -46,7 +49,7 @@ export class LoginController {
     return RedirectResource.MAIN;
   }
 
-  @Post('oauth/42')
+  @Get('oauth/42')
   @UseGuards(FortyTwoAuthGuard)
   ftAuth() {}
 
@@ -65,7 +68,12 @@ export class LoginController {
     oauthUser = await this.userService.getOauthUserByProfileId(reqUser.id);
     user = oauthUser?.user; // 유저가 없었다면 oauthUser 는 null 이다.
     if (!user) {
-      user = await this.userService.createUser(reqUser.mail);
+      user = await this.userService.createUser(
+        Builder(CreateUserDto)
+        .mail(reqUser.mail)
+        .nickname(this.signupService.getRandomNickname())
+        .build()
+      )
       this.userService.createSignupOauth(
         Builder(CreateOauthUserDto)
         .user(user)
