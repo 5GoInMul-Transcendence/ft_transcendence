@@ -37,6 +37,7 @@ export class SignupController {
       .mail(null)
       .build()
     );
+
     this.memoryUserService.addUser(
       Builder(UserDto)
       .avatar(user.avatar)
