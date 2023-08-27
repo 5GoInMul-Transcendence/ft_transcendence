@@ -12,21 +12,23 @@ export default function EditItem({ title, content }: Props) {
       <div>{title}</div>
       <EditContentDiv>
         <span>{content}</span>
-        <span>
-          <Image src='/pencil.png' alt='me' width='25' height='25' />
-        </span>
+        <button>
+          <Image src='/pen.svg' alt='me' width='20' height='20' />
+        </button>
       </EditContentDiv>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
+  margin-bottom: 1rem;
   div:first-child {
     margin-bottom: 1rem;
   }
-
   div:last-child {
-    padding: 1.5rem 2rem;
+    height: 4rem;
+    width: 100%;
+    padding: 0 2rem;
     border-radius: 0.8rem;
     color: ${({ theme }) => theme.colors.black};
     background: ${({ theme }) => theme.colors.lightgrey};

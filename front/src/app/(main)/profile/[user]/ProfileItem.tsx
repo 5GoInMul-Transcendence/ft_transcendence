@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 interface Props {
   title: string;
-  content: string;
+  content: string | number | undefined;
 }
 
 export default function ProfileItem({ title, content }: Props) {

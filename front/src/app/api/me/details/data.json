@@ -1,0 +1,15 @@
+{ 
+  "data": {
+    "id":1,
+    "nickname": "donghyuk",
+    "avatar": "793506111257096042754805",
+    "mail": "donghyuk@naver.com",
+    "phone": "01012345678",
+    "twoFactor": "mail"
+  },
+  "resStatus" :
+  {
+    "code"   : "0000",
+    "message": ""
+  }
+}
