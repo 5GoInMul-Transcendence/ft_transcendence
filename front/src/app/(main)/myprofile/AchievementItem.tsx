@@ -11,7 +11,7 @@ export default function AchievementItem({ title, content }: Props) {
     <Wrapper>
       <div>{title}</div>
       <div>
-        {content.map((data) => (
+        {content?.map((data) => (
           <Achievement
             key={data}
             src={gravatar.url('kipark@ki.com', {
@@ -19,7 +19,6 @@ export default function AchievementItem({ title, content }: Props) {
               d: 'retro',
             })}
             alt={'kipark'}
-            style={{ borderRadius: '0.8rem' }}
           />
         ))}
       </div>
@@ -41,4 +40,5 @@ const Achievement = styled.img`
   border-radius: 0.8rem;
   color: ${({ theme }) => theme.colors.black};
   background: ${({ theme }) => theme.colors.white};
+  border-radius: 0.8rem;
 `;

@@ -6,25 +6,38 @@ import AchievementItem from './AchievementItem';
 import MatchItem from '@/component/MatchItem';
 import ProfileImage from '@/component/ProfileImage';
 import styled from 'styled-components';
+import { IUser } from '@/types/IUser';
+import useSwrFetcher from '@/hooks/useSwrFetcher';
 
 export default function Profile() {
+  const [data, status] = useSwrFetcher<IUser>('/api/me');
+  const { id, nickname, avatar, gameRecord } = data
+    ? data
+    : {
+        id: 0,
+        nickname: '',
+        avatar: '',
+        gameRecord: { win: 0, lose: 0, ladderLevel: 0, achievement: [] },
+      };
+
   return (
     <Container>
       <TopWrapper>
         <Wrapper $width={3}>
-          <ProfileImage url='' size='250px' />
+          <ProfileImage url={avatar} size='250px' />
         </Wrapper>
         <Wrapper $width={7}>
-          <ProfileItem title='NICNAME' content='jabae' />
-          <ProfileItem title='LADDER LEVEL' content='1' />
-          <MatchItem title='WIN/LOSE' content='132/13' />
+          <ProfileItem title='NICNAME' content={nickname} />
+          <ProfileItem title='LADDER LEVEL' content={gameRecord.ladderLevel} />
+          <MatchItem
+            title='WIN/LOSE'
+            content={`${gameRecord.win}/${gameRecord.lose}`}
+          />
           <AchievementItem
             title='ACHIEVMENT'
-            content={['10연승', '10연패..']}
+            content={gameRecord.achievement || []}
           />
-          <EditButton>
-            <Link href='/myprofile/edit'>EDIT</Link>
-          </EditButton>
+          <EditLink href='/myprofile/edit'>EDIT</EditLink>
         </Wrapper>
       </TopWrapper>
     </Container>
@@ -46,10 +59,10 @@ const TopWrapper = styled.div`
 `;
 
 const Wrapper = styled.div<{ $width: number }>`
-  flex: ${({ $width }) => $width};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  flex: ${({ $width }) => $width};
   margin: 0 2rem;
   height: 100%;
   div {
@@ -57,7 +70,7 @@ const Wrapper = styled.div<{ $width: number }>`
   }
 `;
 
-const EditButton = styled.div`
+const EditLink = styled(Link)`
   padding: 1rem;
   text-align: center;
   border-radius: 0.8rem;
