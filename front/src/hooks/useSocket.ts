@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { Socket, io } from 'socket.io-client';
-
 const backUrl = 'ws://localhost';
 
 const sockets: { [key: string]: Socket } = {};
@@ -17,10 +16,6 @@ const useSocket = (port?: string): [Socket | undefined, () => void] => {
   if (!sockets[port]) {
     sockets[port] = io(`${backUrl}:${port}`, {
       transports: ['websocket'],
-      extraHeaders: {
-        cookie:
-          'sessionid=s%3AV0Og2ue-rybWA2XW7p7WfIyT1ma0Qvd6.IEpeG3elbkI4LEPnt0Myw1CWKdm1HzDYtINuw6ha3Uo; Path=/; HttpOnly; Expires=Sun, 27 Aug 2023 07:30:32 GMT;f',
-      },
     });
   }
 
