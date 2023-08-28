@@ -33,7 +33,7 @@ export class MemoryUserService {
 
   findUserByNickname(dto: FindUserByNicknameDto): MemoryUser {
     for (const user of this.memoryUsers.values()) {
-      if (user.nickname == dto.nickname) {
+      if (user.nickname === dto.nickname) {
         return user;
       }
     }
@@ -43,7 +43,7 @@ export class MemoryUserService {
 
   getUserByNickname(dto: GetUserByNicknameDto): MemoryUser | undefined {
     for (const user of this.memoryUsers.values()) {
-      if (user.nickname == dto.nickname) {
+      if (user.nickname === dto.nickname) {
         return user;
       }
     }
