@@ -23,7 +23,8 @@ export default function Login() {
           password: password,
         })
         .then((res) => {
-          route.push(res.data.data);
+          console.log(res, res.resStatus);
+          route.push(res.data);
         })
         .catch((res) => {
           console.log(res);

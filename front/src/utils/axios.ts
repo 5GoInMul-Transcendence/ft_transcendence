@@ -9,3 +9,5 @@ axiosInstance.interceptors.request.use(function setConfig(config) {
   config.withCredentials = true;
   return config;
 });
+
+axiosInstance.interceptors.response.use((response) => response.data);
