@@ -28,9 +28,10 @@ export class SignupService {
 		let nickname: string;
 		let memoryUser: MemoryUser;
 		const randomStrlen = 8;
+		const preStr = 'user';
 
 		while (1) {
-			nickname = 'user' + this.generateRandomNickname(randomStrlen);
+			nickname = preStr + this.generateRandomNickname(randomStrlen);
 			memoryUser = this.memoryUserService.getUserByNickname(Builder(GetUserByNicknameDto).nickname(nickname).build())
 			if (!memoryUser)
 				break;
