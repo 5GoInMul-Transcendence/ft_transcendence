@@ -8,18 +8,23 @@ import useSwr from 'swr';
 import Link from 'next/link';
 
 export default function FriendList() {
-  const { data: friends, error } = useSwr('/api/friends', fetcher);
+  const { data: friends, error } = useSwr(
+    'http://localhost:8080/friend/list',
+    fetcher
+  );
 
   if (!friends) return null;
 
+  console.log(friends);
+
   return (
     <div>
-      {friends.map((e: IFriends, index: number) => (
-        <Link key={e.name} href={`/profile/${e.name}`}>
+      {friends.data.map((e: IFriends, index: number) => (
+        <Link key={index} href={`/profile/${e.nickname}`}>
           <FriendItem>
             <div>
-              <ProfileImage url={e.url} size='35px' />
-              &nbsp;{e.name}
+              <ProfileImage url={e.avatar} size='35px' />
+              &nbsp;{e.nickname}
             </div>
             <StatusDiv $status={e.status} />
           </FriendItem>

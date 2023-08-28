@@ -1,6 +1,6 @@
 export interface IFriends {
-  name: string;
-  id: string;
+  id: number;
+  nickname: string;
+  avatar: string;
   status: string;
-  url: string;
 }

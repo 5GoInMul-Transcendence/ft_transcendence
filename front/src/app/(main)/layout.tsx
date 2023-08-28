@@ -5,14 +5,31 @@ import styled from 'styled-components';
 import Pong from '@/component/Pong';
 import ProfileImage from '@/component/ProfileImage';
 import FriendList from '@/component/FriendList';
-
-const name = 'kipark';
+import fetcher from '@/utils/fetcher';
+import useSwr from 'swr';
+import useSocket from '@/hooks/useSocket';
+import { useEffect } from 'react';
 
 export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [socket] = useSocket('10001/main');
+  const { data, error } = useSwr('http://localhost:8080/me', fetcher);
+
+  useEffect(() => {
+    socket?.on('connect', () => {
+      console.log('hi');
+    });
+    socket?.on('friend_update', (res: any) => {
+      console.log('friend updatae !!');
+      console.log(res);
+    });
+  }, [socket]);
+  if (!data) return;
+  console.log(socket);
+  console.log(data);
   return (
     <Container>
       <MainContainer>
@@ -32,7 +49,7 @@ export default function MainLayout({
           <MyProfile>
             <ProfileImage url='' size='45px' />
             &nbsp;
-            {name}
+            {data.data.nickname}
           </MyProfile>
         </Link>
         <FriendProfile>

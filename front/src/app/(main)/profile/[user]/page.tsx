@@ -7,11 +7,21 @@ import MatchItem from '@/component/MatchItem';
 import ProfileImage from '@/component/ProfileImage';
 import Toggle from '@/component/Toggle';
 import useToggle from '@/hooks/useToggle';
+import fetcher from '@/utils/fetcher';
 import styled from 'styled-components';
+import useSwr from 'swr';
 
 export default function Profile({ params }: { params: { user: string } }) {
+  const { data, error } = useSwr(
+    `http://localhost:8080/user/${params.user}`,
+    fetcher
+  );
   const [follw, onChangeFollow] = useToggle(false);
   const [block, onChangeBlock] = useToggle(false);
+
+  if (!data) return;
+
+  console.log(data, '상대방 프로필 데이터 ');
 
   return (
     <Container>
@@ -34,12 +44,18 @@ export default function Profile({ params }: { params: { user: string } }) {
           </TogglesWrapper>
         </Wrapper>
         <Wrapper $width={7}>
-          <ProfileItem title='NICNAME' content={`${params.user}`} />
-          <ProfileItem title='LADDER LEVEL' content='1' />
-          <MatchItem title='WIN/LOSE' content='132/13' />
+          <ProfileItem title='NICNAME' content={`${data.data.nickname}`} />
+          <ProfileItem
+            title='LADDER LEVEL'
+            content={`${data.data.gameRecord.ladderLevel}`}
+          />
+          <MatchItem
+            title='WIN/LOSE'
+            content={`${data.data.gameRecord.win}/${data.data.gameRecord.loss}`}
+          />
           <AchievementItem
             title='ACHIEVMENT'
-            content={['10연승', '10연패..']}
+            content={data.data.gameRecord.achievement}
           />
         </Wrapper>
       </TopWrapper>

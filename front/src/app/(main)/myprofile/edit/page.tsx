@@ -8,7 +8,7 @@ import useSwrFetcher from '@/hooks/useSwrFetcher';
 import { IUserDetail } from '@/types/IUser';
 
 export default function Profile() {
-  const [data] = useSwrFetcher<IUserDetail>('/api/me/details');
+  const [data] = useSwrFetcher<IUserDetail>('http://localhost:8080/me/details');
 
   return (
     <Container>
