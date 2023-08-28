@@ -4,9 +4,9 @@ import { useCallback } from 'react';
 import Link from 'next/link';
 import useInput from '@/hooks/useInput';
 import { Form, FormWrapper } from '@/app/(auth)/styles';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
+import { axiosInstance } from '@/utils/axios';
 
 export default function Login() {
   const [id, , onChangeId] = useInput('');
@@ -17,15 +17,11 @@ export default function Login() {
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       console.log(id, password);
-      axios
-        .post(
-          'http://localhost:8080/login',
-          {
-            id: id,
-            password: password,
-          },
-          { withCredentials: true }
-        )
+      axiosInstance
+        .post('/login', {
+          id: id,
+          password: password,
+        })
         .then((res) => {
           route.push(res.data.data);
         })

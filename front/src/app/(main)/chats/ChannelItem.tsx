@@ -22,10 +22,10 @@ export default function ChannelItem({
   const router = useRouter();
   const onClickChannel = () => {
     if (recentMessage) {
-      router.push(`/chats/${channelId}`);
+      router.push(`/api/chats/${channelId}`);
       return;
     }
-    axios.get(` /channel/${channelId}/check`).then((data) => {
+    axios.get(`/api/channel/${channelId}/check`).then((data) => {
       if (data.data.data.env === 'protected') {
         //TODO: 비번 모달
       } else {
