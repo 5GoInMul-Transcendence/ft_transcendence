@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { apiHaddling } from './apiHaddling';
 // const baseURL = `${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}` ;
-const baseURL = `http://localhost:8080`;
+const baseURL = `http://localhost/api/`;
 
 export const axiosInstance = axios.create({ baseURL });
 
@@ -10,4 +10,7 @@ axiosInstance.interceptors.request.use(function setConfig(config) {
   return config;
 });
 
-axiosInstance.interceptors.response.use((response) => response.data);
+axiosInstance.interceptors.response.use((response) => {
+  apiHaddling(response.data.data, response.data.resStatus);
+  return response.data;
+});

@@ -11,24 +11,21 @@ import { axiosInstance } from '@/utils/axios';
 export default function Login() {
   const [id, , onChangeId] = useInput('');
   const [password, , onChangePassword] = useInput('');
-  const route = useRouter();
 
   const onSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       console.log(id, password);
-      axiosInstance
-        .post('/login', {
+      try {
+        await axiosInstance.post('/login', {
           id: id,
           password: password,
-        })
-        .then((res) => {
-          console.log(res, res.resStatus);
-          route.push(res.data);
-        })
-        .catch((res) => {
-          console.log(res);
         });
+        // 데이터 패치 정상적으로 완료
+      } catch (error) {
+        // 데이터 패치 에러
+        console.log(error);
+      }
     },
     [id, password]
   );
