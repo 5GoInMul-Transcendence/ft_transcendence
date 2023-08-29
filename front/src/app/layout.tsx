@@ -5,6 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import { theme } from '@/styles/theme';
 import GlobalStyle from '@/styles/global-style';
 import Modal from '@/component/Modal';
+import { RecoilRoot } from 'recoil';
 
 export default function RootLayout({
   children,
@@ -14,13 +15,15 @@ export default function RootLayout({
   return (
     <html>
       <body>
-        <StyledComponentsRegistry>
-          <ThemeProvider theme={theme}>
-            <GlobalStyle />
-            <Modal />
-            {children}
-          </ThemeProvider>
-        </StyledComponentsRegistry>
+        <RecoilRoot>
+          <StyledComponentsRegistry>
+            <ThemeProvider theme={theme}>
+              <GlobalStyle />
+              <Modal />
+              {children}
+            </ThemeProvider>
+          </StyledComponentsRegistry>
+        </RecoilRoot>
       </body>
     </html>
   );
