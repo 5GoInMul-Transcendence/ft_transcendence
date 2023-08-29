@@ -30,6 +30,7 @@ export default function Input({
 }
 
 const Wrapper = styled.div`
+  width: 100%;
   * {
     width: 100%;
   }

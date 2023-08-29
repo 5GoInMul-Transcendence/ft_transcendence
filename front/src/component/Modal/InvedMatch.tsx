@@ -3,7 +3,7 @@ import ProfileImage from '@/component/ProfileImage';
 import styled from 'styled-components';
 
 export default function InvedMatch() {
-  /* todo: 추후 매칭 데이터에 따라 닉네임 받기 */
+  //TODO: 추후 매칭 데이터에 따라 닉네임 받기
   const nickname = 'jiyokim';
 
   const declineMatchHandler = async () => {};

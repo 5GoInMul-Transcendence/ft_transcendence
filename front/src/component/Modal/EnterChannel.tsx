@@ -4,24 +4,28 @@ import Input from '@/component/Input';
 import Button from '@/component/Buttons/Button';
 import InvalidMsg from './InvalidMsg';
 import { styled } from 'styled-components';
+import axios from 'axios';
 
-export default function EnterChannel() {
+interface EnterChannelProps {
+  channelName: string;
+  channelId: number;
+}
+export default function EnterChannel({
+  channelName,
+  channelId,
+}: EnterChannelProps) {
   const [keyword, , onChangeKeyword] = useInput('');
   const [invalidMsg, setInvalidMsg] = useState<string>('');
-  /* todo: 추후 데이터에 따라 채널명 받기 */
-  const channelName = '11';
 
   const setPasswordHandler = async () => {
     if (keyword === '') {
       setInvalidMsg(() => 'password is empty');
       return;
     }
-    /* todo: 비밀번호 data 요청, response에 따라 inValidMsg 설정 
-		예시)
-		'invalid passowrd'
-		...
-		*/
-    setInvalidMsg(() => 'invalid passowrd');
+    axios.post(`/channel/${channelId}/password`).then((data) => {
+      if (data.data.resStatus.code === '0001')
+        setInvalidMsg(() => 'invalid passowrd');
+    });
   };
 
   return (
