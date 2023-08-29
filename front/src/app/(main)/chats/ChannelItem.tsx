@@ -25,17 +25,18 @@ export default function ChannelItem({
   const setModal = useSetRecoilState(modalState);
   const onClickChannel = () => {
     if (recentMessage) {
-      router.push(`/api/chats/${channelId}`);
+      router.push(`/chats/${channelId}`);
       return;
     }
-    axios.get(`/api/channel/${channelId}/check`).then((data) => {
+    axios.get(`/channel/${channelId}/check`).then((data) => {
+      console.log(data);
       if (data.data.data.env === 'protected') {
         setModal({
           type: 'ENTER-Channel',
           modalProps: { channelName, channelId },
         });
       } else {
-        router.push(`/chats/${channelId}`);
+        // router.push(`/chats/${channelId}`);
       }
     });
   };

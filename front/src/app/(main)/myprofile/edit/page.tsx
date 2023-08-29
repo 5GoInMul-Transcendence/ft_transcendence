@@ -10,9 +10,8 @@ import { useSetRecoilState } from 'recoil';
 import { modalState } from '@/utils/recoil/atom';
 
 export default function Profile() {
-  // const data = useSwrFetcher<IUserDetail>('http://localhost:8080/me/details');
+  const data = useSwrFetcher<IUserDetail>('http://localhost:8080/me/details');
   const setModal = useSetRecoilState(modalState);
-  const data = useSwrFetcher<IUserDetail>('/api/me/details');
 
   if (!data) return;
   return (
@@ -23,7 +22,6 @@ export default function Profile() {
           <ProfileImage url='' size='250px' />
         </Wrapper>
         <Wrapper $width={7}>
-          <AuthSelect twoFactor={data.twoFactor || 'disabled'} />
           <EditItem
             title='NICNAME'
             content={data?.nickname || ''}

@@ -21,6 +21,7 @@ export default function MainLayout({
 }) {
   const [socket] = useSocket('10001/main');
   const data = useSwrFetcher<IMe>('/me');
+  const setModal = useSetRecoilState(modalState);
 
   useEffect(() => {
     socket?.on('connect', () => {
@@ -31,10 +32,11 @@ export default function MainLayout({
       console.log(res);
     });
   }, [socket]);
+
   if (!data) return;
+
   console.log(socket);
   console.log(data);
-  const setModal = useSetRecoilState(modalState);
   const onClickAddFriend = () => {
     setModal({ type: 'ADD-Friend' });
   };

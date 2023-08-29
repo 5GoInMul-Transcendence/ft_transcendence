@@ -21,11 +21,8 @@
     "next": "13.4.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-<<<<<<< HEAD
     "react-toastify": "^9.1.3",
-=======
     "recoil": "^0.7.7",
->>>>>>> 624be159360ecad237dd65028c16e5aab9b7ac8c
     "socket.io-client": "^4.7.1",
     "styled-components": "^6.0.4",
     "swr": "^2.2.0",
