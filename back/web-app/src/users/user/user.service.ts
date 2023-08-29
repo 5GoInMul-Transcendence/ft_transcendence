@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { randomUUID } from 'crypto';
 import { CreateOauthUserDto } from './dto/create-oauth-user.dto';
 import { OauthUser } from './entities/oauth-user.entity';
 import { CreateMemberUserDto } from './dto/create-member-user.dto';
@@ -73,9 +72,9 @@ export class UserService {
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    let { mail } = createUserDto;
+    let { mail, nickname } = createUserDto;
     const user = this.userRepository.create({
-      nickname: randomUUID(),
+      nickname,
       avatar: 'avatar', // 이미지가 저장된 url 의 id 값만 넣는다.
       mail,
     });

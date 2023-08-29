@@ -9,12 +9,14 @@ import { SignupMemberRepDto } from './dto/signup-member-req.dto';
 import { MemberUser } from 'src/users/user/entities/member-user.entity';
 import { CreateUserDto } from 'src/users/user/dto/create-user.dto';
 import { UserDto } from 'src/users/user/dto/user.dto';
+import { SignupService } from './signup.service';
 
 @Controller('signup')
 export class SignupController {
   constructor(
     private userService: UserService,
     private memoryUserService: MemoryUserService,
+    private signupService: SignupService,
   ) {}
 
   @Post()
@@ -29,12 +31,13 @@ export class SignupController {
     if (memberUser) {
       throw new HttpException("이미 등록된 아이디입니다.", HttpStatus.OK);
     }
-    // nickname, avatar 랜덤생성
+    // avatar 랜덤생성
     // 비밀번호 해시화 후 저장
 
     user = await this.userService.createUser(
       Builder(CreateUserDto)
       .mail(null)
+      .nickname(this.signupService.getRandomNickname()) // generate random ID
       .build()
     );
 

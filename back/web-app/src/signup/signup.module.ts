@@ -6,6 +6,7 @@ import { UserModule } from 'src/users/user/user.module';
 @Module({
   imports: [UserModule], // Use to UserService
   controllers: [SignupController],
-  providers: [SignupService]
+  providers: [SignupService],
+  exports: [SignupService],
 })
 export class SignupModule {}

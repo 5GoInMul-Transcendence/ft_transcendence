@@ -15,6 +15,7 @@ import { Builder } from 'builder-pattern';
 import _ from 'lodash';
 import { CheckAvailableTwofactorDto } from './dto/check-available-twofactor.dto';
 import { TwoFactorStatus } from '../enums/twoFactor-status.enum';
+import { GetUserByNicknameDto } from './dto/get-user-by-nickname.dto';
 
 @Injectable()
 export class MemoryUserService {
@@ -32,13 +33,23 @@ export class MemoryUserService {
 
   findUserByNickname(dto: FindUserByNicknameDto): MemoryUser {
     for (const user of this.memoryUsers.values()) {
-      if (user.nickname == dto.nickname) {
+      if (user.nickname === dto.nickname) {
         return user;
       }
     }
 
     throw new HttpException('존재하지 않은 유저입니다.', 200);
   }
+
+  getUserByNickname(dto: GetUserByNicknameDto): MemoryUser | undefined {
+    for (const user of this.memoryUsers.values()) {
+      if (user.nickname === dto.nickname) {
+        return user;
+      }
+    }
+    return undefined;
+  }
+
   addUser(dto: UserDto) {
     const user = Builder(MemoryUser)
       .id(dto.userId)
@@ -88,10 +99,10 @@ export class MemoryUserService {
   checkAvailableTwoFactor(dto: CheckAvailableTwofactorDto) {
     const user = this.memoryUsers.get(dto.userId);
 
-    if (dto.twoFactor === TwoFactorStatus.MAIL && user.mail == null) {
+    if (dto.twoFactor === TwoFactorStatus.MAIL && user.mail === null) {
       throw new HttpException('잘못된 요청입니다.', HttpStatus.OK);
     }
-    if (dto.twoFactor === TwoFactorStatus.PHONE && user.phone == null) {
+    if (dto.twoFactor === TwoFactorStatus.PHONE && user.phone === null) {
       throw new HttpException('잘못된 요청입니다.', HttpStatus.OK);
     }
 
