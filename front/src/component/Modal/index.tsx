@@ -10,20 +10,29 @@ import styled from 'styled-components';
 import EnterChannel from './EnterChannel';
 import CreateChannel from './CreateChannel';
 import SetChannel from './SetChannel';
+import { useRecoilState } from 'recoil';
+import { modalState } from '@/utils/recoil/atom';
 
 export default function Modal() {
-  /*todo: 추후 recoil로 여러 페이지 및 컴포넌트에서 관리 */
-  const [modal, setModal] = useState<string | null>('');
-
+  const [modal, setModal] = useRecoilState(modalState);
   const modalStorage: Record<string, Record<string, string | JSX.Element>> = {
     'ADD-Friend': { title: 'Add Friend', child: <AddFriend /> },
     'INV-Match': { title: '', child: <InvMatch /> },
     'INVED-Match': { title: '1:1 match', child: <InvedMatch /> },
-    'SET-User': { title: 'user setting', child: <SetUser /> },
+    'SET-User': {
+      title: 'user setting',
+      child: <SetUser {...modal?.modalProps} />,
+    },
     'SET-Nick': { title: 'Change Nickname', child: <SetNick /> },
-    'SET-Channel': { title: 'channel setting', child: <SetChannel /> },
+    'SET-Channel': {
+      title: 'channel setting',
+      child: <SetChannel {...modal?.modalProps} />,
+    },
     'CREATE-Channel': { title: 'create channel', child: <CreateChannel /> },
-    'ENTER-Channel': { title: '', child: <EnterChannel /> },
+    'ENTER-Channel': {
+      title: '',
+      child: <EnterChannel {...modal?.modalProps} />,
+    },
     'AUTH-Mail': { title: 'Mail Authentication', child: <AuthMail /> },
     'AUTH-Phone': { title: 'Phone Authentication', child: <AuthPhone /> },
   };
@@ -36,9 +45,9 @@ export default function Modal() {
     modal && (
       <BackDrop>
         <ModalWrap>
-          <TitleDiv>{modalStorage[modal].title}</TitleDiv>
-          <CloseDiv>X</CloseDiv>
-          {modalStorage[modal].child}
+          <TitleDiv>{modalStorage[modal.type].title}</TitleDiv>
+          <CloseButton onClick={closeModal}>x</CloseButton>
+          {modalStorage[modal.type].child}
         </ModalWrap>
       </BackDrop>
     )
@@ -70,7 +79,7 @@ const TitleDiv = styled.div`
   font-size: ${({ theme }) => theme.fontSize.normal};
 `;
 
-const CloseDiv = styled.div`
+const CloseButton = styled.button`
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
