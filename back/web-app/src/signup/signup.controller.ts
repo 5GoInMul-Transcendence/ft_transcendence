@@ -32,7 +32,6 @@ export class SignupController {
       throw new HttpException("이미 등록된 아이디입니다.", HttpStatus.OK);
     }
     // avatar 랜덤생성
-    // 비밀번호 해시화 후 저장
 
     user = await this.userService.createUser(
       Builder(CreateUserDto)
@@ -56,7 +55,7 @@ export class SignupController {
       Builder(CreateMemberUserDto)
       .user(user)
       .id(id)
-      .password(password) // 해시화 필요
+      .password(await this.signupService.hashMemberPassword(password))
       .build()
     );
 

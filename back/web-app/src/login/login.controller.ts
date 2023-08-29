@@ -14,6 +14,7 @@ import { MemoryUserService } from 'src/users/memoryuser/memory-user.service';
 import { UserDto } from 'src/users/user/dto/user.dto';
 import { CreateUserDto } from 'src/users/user/dto/create-user.dto';
 import { SignupService } from 'src/signup/signup.service';
+import * as bcrypt from 'bcrypt';
 
 @Controller('login')
 export class LoginController {
@@ -38,9 +39,13 @@ export class LoginController {
     if (!memberUser) {
       throw new HttpException('아이디 또는 비밀번호가 올바르지 않습니다!', HttpStatus.OK);
     }
-    if (memberUser.password !== password) {
+    
+    const isCorrectPassword = (await bcrypt.compare(password, memberUser.password));
+
+    if (!isCorrectPassword) {
       throw new HttpException('아이디 또는 비밀번호가 올바르지 않습니다!', HttpStatus.OK);
     }
+    
     if (this.loginService.isTwoFaOn(memberUser.user.twoFactor) == true) {
       // 2FA
       // 세션만 생성하고, userId 는 넣어주면 안 됨
