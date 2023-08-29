@@ -3,14 +3,17 @@
 import styled from 'styled-components';
 import ChannelList from './ChannelList';
 import React from 'react';
+import { useSetRecoilState } from 'recoil';
+import { modalState } from '@/utils/recoil/atom';
 
 export default function ChatsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const setModal = useSetRecoilState(modalState);
   const onClickCreateChannel = () => {
-    //TODO: create channel 모달
+    setModal({ type: 'CREATE-Channel' });
   };
   return (
     <>

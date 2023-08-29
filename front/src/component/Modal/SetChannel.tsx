@@ -4,31 +4,47 @@ import Input from '@/component/Input';
 import Buttons from '@/component/Buttons';
 import InvalidMsg from './InvalidMsg';
 import styled from 'styled-components';
+import { useSetRecoilState } from 'recoil';
+import { modalState } from '@/utils/recoil/atom';
+import axios from 'axios';
 
-export default function SetChannel() {
+interface SetChannelProps {
+  channelName?: string;
+  channelId?: number;
+}
+export default function SetChannel({
+  channelName,
+  channelId,
+}: SetChannelProps) {
+  const setModal = useSetRecoilState(modalState);
   const [password, , onChangePassword] = useInput('');
   const [passwordCheck, , onChangePasswordCheck] = useInput('');
   const [invalidMsg, setInvalidMsg] = useState<string>('');
-  const channelName = '11';
 
   const cancelSetChannelHandler = () => {
-    /* todo: modal recoil set null */
+    setModal(null);
   };
   const saveSetChannelHandler = async () => {
     if (password === '') {
-      setInvalidMsg(() => 'password is empty');
+      axios.post(`/channel/setting/${channelId}`, {
+        mode: 'public',
+      });
       return;
     }
     if (password !== passwordCheck) {
       setInvalidMsg(() => 'password mismatch');
       return;
     }
-    setInvalidMsg(() => '');
-    /* todo: 비밀번호 data 요청, response에 따라 inValidMsg 설정 
-		예시)
-		'invalid passowrd'
-		...
-		*/
+    axios
+      .put(`/channel/setting/${channelId}`, {
+        mode: 'protected',
+        password,
+      })
+      .then((data) => {
+        if (data.data.resStatus.code === '0000') cancelSetChannelHandler();
+        if (data.data.resStatus.code === '0001')
+          setInvalidMsg(() => data.data.resStatus.message);
+      });
   };
 
   return (

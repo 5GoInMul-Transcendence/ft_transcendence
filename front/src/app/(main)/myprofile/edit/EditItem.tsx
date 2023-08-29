@@ -4,15 +4,16 @@ import styled from 'styled-components';
 interface Props {
   title: string;
   content: string;
+  onClickEdit: () => void;
 }
 
-export default function EditItem({ title, content }: Props) {
+export default function EditItem({ title, content, onClickEdit }: Props) {
   return (
     <Wrapper>
       <div>{title}</div>
       <EditContentDiv>
         <span>{content}</span>
-        <button>
+        <button onClick={onClickEdit}>
           <Image src='/pen.svg' alt='me' width='20' height='20' />
         </button>
       </EditContentDiv>

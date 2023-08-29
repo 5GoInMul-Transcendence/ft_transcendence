@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import Pong from '@/component/Pong';
 import ProfileImage from '@/component/ProfileImage';
 import FriendList from '@/component/FriendList';
+import { useSetRecoilState } from 'recoil';
+import { modalState } from '@/utils/recoil/atom';
 
 const name = 'kipark';
 
@@ -13,6 +15,10 @@ export default function MainLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const setModal = useSetRecoilState(modalState);
+  const onClickAddFriend = () => {
+    setModal({ type: 'ADD-Friend' });
+  };
   return (
     <Container>
       <MainContainer>
@@ -36,7 +42,7 @@ export default function MainLayout({
           </MyProfile>
         </Link>
         <FriendProfile>
-          <button>+ add friend</button>
+          <button onClick={onClickAddFriend}>+ add friend</button>
           <FriendList />
         </FriendProfile>
       </SideContainer>

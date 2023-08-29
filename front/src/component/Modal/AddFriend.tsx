@@ -3,6 +3,7 @@ import useInput from '@/hooks/useInput';
 import Input from '@/component/Input';
 import Button from '@/component/Buttons/Button';
 import InvalidMsg from './InvalidMsg';
+import axios from 'axios';
 
 export default function AddFriend() {
   const [keyword, , onChangeKeyword] = useInput('');
@@ -13,15 +14,13 @@ export default function AddFriend() {
       setInvalidMsg(() => 'nickname is empty');
       return;
     }
-    /* todo: 검색 data 요청, response에 따라 inValidMsg 설정 
-		예시)
-		'No such user.'
-		'Already your friend.'
-		'You can't add yourself.'
-		'You have already sent a friend request.'
-		...
-		*/
-    setInvalidMsg(() => 'No such user.');
+    axios.post('/friend', { name: keyword }).then((data) => {
+      if (data.data.resStatus.code === '0000') {
+        //friendList 변경
+      }
+      if (data.data.resStatus.code === '0001')
+        setInvalidMsg(() => data.data.resStatus.message);
+    });
   };
 
   return (
