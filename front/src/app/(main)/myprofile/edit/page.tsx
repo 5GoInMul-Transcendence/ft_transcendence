@@ -8,8 +8,9 @@ import useSwrFetcher from '@/hooks/useSwrFetcher';
 import { IUserDetail } from '@/types/IUser';
 
 export default function Profile() {
-  const [data] = useSwrFetcher<IUserDetail>('http://localhost:8080/me/details');
+  const data = useSwrFetcher<IUserDetail>('http://localhost:8080/me/details');
 
+  if (!data) return;
   return (
     <Container>
       <TopWrapper>
@@ -18,10 +19,10 @@ export default function Profile() {
           <ProfileImage url='' size='250px' />
         </Wrapper>
         <Wrapper $width={7}>
-          <EditItem title='NICNAME' content={data?.nickname || ''} />
-          <EditItem title='EMAIL' content={data?.mail || ''} />
-          <EditItem title='PHONE' content={data?.phone || ''} />
-          <AuthSelect twoFactor={data?.twoFactor || 'disabled'} />
+          <EditItem title='NICNAME' content={data.nickname || ''} />
+          <EditItem title='EMAIL' content={data.mail || ''} />
+          <EditItem title='PHONE' content={data.phone || ''} />
+          <AuthSelect twoFactor={data.twoFactor || 'disabled'} />
         </Wrapper>
       </TopWrapper>
     </Container>

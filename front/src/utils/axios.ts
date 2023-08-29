@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { apiHaddling } from './apiHaddling';
+import { apiHaddling } from './apihaddling';
+
 // const baseURL = `${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}` ;
-const baseURL = `http://localhost/api/`;
+const baseURL = `http://localhost:8080/`;
 
 export const axiosInstance = axios.create({ baseURL });
 
@@ -11,6 +12,6 @@ axiosInstance.interceptors.request.use(function setConfig(config) {
 });
 
 axiosInstance.interceptors.response.use((response) => {
-  apiHaddling(response.data.data, response.data.resStatus);
+  apiHaddling(response.data.data, response.data.resStatus.code);
   return response.data;
 });

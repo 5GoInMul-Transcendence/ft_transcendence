@@ -2,24 +2,18 @@
 
 import { IFriends } from '@/types/IFriends';
 import ProfileImage from '../ProfileImage';
-import fetcher from '@/utils/fetcher';
 import styled from 'styled-components';
-import useSwr from 'swr';
 import Link from 'next/link';
+import useSwrFetcher from '@/hooks/useSwrFetcher';
 
 export default function FriendList() {
-  const { data: friends, error } = useSwr(
-    'http://localhost:8080/friend/list',
-    fetcher
-  );
+  const friends = useSwrFetcher<IFriends[]>('/friend/list');
 
   if (!friends) return null;
 
-  console.log(friends);
-
   return (
     <div>
-      {friends.data.map((e: IFriends, index: number) => (
+      {friends.map((e: IFriends, index: number) => (
         <Link key={index} href={`/profile/${e.nickname}`}>
           <FriendItem>
             <div>

@@ -5,10 +5,10 @@ import styled from 'styled-components';
 import Pong from '@/component/Pong';
 import ProfileImage from '@/component/ProfileImage';
 import FriendList from '@/component/FriendList';
-import fetcher from '@/utils/fetcher';
-import useSwr from 'swr';
 import useSocket from '@/hooks/useSocket';
 import { useEffect } from 'react';
+import useSwrFetcher from '@/hooks/useSwrFetcher';
+import { IMe } from '@/types/IMe';
 
 export default function MainLayout({
   children,
@@ -16,7 +16,7 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   const [socket] = useSocket('10001/main');
-  const { data, error } = useSwr('http://localhost:8080/me', fetcher);
+  const data = useSwrFetcher<IMe>('/me');
 
   useEffect(() => {
     socket?.on('connect', () => {
@@ -49,7 +49,7 @@ export default function MainLayout({
           <MyProfile>
             <ProfileImage url='' size='45px' />
             &nbsp;
-            {data.data.nickname}
+            {data.nickname}
           </MyProfile>
         </Link>
         <FriendProfile>

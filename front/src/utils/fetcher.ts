@@ -1,6 +1,6 @@
-import axios from 'axios';
+import { axiosInstance } from './axios';
 
-const fetcher = (url: string) =>
-  axios.get(url, { withCredentials: true }).then((response) => response.data);
+const fetcher = async (url: string) =>
+  axiosInstance.get(url).then((res) => res);
 
 export default fetcher;

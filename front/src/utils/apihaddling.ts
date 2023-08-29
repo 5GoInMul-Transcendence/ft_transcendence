@@ -1,5 +1,3 @@
-import { routePush } from './router';
-
 export const apiHaddling = (resData: string, resStatus: string) => {
   switch (resStatus) {
     // main
@@ -7,7 +5,7 @@ export const apiHaddling = (resData: string, resStatus: string) => {
       console.log(resData);
       break;
     case '0002':
-      routePush(resData);
+      window.location.href = `http://localhost:3000${resData}`;
       break;
 
     // chat
@@ -15,7 +13,8 @@ export const apiHaddling = (resData: string, resStatus: string) => {
       console.log(resData);
       break;
     case '1002':
-      routePush(resData);
+      window.location.href = `http://localhost:3000${resData}`;
+
       break;
 
     // game
@@ -23,7 +22,8 @@ export const apiHaddling = (resData: string, resStatus: string) => {
       console.log(resData);
       break;
     case '2002':
-      routePush(resData);
+      window.location.href = `http://localhost:3000${resData}`;
+
       break;
   }
 };

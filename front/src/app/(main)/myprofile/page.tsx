@@ -10,7 +10,7 @@ import { IUser } from '@/types/IUser';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
 
 export default function Profile() {
-  const [data, status] = useSwrFetcher<IUser>('http://localhost:8080/me');
+  const data = useSwrFetcher<IUser>('/me');
   const { id, nickname, avatar, gameRecord } = data
     ? data
     : {

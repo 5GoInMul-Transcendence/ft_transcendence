@@ -17,14 +17,15 @@ export default function Login() {
       e.preventDefault();
       console.log(id, password);
       try {
-        await axiosInstance.post('/login', {
+        const res = await axiosInstance.post('/login', {
           id: id,
           password: password,
         });
         // 데이터 패치 정상적으로 완료
+        console.log(res, 'response');
       } catch (error) {
         // 데이터 패치 에러
-        console.log(error);
+        console.log(error, 'error');
       }
     },
     [id, password]
