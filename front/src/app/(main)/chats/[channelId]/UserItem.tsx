@@ -5,12 +5,20 @@ import Link from 'next/link';
 import styled from 'styled-components';
 
 interface UserItemProps {
+  id: number;
   nickname: string;
   role: string;
   avatar: string;
+  onClickSetUser: (userid: number, nickname: string) => void;
 }
 
-export default function UserItem({ nickname, role, avatar }: UserItemProps) {
+export default function UserItem({
+  id,
+  nickname,
+  role,
+  avatar,
+  onClickSetUser,
+}: UserItemProps) {
   return (
     <Container>
       <ProfileContainer>
@@ -23,7 +31,7 @@ export default function UserItem({ nickname, role, avatar }: UserItemProps) {
       <StatusContainer>
         <ProfileLink href={`/profile/${nickname}`}>profile</ProfileLink>
         <GameMatchButton>game</GameMatchButton>
-        <button>{'>'}</button>
+        <button onClick={() => onClickSetUser(id, nickname)}>{'>'}</button>
       </StatusContainer>
     </Container>
   );

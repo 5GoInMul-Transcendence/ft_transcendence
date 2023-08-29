@@ -9,6 +9,10 @@ import useSocket from '@/hooks/useSocket';
 import { useEffect } from 'react';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
 import { IMe } from '@/types/IMe';
+import { useSetRecoilState } from 'recoil';
+import { modalState } from '@/utils/recoil/atom';
+
+const name = 'kipark';
 
 export default function MainLayout({
   children,
@@ -30,6 +34,10 @@ export default function MainLayout({
   if (!data) return;
   console.log(socket);
   console.log(data);
+  const setModal = useSetRecoilState(modalState);
+  const onClickAddFriend = () => {
+    setModal({ type: 'ADD-Friend' });
+  };
   return (
     <Container>
       <MainContainer>
@@ -53,7 +61,7 @@ export default function MainLayout({
           </MyProfile>
         </Link>
         <FriendProfile>
-          <button>+ add friend</button>
+          <button onClick={onClickAddFriend}>+ add friend</button>
           <FriendList />
         </FriendProfile>
       </SideContainer>

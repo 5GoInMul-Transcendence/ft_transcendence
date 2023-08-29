@@ -12,6 +12,8 @@ axiosInstance.interceptors.request.use(function setConfig(config) {
 });
 
 axiosInstance.interceptors.response.use((response) => {
-  apiHaddling(response.data.data, response.data.resStatus.code);
+  if (apiHaddling(response.data.data, response.data.resStatus.code)) {
+    return response.data.data.data.data;
+  }
   return response.data;
 });

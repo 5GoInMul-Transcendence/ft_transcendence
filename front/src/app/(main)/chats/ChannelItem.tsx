@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import ProfileImage from '@/component/ProfileImage';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { useSetRecoilState } from 'recoil';
+import { modalState } from '@/utils/recoil/atom';
 
 interface ChannelItemProps {
   channelId: number;
@@ -20,6 +22,7 @@ export default function ChannelItem({
   recentMessage,
 }: ChannelItemProps) {
   const router = useRouter();
+  const setModal = useSetRecoilState(modalState);
   const onClickChannel = () => {
     if (recentMessage) {
       router.push(`/api/chats/${channelId}`);
@@ -27,9 +30,12 @@ export default function ChannelItem({
     }
     axios.get(`/api/channel/${channelId}/check`).then((data) => {
       if (data.data.data.env === 'protected') {
-        //TODO: 비번 모달
+        setModal({
+          type: 'ENTER-Channel',
+          modalProps: { channelName, channelId },
+        });
       } else {
-        //TODO: 입장 모달
+        router.push(`/chats/${channelId}`);
       }
     });
   };

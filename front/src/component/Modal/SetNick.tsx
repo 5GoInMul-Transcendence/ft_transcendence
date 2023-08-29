@@ -3,6 +3,7 @@ import useInput from '@/hooks/useInput';
 import Input from '@/component/Input';
 import Button from '@/component/Buttons/Button';
 import InvalidMsg from './InvalidMsg';
+import axios from 'axios';
 
 export default function SetNick() {
   const [keyword, , onChangeKeyword] = useInput('');
@@ -13,12 +14,13 @@ export default function SetNick() {
       setInvalidMsg(() => 'nickname is empty');
       return;
     }
-    /* todo: 검색 data 요청, response에 따라 inValidMsg 설정 
-		예시)
-		'Nickname already exist'
-		...
-		*/
-    setInvalidMsg(() => 'Nickname already exist');
+    axios.put('/me/nickname', { nickname: keyword }).then((data) => {
+      if (data.data.resStatus.code === '0000') {
+        //TODO: nickname 변경 성공 후 처리
+      }
+      if (data.data.resStatus.code === '0001')
+        setInvalidMsg(() => data.data.resStatus.message);
+    });
   };
 
   return (

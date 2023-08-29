@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useSetRecoilState } from 'recoil';
+import { modalState } from '@/utils/recoil/atom';
 
 interface ChannelEditProps {
   channelid: number;
@@ -20,16 +22,30 @@ export default function ChannelEdit({
   role,
   onClickEdit,
 }: ChannelEditProps) {
-  const onClickSetting = () => {};
   const [userList, setUserList] = useState<IChatUser[]>([]);
+  const setModal = useSetRecoilState(modalState);
+
+  const onClickSetting = () => {
+    setModal({
+      type: 'SET-Channel',
+      modalProps: { channelName, channelId: channelid },
+    });
+  };
+
+  const onClickSetUser = (userid: number, nickname: string) => {
+    if (role === 'owner')
+      setModal({
+        type: 'SET-User',
+        modalProps: { userid, nickname, channelid },
+      });
+  };
+
   useEffect(() => {
     axios.get(`/api/channel/setting/${channelid}`).then((data) => {
       setUserList([...data.data.data]);
     });
   }, []);
-  useEffect(() => {
-    console.log(userList);
-  }, [userList]);
+
   return (
     <>
       <ChannelNameDiv>
@@ -46,9 +62,11 @@ export default function ChannelEdit({
       {userList?.map((user) => (
         <UserItem
           key={user.id}
+          id={user.id}
           nickname={user.nickname}
           role={user.role}
           avatar={user.avatar}
+          onClickSetUser={onClickSetUser}
         />
       ))}
     </>

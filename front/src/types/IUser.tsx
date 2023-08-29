@@ -18,3 +18,8 @@ export interface IUserDetail {
   phone: string | null;
   twoFactor: 'mail' | 'phone' | 'disabled';
 }
+
+export interface IUserSetting {
+  admin: boolean;
+  mute: boolean;
+}

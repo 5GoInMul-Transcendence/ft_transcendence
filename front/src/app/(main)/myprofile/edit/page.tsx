@@ -6,9 +6,13 @@ import ProfileImage from '@/component/ProfileImage';
 import styled from 'styled-components';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
 import { IUserDetail } from '@/types/IUser';
+import { useSetRecoilState } from 'recoil';
+import { modalState } from '@/utils/recoil/atom';
 
 export default function Profile() {
-  const data = useSwrFetcher<IUserDetail>('http://localhost:8080/me/details');
+  // const data = useSwrFetcher<IUserDetail>('http://localhost:8080/me/details');
+  const setModal = useSetRecoilState(modalState);
+  const data = useSwrFetcher<IUserDetail>('/api/me/details');
 
   if (!data) return;
   return (
@@ -19,10 +23,29 @@ export default function Profile() {
           <ProfileImage url='' size='250px' />
         </Wrapper>
         <Wrapper $width={7}>
-          <EditItem title='NICNAME' content={data.nickname || ''} />
-          <EditItem title='EMAIL' content={data.mail || ''} />
-          <EditItem title='PHONE' content={data.phone || ''} />
           <AuthSelect twoFactor={data.twoFactor || 'disabled'} />
+          <EditItem
+            title='NICNAME'
+            content={data?.nickname || ''}
+            onClickEdit={() => {
+              setModal({ type: 'SET-Nick' });
+            }}
+          />
+          <EditItem
+            title='EMAIL'
+            content={data?.mail || ''}
+            onClickEdit={() => {
+              setModal({ type: 'AUTH-Mail' });
+            }}
+          />
+          <EditItem
+            title='PHONE'
+            content={data?.phone || ''}
+            onClickEdit={() => {
+              setModal({ type: 'AUTH-Phone' });
+            }}
+          />
+          <AuthSelect twoFactor={data?.twoFactor || 'disabled'} />
         </Wrapper>
       </TopWrapper>
     </Container>
