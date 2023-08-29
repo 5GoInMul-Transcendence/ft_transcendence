@@ -10,6 +10,6 @@ export class MemberUser {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @Column('varchar', { length: 64 })
+  @Column('varchar', { length: 72 })
   password: string;
 }
