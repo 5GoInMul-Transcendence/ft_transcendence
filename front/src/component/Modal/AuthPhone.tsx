@@ -26,7 +26,6 @@ export default function AuthPhone() {
   const authPhoneHandler = async () => {
     /* todo: 인증 data 요청, response에 따라 invalidCodeMsg 설정 */
     axiosInstance.post('/auth', { code: code }).then();
-
     setInvalidCodeMsg(() => 'Wrong Code');
   };
 

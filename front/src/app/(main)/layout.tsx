@@ -28,16 +28,12 @@ export default function MainLayout({
       console.log('socket connect');
       console.log(socket);
     });
-    socket?.on('friend_update', (res: any) => {
-      console.log('friend updatae !!');
-      console.log(res);
-    });
   }, [socket]);
 
   if (!data) return;
 
-  // console.log(socket);
   // console.log(data);
+  // console.log(socket);
   const onClickAddFriend = () => {
     setModal({ type: 'ADD-Friend' });
   };

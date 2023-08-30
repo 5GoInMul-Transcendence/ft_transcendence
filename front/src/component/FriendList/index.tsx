@@ -5,9 +5,30 @@ import ProfileImage from '../ProfileImage';
 import styled from 'styled-components';
 import Link from 'next/link';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
+import useSocket from '@/hooks/useSocket';
+import { useEffect, useState } from 'react';
 
 export default function FriendList() {
-  const friends = useSwrFetcher<IFriends[]>('/friend/list');
+  const [friends, setFriends] = useState<IFriends[]>([]);
+  const friendsData = useSwrFetcher<IFriends[]>('/friend/list');
+
+  const [socket] = useSocket('10001/main');
+  useEffect(() => {
+    socket?.on('friend_update', (res: any) => {
+      setFriends((cur) => {
+        cur.forEach((element) => {
+          if (element.id === res.data.id) {
+            element.status = res.data.status;
+          }
+        });
+        return [...cur];
+      });
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    setFriends(friendsData || []);
+  }, [friendsData]);
 
   if (!friends) return null;
 

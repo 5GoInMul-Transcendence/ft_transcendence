@@ -1,10 +1,10 @@
 import { useRecoilState } from 'recoil';
-import { invaildMsg, modalState } from './recoil/atom';
+import { invalidMsg, modalState } from './recoil/atom';
 import { useEffect } from 'react';
 import { axiosInstance } from './axios';
 
-export default function AxiosApiHaddling() {
-  const [, setInvalidMsg] = useRecoilState(invaildMsg);
+export default function AxiosApiHadling() {
+  const [, setInvalidMsg] = useRecoilState(invalidMsg);
   const [, setModal] = useRecoilState(modalState);
 
   useEffect(() => {
@@ -16,6 +16,9 @@ export default function AxiosApiHaddling() {
         console.log(response);
         switch (resStatus) {
           // main
+          // case '0000':
+          //   setModal(null);
+          // break;
           case '0001':
             setModal({ type: 'API-Error' });
             setInvalidMsg(resMessage);
@@ -25,6 +28,9 @@ export default function AxiosApiHaddling() {
             break;
 
           // chat
+          // case '1000':
+          //   setModal(null);
+          // break;
           case '1001':
             setModal({ type: 'API-Error' });
             setInvalidMsg(resMessage);
@@ -34,6 +40,9 @@ export default function AxiosApiHaddling() {
             break;
 
           // game
+          // case '2000':
+          //   setModal(null);
+          // break;
           case '2001':
             setModal({ type: 'API-Error' });
             setInvalidMsg(resMessage);

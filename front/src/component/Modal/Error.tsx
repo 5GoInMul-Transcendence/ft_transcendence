@@ -1,10 +1,10 @@
 import InvalidMsg from './InvalidMsg';
 
 import { useRecoilState } from 'recoil';
-import { invaildMsg } from '@/utils/recoil/atom';
+import { invalidMsg } from '@/utils/recoil/atom';
 
 export default function Error() {
-  const [invalidMsg] = useRecoilState(invaildMsg);
+  const [invalidMsg] = useRecoilState(invalidMsg);
 
   return (
     <>

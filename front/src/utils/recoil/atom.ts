@@ -10,7 +10,7 @@ export const modalState = atom<modalType | null>({
   default: null,
 });
 
-export const invaildMsg = atom<string>({
+export const invalidMsg = atom<string>({
   key: 'invalidMsg',
   default: '',
 });

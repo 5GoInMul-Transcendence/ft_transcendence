@@ -1,3 +1,4 @@
+import { axiosInstance } from '@/utils/axios';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -9,8 +10,9 @@ export default function AuthSelect({ twoFactor }: AuthSelectProps) {
   const [auth, setAuth] = useState(twoFactor);
 
   const onChangeAuth = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setAuth(e.target.value);
+    axiosInstance.put('me/twofactor', { twofactor: e.target.value }).then();
   };
+
   useEffect(() => {
     setAuth(twoFactor);
   }, [twoFactor]);
