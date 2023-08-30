@@ -13,7 +13,7 @@ import { MemoryUserService } from '../memoryuser/memory-user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Friend } from '../../friend/entities/friend.entity';
 import { Follower } from '../../friend/entities/follower.entity';
-
+import { Block } from '../../block/block.entity';
 @Injectable()
 export class UserService {
   constructor(
@@ -27,6 +27,9 @@ export class UserService {
     private friendRepository: Repository<Friend>,
     @InjectRepository(Follower)
     private followerRepository: Repository<Follower>,
+    @InjectRepository(Block)
+    private blockRepository: Repository<Block>,
+
     private memoryUserService: MemoryUserService,
   ) {}
 
@@ -88,7 +91,7 @@ export class UserService {
     const createdUser = await this.userRepository.save(user);
     await this.followerRepository.save({ userId: createdUser.id });
     await this.friendRepository.save({ userId: createdUser.id });
-
+    await this.blockRepository.save({ userId: createdUser.id });
     return createdUser;
   }
 
