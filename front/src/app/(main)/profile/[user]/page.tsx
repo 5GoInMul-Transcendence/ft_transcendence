@@ -21,8 +21,6 @@ export default function Profile({ params }: { params: { user: string } }) {
 
   if (!data) return;
 
-  console.log(data, '상대방 프로필 데이터 ');
-
   return (
     <Container>
       <TopWrapper>

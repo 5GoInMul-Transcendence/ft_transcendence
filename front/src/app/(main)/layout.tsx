@@ -25,18 +25,18 @@ export default function MainLayout({
 
   useEffect(() => {
     socket?.on('connect', () => {
-      console.log('hi');
+      // console.log('socket connect');
     });
     socket?.on('friend_update', (res: any) => {
-      console.log('friend updatae !!');
-      console.log(res);
+      // console.log('friend updatae !!');
+      // console.log(res);
     });
   }, [socket]);
 
   if (!data) return;
 
-  console.log(socket);
-  console.log(data);
+  // console.log(socket);
+  // console.log(data);
   const onClickAddFriend = () => {
     setModal({ type: 'ADD-Friend' });
   };
