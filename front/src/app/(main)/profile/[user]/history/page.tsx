@@ -3,11 +3,11 @@
 import useSwr from 'swr';
 import { MatchResult } from './MatchResult';
 import { IMatch } from '@/types/IMatch';
-import fetcher from '@/utils/fetcher';
 import styled from 'styled-components';
+import mockFetcher from '@/utils/mockFetcher';
 
 export default function History() {
-  const { data: match, error } = useSwr('/api/match', fetcher);
+  const { data: match, error } = useSwr('/api/match', mockFetcher);
 
   if (!match) return null;
 

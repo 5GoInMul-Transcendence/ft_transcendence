@@ -4,6 +4,7 @@ import Input from '@/component/Input';
 import Button from '@/component/Buttons/Button';
 import InvalidMsg from './InvalidMsg';
 import styled from 'styled-components';
+import { axiosInstance } from '@/utils/axios';
 
 export default function AuthPhone() {
   const [phone, , onChangePhone] = useInput('');
@@ -14,7 +15,8 @@ export default function AuthPhone() {
   const sendPhoneHandler = async () => {
     const regExp = /\d{2,3}-\d{3,4}-\d{4}/g;
     if (regExp.test(phone) === false) {
-      setInvalidPhoneMsg(() => 'Wrong mail address');
+      axiosInstance.post('/auth/phone', { phone: phone }).then();
+      setInvalidPhoneMsg(() => 'Wrong phone number');
       return;
     }
     setInvalidPhoneMsg(() => '');
@@ -23,6 +25,7 @@ export default function AuthPhone() {
 
   const authPhoneHandler = async () => {
     /* todo: 인증 data 요청, response에 따라 invalidCodeMsg 설정 */
+    axiosInstance.post('/auth', { code: code }).then();
     setInvalidCodeMsg(() => 'Wrong Code');
   };
 

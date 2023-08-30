@@ -5,7 +5,7 @@ interface Props {
 }
 
 export default function InvalidMsg({ text }: Props) {
-  if (text === '') return;
+  if (text === '') return null;
   return <InvalidMsgDiv>{text}</InvalidMsgDiv>;
 }
 

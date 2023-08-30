@@ -6,6 +6,7 @@ import { theme } from '@/styles/theme';
 import GlobalStyle from '@/styles/global-style';
 import Modal from '@/component/Modal';
 import { RecoilRoot } from 'recoil';
+import AxiosApiHadling from '@/utils/AxiosApiHadling';
 
 export default function RootLayout({
   children,
@@ -18,6 +19,7 @@ export default function RootLayout({
         <RecoilRoot>
           <StyledComponentsRegistry>
             <ThemeProvider theme={theme}>
+              <AxiosApiHadling />
               <GlobalStyle />
               <Modal />
               {children}

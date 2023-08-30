@@ -28,7 +28,7 @@ export default function ChannelItem({
       router.push(`/chats/${channelId}`);
       return;
     }
-    axios.get(` /channel/${channelId}/check`).then((data) => {
+    axios.get(`/channel/${channelId}/check`).then((data) => {
       if (data.data.data.env === 'protected') {
         setModal({
           type: 'ENTER-Channel',

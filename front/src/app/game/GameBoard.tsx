@@ -75,7 +75,7 @@ export default function GameBoard() {
     ctx.strokeStyle = ballBorderColor;
     ctx.lineWidth = 2;
     ctx.beginPath();
-    console.log(ballX, ballY);
+    // console.log(ballX, ballY);
     ctx.arc(ballX, ballY, ballRadius, 0, 2 * Math.PI);
     ctx.stroke();
     ctx.fill();

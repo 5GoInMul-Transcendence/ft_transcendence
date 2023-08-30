@@ -2,26 +2,46 @@
 
 import { IFriends } from '@/types/IFriends';
 import ProfileImage from '../ProfileImage';
-import fetcher from '@/utils/fetcher';
 import styled from 'styled-components';
-import useSwr from 'swr';
 import Link from 'next/link';
+import useSwrFetcher from '@/hooks/useSwrFetcher';
+import useSocket from '@/hooks/useSocket';
+import { useEffect, useState } from 'react';
 
 export default function FriendList() {
-  const { data: friends, error } = useSwr('/api/friends', fetcher);
+  const [friends, setFriends] = useState<IFriends[]>([]);
+  const friendsData = useSwrFetcher<IFriends[]>('/friend/list');
+
+  const [socket] = useSocket('10001/main');
+  useEffect(() => {
+    socket?.on('friend_update', (res: any) => {
+      setFriends((cur) => {
+        cur.forEach((element) => {
+          if (element.id === res.data.id) {
+            element.status = res.data.status;
+          }
+        });
+        return [...cur];
+      });
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    setFriends(friendsData || []);
+  }, [friendsData]);
 
   if (!friends) return null;
 
   return (
     <div>
-      {friends.map((e: IFriends, index: number) => (
-        <Link key={e.name} href={`/profile/${e.name}`}>
+      {friends.map((friend: IFriends) => (
+        <Link key={friend.id} href={`/profile/${friend.nickname}`}>
           <FriendItem>
             <div>
-              <ProfileImage url={e.url} size='35px' />
-              &nbsp;{e.name}
+              <ProfileImage url={friend.avatar} size='35px' />
+              &nbsp;{friend.nickname}
             </div>
-            <StatusDiv $status={e.status} />
+            <StatusDiv $status={friend.status} />
           </FriendItem>
         </Link>
       ))}

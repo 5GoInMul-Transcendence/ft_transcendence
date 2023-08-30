@@ -10,8 +10,10 @@ import { useSetRecoilState } from 'recoil';
 import { modalState } from '@/utils/recoil/atom';
 
 export default function Profile() {
+  const data = useSwrFetcher<IUserDetail>('/me/details');
   const setModal = useSetRecoilState(modalState);
-  const [data] = useSwrFetcher<IUserDetail>('/api/me/details');
+
+  if (!data) return;
 
   return (
     <Container>

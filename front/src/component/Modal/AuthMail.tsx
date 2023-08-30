@@ -4,6 +4,7 @@ import Input from '@/component/Input';
 import Button from '@/component/Buttons/Button';
 import InvalidMsg from './InvalidMsg';
 import styled from 'styled-components';
+import { axiosInstance } from '@/utils/axios';
 
 export default function AuthMail() {
   const [mail, , onChangeMail] = useInput('');
@@ -18,11 +19,14 @@ export default function AuthMail() {
       setInvalidMailMsg(() => 'Wrong mail address');
       return;
     }
+    axiosInstance.post('/auth/mail', { mail: mail }).then();
     setInvalidMailMsg(() => '');
     /* todo: 메일 data 요청, response에 따라 invalidMailMsg 설정 */
   };
 
   const authMailHandler = async () => {
+    axiosInstance.post('/auth', { code: code }).then();
+
     /* todo: 인증 data 요청, response에 따라 invalidCodeMsg 설정 */
     setInvalidCodeMsg(() => 'Wrong Code');
   };

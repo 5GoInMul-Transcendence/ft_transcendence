@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 interface Props {
   title: string;
-  content: string[];
+  content: string[] | null;
 }
 
 export default function AchievementItem({ title, content }: Props) {

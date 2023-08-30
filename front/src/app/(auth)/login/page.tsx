@@ -3,21 +3,33 @@
 import { useCallback } from 'react';
 import Link from 'next/link';
 import useInput from '@/hooks/useInput';
-import styled from 'styled-components';
 import { Form, FormWrapper } from '@/app/(auth)/styles';
+import { useRouter } from 'next/navigation';
+import styled from 'styled-components';
+import { axiosInstance } from '@/utils/axios';
 
 export default function Login() {
   const [id, , onChangeId] = useInput('');
   const [password, , onChangePassword] = useInput('');
 
   const onSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
+    async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+      console.log(id, password);
+      try {
+        const res = await axiosInstance.post('/login', {
+          id: id,
+          password: password,
+        });
+      } catch (error) {
+        // 데이터 패치 에러
+        console.log(error, 'error');
+      }
     },
     [id, password]
   );
   const onClickOAuth = () => {
-    location.href = 'http://10.19.231.208:8080/login/oauth/42';
+    location.href = 'http://localhost:8080/login/oauth/42';
   };
   return (
     <FormWrapper>

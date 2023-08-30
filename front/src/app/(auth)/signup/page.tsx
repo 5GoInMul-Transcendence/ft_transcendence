@@ -5,6 +5,8 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import useInput from '@/hooks/useInput';
 import { Form, FormWrapper } from '../styles';
+import axios from 'axios';
+import { axiosInstance } from '@/utils/axios';
 
 export default function SignUp() {
   const [id, , onChangeId] = useInput('');
@@ -29,6 +31,13 @@ export default function SignUp() {
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+
+      axiosInstance
+        .post('http://localhost:8080/signup', {
+          id: id,
+          password: password,
+        })
+        .then();
       if (mismatchError) {
       }
     },
