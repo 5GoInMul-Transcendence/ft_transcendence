@@ -13,14 +13,14 @@ export default function FriendList() {
 
   return (
     <div>
-      {friends.map((e: IFriends, index: number) => (
-        <Link key={index} href={`/profile/${e.nickname}`}>
+      {friends.map((friend: IFriends) => (
+        <Link key={friend.id} href={`/profile/${friend.nickname}`}>
           <FriendItem>
             <div>
-              <ProfileImage url={e.avatar} size='35px' />
-              &nbsp;{e.nickname}
+              <ProfileImage url={friend.avatar} size='35px' />
+              &nbsp;{friend.nickname}
             </div>
-            <StatusDiv $status={e.status} />
+            <StatusDiv $status={friend.status} />
           </FriendItem>
         </Link>
       ))}
