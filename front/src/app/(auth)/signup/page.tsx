@@ -37,7 +37,7 @@ export default function SignUp() {
           id: id,
           password: password,
         })
-        .then((res) => {});
+        .then();
       if (mismatchError) {
       }
     },
