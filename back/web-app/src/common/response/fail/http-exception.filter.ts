@@ -4,6 +4,11 @@ import { ApiResponseForm } from '../api-response-form';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
+  /**
+    This is default codes in json method
+    timestamp: new Date().toISOString(),
+    path: request.url,
+  */
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -12,7 +17,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const message: string = exception.message;
 
     console.log('Exception filter\nSend Response\n');
-    if (status == HttpStatus.FOUND) {
+    if (status === HttpStatus.FOUND) {
       return (
         response
           .status(200)
@@ -20,13 +25,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
       );
     }
 
-    response
+    return response
+      .status(200)
       .json(ApiResponseForm.bad(message));
-
-      /**
-        // This is default codes in json method
-        timestamp: new Date().toISOString(),
-        path: request.url,
-       */
   }
 }

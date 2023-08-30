@@ -19,11 +19,10 @@ export class ResponseInterceptor implements NestInterceptor {
           // test
           console.log('Post interceptor\nSend Response\n');
 
-          if (status == HttpStatus.FOUND) {
+          if (status === HttpStatus.FOUND) {
             response.status(HttpStatus.OK);
             return ApiResponseForm.redirect(data);
           }
-
           return ApiResponseForm.ok(data);
         }),
       );

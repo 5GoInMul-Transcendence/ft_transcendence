@@ -9,22 +9,22 @@ export class ApiResponseForm {
     }
   }
 
-  static redirect(data: any = {}) {
-    return {
-      data,
-      resStatus: {
-        code : '0002',
-        message: '',
-      },
-    }
-  }
-
   static bad(message: string = '', data: any = {}) {
     return {
       data,
       resStatus: {
         code : '0001',
         message,
+      },
+    }
+  }
+  
+  static redirect(data: any = {}) {
+    return {
+      data,
+      resStatus: {
+        code : '0002',
+        message: '',
       },
     }
   }
