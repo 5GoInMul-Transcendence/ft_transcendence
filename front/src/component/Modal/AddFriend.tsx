@@ -1,13 +1,14 @@
-import { useState } from 'react';
 import useInput from '@/hooks/useInput';
 import Input from '@/component/Input';
 import Button from '@/component/Buttons/Button';
 import InvalidMsg from './InvalidMsg';
 import axios from 'axios';
+import { useRecoilState } from 'recoil';
+import { invaildMsg } from '@/utils/recoil/atom';
 
 export default function AddFriend() {
   const [keyword, , onChangeKeyword] = useInput('');
-  const [invalidMsg, setInvalidMsg] = useState<string>('');
+  const [invalidMsg, setInvalidMsg] = useRecoilState(invaildMsg);
 
   const addFriendHandler = async () => {
     if (keyword === '') {

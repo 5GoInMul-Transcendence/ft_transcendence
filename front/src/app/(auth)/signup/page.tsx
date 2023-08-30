@@ -30,7 +30,7 @@ export default function SignUp() {
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      console.log(id, password);
+
       axios
         .post(
           'http://localhost:8080/signup',
@@ -42,9 +42,7 @@ export default function SignUp() {
             withCredentials: true,
           }
         )
-        .then((res) => {
-          console.log(res);
-        });
+        .then((res) => {});
       if (mismatchError) {
       }
     },

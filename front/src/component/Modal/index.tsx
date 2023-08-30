@@ -12,6 +12,7 @@ import CreateChannel from './CreateChannel';
 import SetChannel from './SetChannel';
 import { useRecoilState } from 'recoil';
 import { modalState } from '@/utils/recoil/atom';
+import Error from './Error';
 
 export default function Modal() {
   const [modal, setModal] = useRecoilState(modalState);
@@ -35,6 +36,7 @@ export default function Modal() {
     },
     'AUTH-Mail': { title: 'Mail Authentication', child: <AuthMail /> },
     'AUTH-Phone': { title: 'Phone Authentication', child: <AuthPhone /> },
+    'API-Error': { title: 'Error', child: <Error /> },
   };
 
   const closeModal = (e: React.MouseEvent) => {

@@ -21,8 +21,6 @@ export default function Login() {
           id: id,
           password: password,
         });
-        // 데이터 패치 정상적으로 완료
-        console.log(res, 'response');
       } catch (error) {
         // 데이터 패치 에러
         console.log(error, 'error');
