@@ -6,16 +6,13 @@ import Buttons from '@/component/Buttons';
 import MatchItem from '@/component/MatchItem';
 import ProfileImage from '@/component/ProfileImage';
 import Toggle from '@/component/Toggle';
+import useSwrFetcher from '@/hooks/useSwrFetcher';
 import useToggle from '@/hooks/useToggle';
-import fetcher from '@/utils/fetcher';
+import { IMe } from '@/types/IMe';
 import styled from 'styled-components';
-import useSwr from 'swr';
 
 export default function Profile({ params }: { params: { user: string } }) {
-  const { data, error } = useSwr(
-    `http://localhost:8080/user/${params.user}`,
-    fetcher
-  );
+  const data = useSwrFetcher<IMe>(`http://localhost:8080/user/${params.user}`);
   const [follw, onChangeFollow] = useToggle(false);
   const [block, onChangeBlock] = useToggle(false);
 
@@ -42,18 +39,18 @@ export default function Profile({ params }: { params: { user: string } }) {
           </TogglesWrapper>
         </Wrapper>
         <Wrapper $width={7}>
-          <ProfileItem title='NICNAME' content={`${data.data.nickname}`} />
+          <ProfileItem title='NICNAME' content={`${data.nickname}`} />
           <ProfileItem
             title='LADDER LEVEL'
-            content={`${data.data.gameRecord.ladderLevel}`}
+            content={`${data.gameRecord.ladderLevel}`}
           />
           <MatchItem
             title='WIN/LOSE'
-            content={`${data.data.gameRecord.win}/${data.data.gameRecord.loss}`}
+            content={`${data.gameRecord.win}/${data.gameRecord.loss}`}
           />
           <AchievementItem
             title='ACHIEVMENT'
-            content={data.data.gameRecord.achievement}
+            content={data.gameRecord.achievement}
           />
         </Wrapper>
       </TopWrapper>
