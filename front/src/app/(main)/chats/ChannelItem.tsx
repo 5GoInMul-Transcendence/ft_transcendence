@@ -35,7 +35,7 @@ export default function ChannelItem({
           modalProps: { channelName, channelId },
         });
       } else {
-        // router.push(`/chats/${channelId}`);
+        router.push(`/chats/${channelId}`);
       }
     });
   };
