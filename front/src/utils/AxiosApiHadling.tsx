@@ -1,10 +1,10 @@
 import { useRecoilState } from 'recoil';
-import { invalidMsg, modalState } from './recoil/atom';
+import { invalidMsgState, modalState } from './recoil/atom';
 import { useEffect } from 'react';
 import { axiosInstance } from './axios';
 
 export default function AxiosApiHadling() {
-  const [, setInvalidMsg] = useRecoilState(invalidMsg);
+  const [, setInvalidMsg] = useRecoilState(invalidMsgState);
   const [, setModal] = useRecoilState(modalState);
 
   useEffect(() => {
