@@ -11,6 +11,8 @@ import { Builder } from 'builder-pattern';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { MemoryUserService } from '../memoryuser/memory-user.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { Friend } from '../../friend/entities/friend.entity';
+import { Follower } from '../../friend/entities/follower.entity';
 
 @Injectable()
 export class UserService {
@@ -21,6 +23,10 @@ export class UserService {
     private signupOauthRepository: Repository<OauthUser>,
     @InjectRepository(MemberUser)
     private signupMemberRepository: Repository<MemberUser>,
+    @InjectRepository(Friend)
+    private friendRepository: Repository<Friend>,
+    @InjectRepository(Follower)
+    private followerRepository: Repository<Follower>,
     private memoryUserService: MemoryUserService,
   ) {}
 
@@ -72,14 +78,18 @@ export class UserService {
   }
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
-    let { mail, nickname } = createUserDto;
+    const { mail, nickname } = createUserDto;
     const user = this.userRepository.create({
       nickname,
       avatar: 'avatar', // 이미지가 저장된 url 의 id 값만 넣는다.
       mail,
     });
 
-    return await this.userRepository.save(user);
+    const createdUser = await this.userRepository.save(user);
+    await this.followerRepository.save({ userId: createdUser.id });
+    await this.friendRepository.save({ userId: createdUser.id });
+
+    return createdUser;
   }
 
   updateUser(dto: Partial<UpdateUserDto> & { userId: number }): void {
