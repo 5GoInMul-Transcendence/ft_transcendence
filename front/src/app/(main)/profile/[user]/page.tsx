@@ -12,7 +12,7 @@ import { IMe } from '@/types/IMe';
 import styled from 'styled-components';
 
 export default function Profile({ params }: { params: { user: string } }) {
-  const data = useSwrFetcher<IMe>(`user/${params.user}`);
+  const data = useSwrFetcher<IUser>(`user/${params.user}`);
   const [follw, onChangeFollow] = useToggle(false);
   const [block, onChangeBlock] = useToggle(false);
 

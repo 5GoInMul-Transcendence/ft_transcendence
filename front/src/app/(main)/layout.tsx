@@ -1,16 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import styled from 'styled-components';
 import Pong from '@/component/Pong';
 import ProfileImage from '@/component/ProfileImage';
 import FriendList from '@/component/FriendList';
 import useSocket from '@/hooks/useSocket';
-import { useEffect } from 'react';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
-import { IMe } from '@/types/IMe';
+import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { modalState } from '@/utils/recoil/atom';
+import { IUser } from '@/types/IUser';
+import styled from 'styled-components';
 
 const name = 'kipark';
 
@@ -20,16 +20,17 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   const [socket] = useSocket('10001/main');
-  const data = useSwrFetcher<IMe>('/me');
+  const data = useSwrFetcher<IUser>('/me');
   const setModal = useSetRecoilState(modalState);
 
   useEffect(() => {
     socket?.on('connect', () => {
-      // console.log('socket connect');
+      console.log('socket connect');
+      console.log(socket);
     });
     socket?.on('friend_update', (res: any) => {
-      // console.log('friend updatae !!');
-      // console.log(res);
+      console.log('friend updatae !!');
+      console.log(res);
     });
   }, [socket]);
 

@@ -14,6 +14,7 @@ export default function Profile() {
   const setModal = useSetRecoilState(modalState);
 
   if (!data) return;
+
   return (
     <Container>
       <TopWrapper>
