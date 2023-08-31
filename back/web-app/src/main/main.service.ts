@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { MemoryUserService } from '../users/memoryuser/memory-user.service';
-import { ConnectionDto } from './dto/connection.dto';
+import { ConnectMainDto } from './dto/connect-main.dto';
 import { FindUserDto } from '../users/memoryuser/dto/find-user.dto';
 import { Builder } from 'builder-pattern';
 import { UpdateMemoryUserDto } from '../users/memoryuser/dto/update-memory-user.dto';
 import { UserStatus } from '../users/enums/user-status.enum';
 import { UpdateFriendResDto } from '../friend/dto/update-friend-res.dto';
-import { DisconnectionDto } from './dto/disconnection.dto';
-import { MainUserService } from './main-user.service';
+import { DisConnectMainDto } from './dto/disconnect-main.dto';
+import { MainUserService } from './mainuser/main-user.service';
 import { AddMainUserDto } from './dto/add-main-user.dto';
 import { BroadcastMessageDto } from './dto/broadcast-message.dto';
 import { DeleteMainUserDto } from './dto/delete-main-user.dto';
@@ -58,7 +58,7 @@ export class MainService {
     }
   }
 
-  connection(dto: ConnectionDto) {
+  connectMain(dto: ConnectMainDto) {
     const user = this.memoryUserService.findUserByUserId(
       Builder(FindUserDto).userId(dto.userId).build(),
     );
@@ -91,7 +91,7 @@ export class MainService {
     );
   }
 
-  disConnection(dto: DisconnectionDto) {
+  disConnectMain(dto: DisConnectMainDto) {
     const user = this.memoryUserService.findUserByUserId(
       Builder(FindUserDto).userId(dto.userId).build(),
     );
