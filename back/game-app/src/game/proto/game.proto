@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package game;
+
+service GameService {
+  rpc createGame (google.protobuf.Empty) returns (Game) {}
+}
+
+message GameById {
+  int32 id = 1;
+}
+
+message Game {
+  string gameId = 1;
+  string p1GameKey = 2;
+  string p2GameKey = 3;
+}
