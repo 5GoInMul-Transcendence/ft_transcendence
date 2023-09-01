@@ -26,7 +26,7 @@ const Wrapper = styled.div`
   height: 20rem;
 `;
 
-const GameMode = styled.div<{ $color: string }>`
+const GameMode = styled.button<{ $color: string }>`
   &:hover {
     font-size: ${({ theme }) => theme.fontSize.xxxxlarge};
     margin: 1rem 0 1rem 0;
