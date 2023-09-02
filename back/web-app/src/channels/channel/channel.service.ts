@@ -36,8 +36,8 @@ export class ChannelService {
 			where: {id: userId},
 		})
 		const link = this.linkChannelToUserRepository.create({
-			userId: user,
-			channelId: channel,
+			user,
+			channel,
 			role: ChannelRole.OWNER,
 		});
 

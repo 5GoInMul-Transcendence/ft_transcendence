@@ -1,12 +1,13 @@
 import { Controller, Get, Session } from '@nestjs/common';
 import { ChannelsService } from './channels.service';
 import { UserService } from 'src/users/user/user.service';
+import { User } from 'src/users/user/entities/user.entity';
+import { LinkChannelToUser } from './channel/entity/link-channel-to-user.entity';
 
 @Controller('channels')
 export class ChannelsController {
 	constructor(
 		private channelsService: ChannelsService,
-		private userService: UserService,
 	) {}
 
 	@Get()
@@ -16,11 +17,9 @@ export class ChannelsController {
 
   @Get('mine')
   async getMyChannels(@Session() session: Record<string, any>,) {
-    const userId = session.userId;
-    const user = await this.userService.getUserByUserId(userId);
+    const userId: number = session.userId;
+    const links: LinkChannelToUser[] = await this.channelsService.getLinksByUserId(userId);
 
-    user.links.forEach(link => {
-      link.channelId; // messageId 추가 예정, message 와 메시지를 보낸 유저의 nickname 가져오기
-    })
+		return await this.channelsService.getMyChannels(links);
   }
 }

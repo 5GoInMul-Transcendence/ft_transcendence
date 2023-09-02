@@ -8,12 +8,14 @@ import { ChannelService } from './channel/channel.service';
 import { LinkChannelToUser } from './channel/entity/link-channel-to-user.entity';
 import { User } from 'src/users/user/entities/user.entity';
 import { UserModule } from 'src/users/user/user.module';
+import { Message } from './channel/entity/message.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([
       Channel,
       LinkChannelToUser,
+      Message,
       User,
     ]),
     UserModule,

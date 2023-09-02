@@ -33,10 +33,12 @@ export class UserService {
     private memoryUserService: MemoryUserService,
   ) {}
 
-  async getUserByUserId(id: number): Promise<User> {
+  async getUserByUserId(id: number) {
     return await this.userRepository.findOne({
-      where: {id},
-    })
+      where: {
+        id,
+      },
+    });
   }
 
   async getOauthUserByProfileId(profileId: number): Promise<OauthUser> {
