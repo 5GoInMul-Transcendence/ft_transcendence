@@ -43,11 +43,4 @@ export class ChannelService {
 
 		return await this.linkChannelToUserRepository.save(link);
 	}
-
-	getAddChannelRes(id: number, name: string): {id: number, name: string} {
-		return {
-			id,
-			name,
-		};
-	}
 }
