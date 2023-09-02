@@ -12,7 +12,9 @@ import { AuthModule } from './auth/auth.module';
 import { FriendModule } from './friend/friend.module';
 import { MainModule } from './main/main.module';
 import { ChannelsModule } from './channels/channels.module';
-
+import { GameModule } from './game/game.module';
+import { MatchModule } from './main/match/match.module';
+import { MainUserModule } from './main/mainuser/main-user.module';
 
 @Module({
   imports: [
@@ -28,6 +30,9 @@ import { ChannelsModule } from './channels/channels.module';
     FriendModule,
     MainModule,
     ChannelsModule,
+    MainUserModule,
+    MatchModule,
+    GameModule,
   ],
   controllers: [AppController],
   providers: [AppService],

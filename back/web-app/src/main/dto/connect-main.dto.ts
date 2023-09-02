@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 
-export class DisconnectionDto {
+export class ConnectMainDto {
   readonly userId: number;
   readonly client: Socket;
 }
