@@ -11,6 +11,7 @@ import { DatabaseModule } from './common/database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { FriendModule } from './friend/friend.module';
 import { MainModule } from './main/main.module';
+import { ChannelsModule } from './channels/channels.module';
 import { GameModule } from './game/game.module';
 import { MatchModule } from './main/match/match.module';
 import { MainUserModule } from './main/mainuser/main-user.module';
@@ -28,6 +29,7 @@ import { MainUserModule } from './main/mainuser/main-user.module';
     AuthModule,
     FriendModule,
     MainModule,
+    ChannelsModule,
     MainUserModule,
     MatchModule,
     GameModule,
