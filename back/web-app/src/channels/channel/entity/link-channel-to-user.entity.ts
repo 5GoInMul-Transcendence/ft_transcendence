@@ -1,6 +1,7 @@
 import { User } from "src/users/user/entities/user.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Channel } from "./channel.entity";
+import { ChannelRole } from "../enum/channel-role.enum";
 
 @Entity('link_channel_to_user')
 export class LinkChannelToUser {
@@ -17,7 +18,7 @@ export class LinkChannelToUser {
 
 	@Column('varchar', {
 		length: 5,
-		default: 'user',
+		default: ChannelRole.USER,
 	})
 	role: string;
 }

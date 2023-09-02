@@ -6,6 +6,7 @@ import { CreateChannelReqDto } from './dto/create-channel-req.dto';
 import { LinkChannelToUser } from './entity/link-channel-to-user.entity';
 import { User } from 'src/users/user/entities/user.entity';
 import { CreateLinkChannelToUserReqDto } from './dto/create-link-channel-to-user-req.dto';
+import { ChannelRole } from './enum/channel-role.enum';
 
 @Injectable()
 export class ChannelService {
@@ -37,7 +38,7 @@ export class ChannelService {
 		const link = this.linkChannelToUserRepository.create({
 			userId: user,
 			channelId: channel,
-			role: 'owner',
+			role: ChannelRole.OWNER,
 		});
 
 		return await this.linkChannelToUserRepository.save(link);
