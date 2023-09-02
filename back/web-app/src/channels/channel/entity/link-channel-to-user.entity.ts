@@ -3,7 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "t
 import { Channel } from "./channel.entity";
 
 @Entity('channel_join')
-export class ChannelJoin {
+export class LinkChannelToUser {
 	@PrimaryGeneratedColumn()
 	id: number;
 

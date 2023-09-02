@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { TwoFactorStatus } from "../../enums/twoFactor-status.enum";
-import { ChannelJoin } from "src/channels/channel/entity/channel-join.entity";
+import { LinkChannelToUser } from "src/channels/channel/entity/link-channel-to-user.entity";
 
 @Entity('user')
 export class User {
@@ -35,6 +35,6 @@ export class User {
   })
   twoFactor: TwoFactorStatus;
 
-  @OneToMany(() => ChannelJoin, (join) => join.userId)
-  joins: ChannelJoin[]
+  @OneToMany(() => LinkChannelToUser, (join) => join.userId)
+  joins: LinkChannelToUser[]
 };
