@@ -15,10 +15,14 @@ import { DeleteUserFriendDto } from '../users/memoryuser/dto/delete-user-friend.
 import { DeleteUserFollowerDto } from '../users/memoryuser/dto/delete-user-follower.dto';
 import { GetFriendsInfoDto } from './dto/get-friends-info.dto';
 import { FriendInfo } from './friend-info';
+import { MainUserService } from '../main/mainuser/main-user.service';
+import { BroadcastFriendUpdateDto } from './dto/broadcast-friend-update.dto';
+import { BroadcastMessageDto } from '../main/dto/broadcast-message.dto';
 
 @Injectable()
 export class FriendService {
   constructor(
+    private mainUserService: MainUserService,
     private memoryUserService: MemoryUserService,
     private dataSource: DataSource,
   ) {}
@@ -78,6 +82,20 @@ export class FriendService {
       .avatar(friend.avatar)
       .status(friend.status)
       .build();
+  }
+
+  broadcastFriendUpdate(dto: BroadcastFriendUpdateDto) {
+    const user = this.memoryUserService.findUserByUserId(
+      Builder(FindUserDto).userId(dto.userId).build(),
+    );
+
+    this.mainUserService.broadcastMessage(
+      Builder(BroadcastMessageDto)
+        .target(user.followers.values())
+        .event('friend_update')
+        .data(dto.friendInfo)
+        .build(),
+    );
   }
 
   private async saveAddFriend(
