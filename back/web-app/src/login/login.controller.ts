@@ -1,4 +1,16 @@
-import { Body, Controller, Get, HttpCode, HttpException, HttpStatus, Post, Req, Session, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Post,
+  Req,
+  Session,
+  UseGuards,
+  Redirect,
+} from '@nestjs/common';
 import { LoginService } from './login.service';
 import { FortyTwoAuthGuard } from './ft-auth.guard';
 import { UserService } from 'src/users/user/user.service';
@@ -31,21 +43,30 @@ export class LoginController {
   async loginMemberUser(
     @Body() loginMemberUserReqDto: LoginMemberUserReqDto,
     @Session() session: Record<string, any>,
-    ) {
+  ) {
     const { id, password } = loginMemberUserReqDto;
     let memberUser: MemberUser;
 
     memberUser = await this.userService.getMemberUserByAccountId(id);
     if (!memberUser) {
-      throw new HttpException('아이디 또는 비밀번호가 올바르지 않습니다!', HttpStatus.OK);
+      throw new HttpException(
+        '아이디 또는 비밀번호가 올바르지 않습니다!',
+        HttpStatus.OK,
+      );
     }
-    
-    const isCorrectPassword = (await bcrypt.compare(password, memberUser.password));
+
+    const isCorrectPassword = await bcrypt.compare(
+      password,
+      memberUser.password,
+    );
 
     if (!isCorrectPassword) {
-      throw new HttpException('아이디 또는 비밀번호가 올바르지 않습니다!', HttpStatus.OK);
+      throw new HttpException(
+        '아이디 또는 비밀번호가 올바르지 않습니다!',
+        HttpStatus.OK,
+      );
     }
-    
+
     if (this.loginService.isTwoFaOn(memberUser.user.twoFactor) == true) {
       // 2FA
       // 세션만 생성하고, userId 는 넣어주면 안 됨
@@ -60,11 +81,11 @@ export class LoginController {
 
   @Get('oauth/42/redirect')
   @UseGuards(FortyTwoAuthGuard)
-  @HttpCode(HttpStatus.FOUND)
+  @Redirect('http://localhost:3000/main')
   async ftAuthRedirect(
     @Req() req: any, // 유효성 검사 해야 하나?
     @Session() session: Record<string, any>,
-    ): Promise<string> {
+  ) : Promise<void> {
     const reqUser: any = req.user;
     let user: User;
     let oauthUser: OauthUser;
@@ -75,34 +96,30 @@ export class LoginController {
     if (!user) {
       user = await this.userService.createUser(
         Builder(CreateUserDto)
-        .mail(reqUser.mail)
-        .nickname(this.signupService.getRandomNickname())
-        .build()
-      )
+          .mail(reqUser.mail)
+          .nickname(this.signupService.getRandomNickname())
+          .build(),
+      );
       this.userService.createSignupOauth(
-        Builder(CreateOauthUserDto)
-        .user(user)
-        .profileId(reqUser.id)
-        .build()
-      ); 
+        Builder(CreateOauthUserDto).user(user).profileId(reqUser.id).build(),
+      );
       this.memoryUserService.addUser(
         Builder(UserDto)
-        .avatar(user.avatar)
-        .mail(user.mail)
-        .nickname(user.nickname)
-        .phone(user.phone)
-        .twoFactor(user.twoFactor)
-        .userId(user.id)
-        .build()
+          .avatar(user.avatar)
+          .mail(user.mail)
+          .nickname(user.nickname)
+          .phone(user.phone)
+          .twoFactor(user.twoFactor)
+          .userId(user.id)
+          .build(),
       );
     }
-  
+
     if (this.loginService.isTwoFaOn(user.twoFactor) == true) {
       // 2FA
       // 세션만 생성하고, userId 는 넣어주면 안 됨
     }
     this.sessionService.setSession(session, user.id);
     // return users; // Need to redirecte 200, /main
-    return RedirectResource.MAIN;
   }
 }
