@@ -5,7 +5,6 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import useInput from '@/hooks/useInput';
 import { Form, FormWrapper } from '../styles';
-import axios from 'axios';
 import { axiosInstance } from '@/utils/axios';
 
 export default function SignUp() {

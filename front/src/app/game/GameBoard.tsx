@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 export default function GameBoard() {
-  const [socket] = useSocket('8081');
+  const [socket] = useSocket('10001');
   const startGame = () => {
     socket?.emit('startGame');
   };

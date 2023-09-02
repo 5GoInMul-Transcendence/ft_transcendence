@@ -1,11 +1,10 @@
 'use client';
 
-import { useCallback } from 'react';
 import Link from 'next/link';
 import useInput from '@/hooks/useInput';
-import { Form, FormWrapper } from '@/app/(auth)/styles';
-import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
+import { useCallback } from 'react';
+import { Form, FormWrapper } from '@/app/(auth)/styles';
 import { axiosInstance } from '@/utils/axios';
 
 export default function Login() {

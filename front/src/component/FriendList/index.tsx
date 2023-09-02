@@ -58,6 +58,7 @@ const FriendItem = styled.div`
   }
 `;
 
+// todo : ingame
 const StatusDiv = styled.div<{ $status: string }>`
   width: 10px;
   height: 10px;

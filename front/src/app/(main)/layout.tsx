@@ -30,13 +30,14 @@ export default function MainLayout({
     });
   }, [socket]);
 
-  if (!data) return;
+  if (!data || !socket) return;
 
   // console.log(data);
   // console.log(socket);
   const onClickAddFriend = () => {
     setModal({ type: 'ADD-Friend' });
   };
+
   return (
     <Container>
       <MainContainer>
