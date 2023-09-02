@@ -167,7 +167,7 @@ export class MatchService {
       this.mainUserService.sendMessage(
         Builder(SendMessageDto)
           .userId(rivalUserId)
-          .event('successMessage')
+           .event('successMatch')
           .data({ status: false })
           .build(),
       );
