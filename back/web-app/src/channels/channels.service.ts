@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Channel } from './channel.entity';
+import { Channel } from './channel/entity/channel.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

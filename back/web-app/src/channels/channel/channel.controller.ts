@@ -16,7 +16,7 @@ export class ChannelController {
 	@Post()
 	async addChannel(
 		// @Session() session: Record<string, any>,
-		@Body() addChannelReqDto: AddChannelReqDto,
+		@Body() addChannelReqDto: AddChannelReqDto, // 채널 name 파이프 구현 필요
 	) {
 		// const me = this.memoryUserService.findUserByUserId(
 		// 	Builder(FindUserDto).userId(session.userId).build(),

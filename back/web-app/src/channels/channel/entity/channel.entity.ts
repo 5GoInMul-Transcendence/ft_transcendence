@@ -5,7 +5,7 @@ export class Channel {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column('varchar', { length: 16 })
+	@Column('varchar', { length: 24 })
 	name: string;
 
 	@Column('varchar', { length: 9 })
