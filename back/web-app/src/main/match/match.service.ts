@@ -39,7 +39,7 @@ export class MatchService {
       Builder(FindUserDto).userId(dto.userId).build(),
     );
 
-    if (user.status !== MainUserStatus.MAIN) {
+    if (user.status !== MainUserStatus.DEFAULT) {
       return;
     }
 
@@ -127,7 +127,7 @@ export class MatchService {
     this.mainUserService.updateUser(
       Builder(UpdateMainUserDto)
         .userId(dto.userId)
-        .status(MainUserStatus.MAIN)
+        .status(MainUserStatus.DEFAULT)
         .build(),
     );
   }
@@ -155,13 +155,13 @@ export class MatchService {
       this.mainUserService.updateUser(
         Builder(UpdateMainUserDto)
           .userId(dto.userId)
-          .status(MainUserStatus.MAIN)
+          .status(MainUserStatus.DEFAULT)
           .build(),
       );
       this.mainUserService.updateUser(
         Builder(UpdateMainUserDto)
           .userId(rivalUserId)
-          .status(MainUserStatus.MAIN)
+          .status(MainUserStatus.DEFAULT)
           .build(),
       );
       this.mainUserService.sendMessage(

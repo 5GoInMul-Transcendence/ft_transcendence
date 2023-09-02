@@ -24,7 +24,7 @@ export class MainUserService {
       Builder(MainUser)
         .userId(dto.userId)
         .client(dto.client)
-        .status(MainUserStatus.MAIN)
+        .status(MainUserStatus.DEFAULT)
         .build(),
     );
   }

@@ -1,5 +1,5 @@
 export enum MainUserStatus {
-  MAIN,
+  DEFAULT,
   MATCH_WAIT_QUEUE,
   MATCH_WAIT_ACCEPT,
   MATCH_ACCEPT,
