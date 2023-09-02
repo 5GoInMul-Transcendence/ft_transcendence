@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { TwoFactorStatus } from "../../enums/twoFactor-status.enum";
+import { ChannelJoin } from "src/channels/channel/entity/channel-join.entity";
 
 @Entity('user')
 export class User {
@@ -33,4 +34,7 @@ export class User {
     default: TwoFactorStatus.DISABLED,
   })
   twoFactor: TwoFactorStatus;
+
+  @OneToMany(() => ChannelJoin, (join) => join.userId)
+  joins: ChannelJoin[]
 };
