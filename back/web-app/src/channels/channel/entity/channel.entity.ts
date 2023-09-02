@@ -11,10 +11,10 @@ export class Channel {
 	@Column('varchar', { length: 9 })
 	mode: string;
 
-	@Column({
-		type: 'integer',
+	@Column('varchar', {
+		length: 4,
 		nullable: true,
 		default: null,
 	})
-	password: number | null;
+	password: string | null;
 }
