@@ -39,7 +39,7 @@ export class ChannelsService {
 		});
 	}
 
-	private async getRecentMessageByChannelId(channel: Channel): Promise<Message> {
+	private async getRecentMessageByChannelId(channel: Channel): Promise<Message | null> {
 		return await this.messageRepositoy.findOne({
 			where: {
 				channel,
@@ -51,28 +51,24 @@ export class ChannelsService {
 	}
 
 	async getMyChannels(links: LinkChannelToUser[]): Promise<MyChannels[]> {
-		let myChannelList: MyChannels[];
+		let myChannelList: MyChannels[] = [];
 
 		for (const link of links) {
       const channel = link.channel;
 			const channelId: number = channel.id;
 			const channelName = channel.name;
 			const message: Message = await this.getRecentMessageByChannelId(channel);
+			const recentMessage: RecentMessage = Builder(RecentMessage)
+			.message(message?.content ?? null)
+			.nickname(message?.nickname ?? null)
+			.build();
 
-			console.log('message', message); // test
-			// console.log('message.content', message.content); // test
-			// console.log('message.nickname', message.nickname); // test
-			// const recentMessage: RecentMessage = Builder(RecentMessage)
-			// .message(message.content)
-			// .nickname(message.nickname)
-			// .build();
-
-			// myChannelList.push(Builder(MyChannels)
-			// .id(channelId)
-			// .name(channelName)
-			// .recentMessage(recentMessage)
-			// .build()
-			// );
+			myChannelList.push(Builder(MyChannels)
+			.id(channelId)
+			.name(channelName)
+			.recentMessage(recentMessage)
+			.build()
+			);
     }
 		return myChannelList;
 	}
