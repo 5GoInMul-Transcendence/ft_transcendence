@@ -12,7 +12,7 @@ export const sessionMiddleware = {
       saveUninitialized: false,
       cookie: {
         httpOnly: true,
-        maxAge: 360000,
+        maxAge: 60 * 60 * 1000
       },
     }),
 };
