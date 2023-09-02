@@ -84,4 +84,14 @@ export class MeController {
         .build(),
     );
   }
+
+  @Get('channels')
+  async getMyChannels(@Session() session: Record<string, any>,) {
+    const userId = session.userId;
+    const user = await this.userService.getUserByUserId(userId);
+
+    user.links.forEach(link => {
+      link.channelId; // messageId 추가 예정, message 와 메시지를 보낸 유저의 nickname 가져오기
+    })
+  }
 }

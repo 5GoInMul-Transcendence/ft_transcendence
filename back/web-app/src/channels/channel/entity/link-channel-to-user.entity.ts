@@ -7,7 +7,7 @@ export class LinkChannelToUser {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@ManyToOne(() => User, (user) => user.joins)
+	@ManyToOne(() => User, (user) => user.links)
 	@JoinColumn({ name: 'user_id' })
 	userId: User;
 
