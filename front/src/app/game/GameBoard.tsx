@@ -3,12 +3,24 @@
 import useSocket from '@/hooks/useSocket';
 import { gameObject } from '@/types/IGameObject';
 import { useEffect, useRef } from 'react';
+import { io } from 'socket.io-client';
 import styled from 'styled-components';
 
-export default function GameBoard() {
-  const [socket] = useSocket('10001');
-  const startGame = () => {
-    socket?.emit('startGame');
+interface Props {
+  gameKey: string;
+}
+
+export default function GameBoard({ gameKey }: Props) {
+  console.log(gameKey);
+  const socket = io(`http://localhost:10003/main`, {
+    transports: ['websocket'],
+    auth: {
+      gamekey: gameKey,
+    },
+  });
+
+  const readyGame = () => {
+    socket?.emit('readyGame');
   };
 
   const gameBoardDiv = useRef<HTMLCanvasElement>(null);
@@ -75,7 +87,6 @@ export default function GameBoard() {
     ctx.strokeStyle = ballBorderColor;
     ctx.lineWidth = 2;
     ctx.beginPath();
-    // console.log(ballX, ballY);
     ctx.arc(ballX, ballY, ballRadius, 0, 2 * Math.PI);
     ctx.stroke();
     ctx.fill();
@@ -89,16 +100,16 @@ export default function GameBoard() {
     const paddle2Down = 40;
     switch (keyPressed) {
       case paddle1Up:
-        socket?.emit('updatePaddle', { paddle: 'paddle1Up' });
+        socket?.emit('updatePaddle', { paddle: 'keyUp' });
         break;
       case paddle1Down:
-        socket?.emit('updatePaddle', { paddle: 'paddle1Down' });
+        socket?.emit('updatePaddle', { paddle: 'keyDown' });
         break;
       case paddle2Up:
-        socket?.emit('updatePaddle', { paddle: 'paddle2Up' });
+        socket?.emit('updatePaddle', { paddle: 'keyUp' });
         break;
       case paddle2Down:
-        socket?.emit('updatePaddle', { paddle: 'paddle2Down' });
+        socket?.emit('updatePaddle', { paddle: 'keyDown' });
         break;
     }
   }
@@ -113,6 +124,9 @@ export default function GameBoard() {
       drawPaddles(p1.x, p1.y, p2.x, p2.y);
       drawBall(ball.x, ball.y);
     });
+    socket.on('infoGame', (res) => {
+      console.log(res);
+    });
   }, [socket]);
 
   return (
@@ -123,7 +137,7 @@ export default function GameBoard() {
         height='700'
         ref={gameBoardDiv}
       ></GameBoardDiv>
-      <button onClick={startGame}>startGame</button>
+      <button onClick={readyGame}>readyGame</button>
     </GameContainer>
   );
 }

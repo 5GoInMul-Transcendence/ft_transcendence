@@ -1,4 +1,5 @@
 export interface IGame {
+  gamekey: string;
   p1: {
     id: number;
     nickname: string;
@@ -9,7 +10,6 @@ export interface IGame {
     nickname: string;
     avatar: string;
   };
-  gamekey: string;
   resStatus: {
     code: number;
     message: string;

@@ -8,7 +8,6 @@ import { IGame } from '@/types/IGame';
 
 export default function Game() {
   const data = useSwrFetcher<IGame>('/game');
-
   if (!data) return;
 
   console.log(data);
@@ -27,7 +26,7 @@ export default function Game() {
         ></ScoreBoard>
       </ScoreBoardDiv>
       <GameBoardDiv>
-        <GameBoard></GameBoard>
+        <GameBoard gameKey={data.gamekey} />
       </GameBoardDiv>
     </Container>
   );
