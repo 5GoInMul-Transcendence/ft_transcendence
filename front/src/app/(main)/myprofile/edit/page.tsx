@@ -13,8 +13,6 @@ export default function Profile() {
   const data = useSwrFetcher<IUserDetail>('/me/details');
   const setModal = useSetRecoilState(modalState);
 
-  if (!data) return;
-
   return (
     <Container>
       <TopWrapper>

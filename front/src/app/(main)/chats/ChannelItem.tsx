@@ -4,16 +4,15 @@ import styled from 'styled-components';
 import ProfileImage from '@/component/ProfileImage';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { useSetRecoilState } from 'recoil';
-import { modalState } from '@/utils/recoil/atom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { modalState, recentMessageState } from '@/utils/recoil/atom';
+import { IMessage } from '@/types/IChannel';
+import { useEffect, useState } from 'react';
 
 interface ChannelItemProps {
   channelId: number;
   channelName: string;
-  recentMessage?: {
-    nickname: string;
-    message: string;
-  };
+  recentMessage?: IMessage;
 }
 
 export default function ChannelItem({
@@ -23,6 +22,8 @@ export default function ChannelItem({
 }: ChannelItemProps) {
   const router = useRouter();
   const setModal = useSetRecoilState(modalState);
+  const [msg, setMsg] = useState(recentMessage);
+  const newMessage = useRecoilValue(recentMessageState);
   const onClickChannel = () => {
     if (recentMessage) {
       router.push(`/chats/${channelId}`);
@@ -39,15 +40,15 @@ export default function ChannelItem({
       }
     });
   };
+  useEffect(() => {
+    if (newMessage?.id === channelId) setMsg(newMessage.recentMessage);
+  }, [newMessage]);
   return (
     <Container onClick={onClickChannel}>
       <ProfileImage url='' size='50px' />
       <ChannelDiv>
         <ChannelNameDiv>{channelName}</ChannelNameDiv>
-        <LastChatDiv>
-          {recentMessage &&
-            recentMessage.nickname + ':' + recentMessage.message}
-        </LastChatDiv>
+        <LastChatDiv>{msg && msg.nickname + ':' + msg.content}</LastChatDiv>
       </ChannelDiv>
     </Container>
   );

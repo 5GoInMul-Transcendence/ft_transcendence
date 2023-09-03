@@ -8,16 +8,21 @@ import ProfileImage from '@/component/ProfileImage';
 import Toggle from '@/component/Toggle';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
 import useToggle from '@/hooks/useToggle';
-import { IMe } from '@/types/IMe';
+import { IUser } from '@/types/IUser';
+import { axiosInstance } from '@/utils/axios';
 import styled from 'styled-components';
 
 export default function Profile({ params }: { params: { user: string } }) {
   const data = useSwrFetcher<IUser>(`user/${params.user}`);
   const [follw, onChangeFollow] = useToggle(false);
   const [block, onChangeBlock] = useToggle(false);
-
-  if (!data) return;
-
+  const onClickDM = () => {
+    axiosInstance
+      .post('/channel', { name: null, mode: 'dm', password: null })
+      .then((data) => {
+        //성공 시 router.push('/chats/${channelid}');
+      });
+  };
   return (
     <Container>
       <TopWrapper>
@@ -39,24 +44,28 @@ export default function Profile({ params }: { params: { user: string } }) {
           </TogglesWrapper>
         </Wrapper>
         <Wrapper $width={7}>
-          <ProfileItem title='NICNAME' content={`${data.nickname}`} />
+          <ProfileItem title='NICNAME' content={`${data?.nickname}`} />
           <ProfileItem
             title='LADDER LEVEL'
-            content={`${data.gameRecord.ladderLevel}`}
+            content={`${data?.gameRecord.ladderLevel}`}
           />
           <MatchItem
             title='WIN/LOSE'
-            content={`${data.gameRecord.win}/${data.gameRecord.loss}`}
+            content={`${data?.gameRecord.win}/${data?.gameRecord.lose}`}
           />
           <AchievementItem
             title='ACHIEVMENT'
-            content={data.gameRecord.achievement}
+            content={data?.gameRecord.achievement || []}
           />
         </Wrapper>
       </TopWrapper>
       <Buttons
         button={{ width: '20rem' }}
-        leftButton={{ text: 'direct message', color: 'white' }}
+        leftButton={{
+          text: 'direct message',
+          color: 'white',
+          onClick: () => {},
+        }}
         rightButton={{ text: 'match game', color: 'green' }}
       />
     </Container>

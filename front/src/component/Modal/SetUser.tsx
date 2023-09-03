@@ -14,7 +14,7 @@ interface SetUserProps {
 }
 
 export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
-  const [data, resStatus] = useSwrFetcher<IUserSetting>(
+  const data = useSwrFetcher<IUserSetting>(
     `/channel/setting/${channelid}/${userid}`
   );
   const [admin, onChangeAdmin] = useToggle(data?.admin ?? false);

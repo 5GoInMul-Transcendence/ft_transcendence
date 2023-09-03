@@ -30,10 +30,6 @@ export default function MainLayout({
     });
   }, [socket]);
 
-  if (!data) return;
-
-  // console.log(data);
-  // console.log(socket);
   const onClickAddFriend = () => {
     setModal({ type: 'ADD-Friend' });
   };
@@ -56,7 +52,7 @@ export default function MainLayout({
           <MyProfile>
             <ProfileImage url='' size='45px' />
             &nbsp;
-            {data.nickname}
+            {data?.nickname}
           </MyProfile>
         </Link>
         <FriendProfile>

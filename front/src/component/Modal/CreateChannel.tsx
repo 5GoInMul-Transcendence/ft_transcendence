@@ -45,10 +45,12 @@ export default function CreateChannel() {
         });
       return;
     }
-    axios.post('/channel', { name: channelName, mode }).then((data) => {
-      if (data.data.resStatus.code === '0001')
-        setInvalidMsg('failed to create channel');
-    });
+    axios
+      .post('/channel', { name: channelName, mode, password: null })
+      .then((data) => {
+        if (data.data.resStatus.code === '0001')
+          setInvalidMsg('failed to create channel');
+      });
   };
   return (
     <Wrapper>
