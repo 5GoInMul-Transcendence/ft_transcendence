@@ -17,6 +17,7 @@ export default function StartGame() {
 
   const onClickMatchCancel = useCallback(() => {
     setGameQueue(false);
+    setGameType('');
     socket?.emit('cancelMatch');
   }, [socket]);
 
