@@ -12,7 +12,7 @@ export class Message {
 	@Column('varchar', { length: 255 })
 	content: string;
 
-	@CreateDateColumn({
+	@Column({
 		type: 'timestamp',										// db에 저장될 데이터 형식
 		precision: 6,													// 10^6 은 micro second
 		default: () => 'CURRENT_TIMESTAMP(6)', // 자동으로 micro sec 단위로 현재 시간 저장

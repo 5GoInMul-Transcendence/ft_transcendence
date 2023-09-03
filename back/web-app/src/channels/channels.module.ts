@@ -9,6 +9,8 @@ import { LinkChannelToUser } from './channel/entity/link-channel-to-user.entity'
 import { User } from 'src/users/user/entities/user.entity';
 import { UserModule } from 'src/users/user/user.module';
 import { Message } from './channel/entity/message.entity';
+import { HashService } from 'src/common/hash/hash.service';
+import { MessageService } from './message/message.service';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { Message } from './channel/entity/message.entity';
   providers: [
     ChannelsService,
     ChannelService,
+    HashService,
+    MessageService,
   ]
 })
 export class ChannelsModule {}

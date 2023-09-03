@@ -14,7 +14,7 @@ export class Channel {
 	mode: string;
 
 	@Column('varchar', {
-		length: 4,
+		length: 72,
 		nullable: true,
 		default: null,
 	})

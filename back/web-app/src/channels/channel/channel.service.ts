@@ -19,14 +19,12 @@ export class ChannelService {
 		private userRepository: Repository<User>,
 	) {}
 
-	async isValidChannel(id: number): Promise<boolean> {
-		const channel = await this.channelRepository.findOne({
+	async getChannel(id: number): Promise<Channel> {
+		return await this.channelRepository.findOne({
 			where: {
 				id,
 			}
 		});
-
-		return channel ? true : false;
 	}
 
 	async createChannel(dto: CreateChannelReqDto): Promise<Channel> {
@@ -40,7 +38,8 @@ export class ChannelService {
 		return await this.channelRepository.save(createdChannel);
 	}
 
-	async createLinkChannelToUser(dto: CreateLinkChannelToUserReqDto): Promise<LinkChannelToUser> {
+	async createLinkChannelToUser(dto: CreateLinkChannelToUserReqDto)
+	: Promise<LinkChannelToUser> {
 		const { userId, channel } = dto;
 		const user = await this.userRepository.findOne({
 			where: {id: userId},
