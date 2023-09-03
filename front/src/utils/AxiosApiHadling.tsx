@@ -5,7 +5,7 @@ import { axiosInstance } from './axios';
 
 export default function AxiosApiHadling() {
   const [, setInvalidMsg] = useRecoilState(invalidMsgState);
-  const [, setModal] = useRecoilState(modalState);
+  const [modal, setModal] = useRecoilState(modalState);
 
   useEffect(() => {
     const intercetpor = axiosInstance.interceptors.response.use(
@@ -20,7 +20,7 @@ export default function AxiosApiHadling() {
           //   setModal(null);
           // break;
           case '0001':
-            setModal({ type: 'API-Error' });
+            if (modal?.type === null) setModal({ type: 'API-Error' });
             setInvalidMsg(resMessage);
             break;
           case '0002':
@@ -32,7 +32,7 @@ export default function AxiosApiHadling() {
           //   setModal(null);
           // break;
           case '1001':
-            setModal({ type: 'API-Error' });
+            if (modal?.type === null) setModal({ type: 'API-Error' });
             setInvalidMsg(resMessage);
             break;
           case '1002':
@@ -44,7 +44,7 @@ export default function AxiosApiHadling() {
           //   setModal(null);
           // break;
           case '2001':
-            setModal({ type: 'API-Error' });
+            if (modal?.type === null) setModal({ type: 'API-Error' });
             setInvalidMsg(resMessage);
             break;
           case '2002':

@@ -6,7 +6,7 @@ import InvalidMsg from './InvalidMsg';
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 import { modalState } from '@/utils/recoil/atom';
-import axios from 'axios';
+import { axiosInstance } from '@/utils/axios';
 
 export default function CreateChannel() {
   const [channelName, , onChangeChannelName] = useInput('');
@@ -37,20 +37,14 @@ export default function CreateChannel() {
         setInvalidMsg(() => 'password mismatch');
         return;
       }
-      axios
+      axiosInstance
         .post('/channel', { name: channelName, mode, password })
-        .then((data) => {
-          if (data.data.resStatus.code === '0001')
-            setInvalidMsg('failed to create channel');
-        });
+        .then((data) => {});
       return;
     }
-    axios
+    axiosInstance
       .post('/channel', { name: channelName, mode, password: null })
-      .then((data) => {
-        if (data.data.resStatus.code === '0001')
-          setInvalidMsg('failed to create channel');
-      });
+      .then((data) => {});
   };
   return (
     <Wrapper>
