@@ -9,8 +9,8 @@ import { modalState } from '@/utils/recoil/atom';
 import axios from 'axios';
 
 interface SetChannelProps {
-  channelName?: string;
-  channelId?: number;
+  channelName: string;
+  channelId: number;
 }
 export default function SetChannel({
   channelName,

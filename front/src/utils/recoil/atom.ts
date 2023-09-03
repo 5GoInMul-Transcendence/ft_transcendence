@@ -1,3 +1,4 @@
+import { IMyChannel } from '@/types/IChannel';
 import { atom } from 'recoil';
 
 interface modalType {
@@ -13,4 +14,9 @@ export const modalState = atom<modalType | null>({
 export const invalidMsgState = atom<string>({
   key: 'invalidMsg',
   default: '',
+});
+
+export const recentMessageState = atom<IMyChannel | null>({
+  key: 'recentMessageState',
+  default: null,
 });

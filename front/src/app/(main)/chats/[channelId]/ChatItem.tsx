@@ -11,6 +11,7 @@ interface ChatItemProps {
 
 export default function ChatItem({ nickname, content }: ChatItemProps) {
   const mynick = 'jiyokim';
+  //TODO: 내 정보 저장해두기
   return (
     <Container $me={mynick === nickname}>
       <Link href={`/profile/${nickname}`}>

@@ -2,7 +2,7 @@
 		"id": "1",
     "name": "OwnerJiyoChannel",
     "role": "owner",
-    "env": "public",
+    "mode": "public",
 		"recentMessage": [
 			{ "id":1, "nickname": "jiyokim", "content": "hello~"},
 			{ "id":2, "nickname": "jiyokim", "content": "hi~"},
