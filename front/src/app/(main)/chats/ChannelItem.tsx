@@ -48,7 +48,9 @@ export default function ChannelItem({
       <ProfileImage url='' size='50px' />
       <ChannelDiv>
         <ChannelNameDiv>{channelName}</ChannelNameDiv>
-        <LastChatDiv>{msg && msg.nickname + ':' + msg.content}</LastChatDiv>
+        <LastChatDiv>
+          {recentMessage && msg && msg.nickname + ':' + msg.content}
+        </LastChatDiv>
       </ChannelDiv>
     </Container>
   );
