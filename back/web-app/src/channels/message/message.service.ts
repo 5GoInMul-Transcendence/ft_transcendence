@@ -3,13 +3,7 @@ import { Channel } from '../channel/entity/channel.entity';
 import { Repository } from 'typeorm';
 import { Message } from '../channel/entity/message.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-
-export class TestMessageReqSer {
-	nickname: string;
-	channel: Channel;
-	content: string;
-	timestamp: Date;
-}
+import { SendMessageDto } from '../channel/dto/send-message.dto';
 
 @Injectable()
 export class MessageService {
@@ -18,7 +12,7 @@ export class MessageService {
 		private messageRepository: Repository<Message>,
 	) {}
 
-	async testMessage(dto: TestMessageReqSer): Promise<Message> {
+	async sendMessage(dto: SendMessageDto): Promise<Message> {
 		const { nickname, channel, content, timestamp } = dto;
 		const message = this.messageRepository.create({
 			nickname,

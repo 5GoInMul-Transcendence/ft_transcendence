@@ -27,6 +27,23 @@ export class ChannelService {
 		});
 	}
 
+	// async getLinksByUserId(user: User): Promise<LinkChannelToUser | null> {
+	// 	return await this.linkChannelToUserRepository.findOne({
+	// 		where: {
+	// 			user,
+	// 		}
+	// 	})
+	// }
+
+	async getLinksByChannelAndUser(user: User, channel: Channel): Promise<LinkChannelToUser | null> {
+		return await this.linkChannelToUserRepository.findOne({
+			where: {
+				user,
+				channel,
+			}
+		})
+	}
+
 	async createChannel(dto: CreateChannelReqDto): Promise<Channel> {
 		const {name, mode, password} = dto;
 		const createdChannel = this.channelRepository.create({

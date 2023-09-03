@@ -41,6 +41,14 @@ export class MemoryUserService {
     throw new HttpException('존재하지 않은 유저입니다.', 200);
   }
 
+  getNicknameByUserId(id: number): string | null {
+    const memoryUser = this.memoryUsers.get(id);
+
+    if (!memoryUser)
+      return null;
+    return memoryUser.nickname;
+  }
+
   getUserByNickname(dto: GetUserByNicknameDto): MemoryUser | undefined {
     for (const user of this.memoryUsers.values()) {
       if (user.nickname === dto.nickname) {
