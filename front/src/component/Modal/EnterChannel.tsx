@@ -4,7 +4,10 @@ import Input from '@/component/Input';
 import Button from '@/component/Buttons/Button';
 import InvalidMsg from './InvalidMsg';
 import { styled } from 'styled-components';
-import axios from 'axios';
+import { axiosInstance } from '@/utils/axios';
+import { useRouter } from 'next/navigation';
+import { useSetRecoilState } from 'recoil';
+import { modalState } from '@/utils/recoil/atom';
 
 interface EnterChannelProps {
   channelName: string;
@@ -16,15 +19,17 @@ export default function EnterChannel({
 }: EnterChannelProps) {
   const [keyword, , onChangeKeyword] = useInput('');
   const [invalidMsg, setInvalidMsg] = useState<string>('');
+  const setModal = useSetRecoilState(modalState);
+  const router = useRouter();
 
   const setPasswordHandler = async () => {
     if (keyword === '') {
       setInvalidMsg(() => 'password is empty');
       return;
     }
-    axios.post(`/channel/${channelId}/password`).then((data) => {
-      if (data.data.resStatus.code === '0001')
-        setInvalidMsg(() => 'invalid passowrd');
+    axiosInstance.post(`/channel/${channelId}/password`).then((data) => {
+      router.push(`/chats/${channelId}`);
+      setModal(null);
     });
   };
 

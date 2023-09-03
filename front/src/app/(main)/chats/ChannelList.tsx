@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ChannelItem from './ChannelItem';
 import axios from 'axios';
-// import { Socket, io } from 'socket.io-client';
 import { IAllChannel, IMyChannel } from '@/types/IChannel';
+import useSocket from '@/hooks/useSocket';
+import { useSetRecoilState } from 'recoil';
+import { recentMessageState } from '@/utils/recoil/atom';
 
 export default function ChannelList() {
-  // const socket = io('ws://localhost:8080', {
-  //   transports: ['websocket'],
-  // });
+  const [socket, disconnect] = useSocket('10002');
+  const setRecentMessage = useSetRecoilState(recentMessageState);
   const [myChannelOption, setmyChannelOption] = useState(true);
   const [myChannels, setMyChannels] = useState<IMyChannel[]>([]);
   const [allChannels, setAllChannels] = useState<IAllChannel[]>([]);
@@ -29,12 +30,34 @@ export default function ChannelList() {
     });
   }, []);
 
-  // useEffect(() => {
-  //   socket.on('addAllChannel', ({ data }: { data: IAllChannel }) => {
-  //     setAllChannels((cur) => [...cur, data]);
-  //     console.log(data);
-  //   });
-  // }, [socket]);
+  useEffect(() => {
+    socket?.on('addAllChannel', ({ data }: { data: IAllChannel }) => {
+      setAllChannels((cur) => [...cur, data]);
+      console.log(data);
+    });
+    socket?.on('deleteAllChannel', ({ data }: { data: IAllChannel }) => {
+      setAllChannels((cur) => cur.filter((e) => e.id !== data.id));
+      console.log(data);
+    });
+    socket?.on('addMyChannel', ({ data }: { data: IMyChannel }) => {
+      setMyChannels((cur) => [...cur, data]);
+      console.log(data);
+    });
+    socket?.on('deleteMyChannel', ({ data }: { data: IMyChannel }) => {
+      setMyChannels((cur) => cur.filter((e) => e.id !== data.id));
+      console.log(data);
+    });
+    socket?.on('updateMyChannel', ({ data }: { data: IMyChannel }) => {
+      setRecentMessage(data);
+      setMyChannels((cur) => {
+        cur.forEach((e) => {
+          if (e.id === data.id) e = data;
+        });
+        return [...cur];
+      });
+      console.log(data);
+    });
+  }, [socket]);
 
   return (
     <Container>

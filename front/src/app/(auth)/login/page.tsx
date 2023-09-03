@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import useInput from '@/hooks/useInput';
+import { Form, FormWrapper } from '@/app/(auth)/styles';
 import styled from 'styled-components';
 import { useCallback } from 'react';
-import { Form, FormWrapper } from '@/app/(auth)/styles';
 import { axiosInstance } from '@/utils/axios';
 
 export default function Login() {
@@ -21,15 +21,16 @@ export default function Login() {
           password: password,
         });
       } catch (error) {
-        // 데이터 패치 에러
         console.log(error, 'error');
       }
     },
     [id, password]
   );
+
   const onClickOAuth = () => {
     location.href = 'http://localhost:8080/login/oauth/42';
   };
+
   return (
     <FormWrapper>
       <Form onSubmit={onSubmit}>

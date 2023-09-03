@@ -11,7 +11,6 @@ export default function AuthMail() {
   const [code, , onChangeCode] = useInput('');
   const [invalidMailMsg, setInvalidMailMsg] = useState<string>('');
   const [invalidCodeMsg, setInvalidCodeMsg] = useState<string>('');
-
   const sendMailHandler = async () => {
     const regExp =
       /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
