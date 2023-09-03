@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Session } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Session } from '@nestjs/common';
 import { AddChannelReqDto } from './dto/add-channel-req.dto';
 import { Builder } from 'builder-pattern';
 import { ChannelService } from './channel.service';
@@ -37,5 +37,12 @@ export class ChannelController {
 		.id(createdChannel.id)
 		.name(createdChannel.name)
 		.build();
+	}
+
+	@Get(':channelid/check')
+	async checkChannel(@Param('channelid') channelId: number): Promise<void> {
+		if (await this.channelService.isValidChannel(channelId) === false) {
+			throw new HttpException('채널이 존재하지 않습니다.', HttpStatus.OK);
+		}
 	}
 }

@@ -19,6 +19,16 @@ export class ChannelService {
 		private userRepository: Repository<User>,
 	) {}
 
+	async isValidChannel(id: number): Promise<boolean> {
+		const channel = await this.channelRepository.findOne({
+			where: {
+				id,
+			}
+		});
+
+		return channel ? true : false;
+	}
+
 	async createChannel(dto: CreateChannelReqDto): Promise<Channel> {
 		const {name, mode, password} = dto;
 		const createdChannel = this.channelRepository.create({
