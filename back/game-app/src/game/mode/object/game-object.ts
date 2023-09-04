@@ -17,7 +17,7 @@ export class GameObjects {
   constructor() {
     this.p1 = { x: 0, y: 0 };
     this.p2 = { x: SCREEN_WIDTH - 25, y: SCREEN_HEIGHT - 100 };
-    this.b = { x: 0, y: 0 };
+    this.b = { x: SCREEN_WIDTH / 2, y: SCREEN_HEIGHT / 2 };
   }
 }
 
