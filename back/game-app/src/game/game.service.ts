@@ -15,6 +15,9 @@ import { AddGameUserDto } from './gameuser/dto/add-game-user.dto';
 import { GameUserService } from './gameuser/game-user.service';
 import { FindGameUserByGameKeyDto } from './gameuser/dto/find-game-user-by-game-key.dto';
 import { GameProcessUnit } from './game-process-unit';
+import { WsException } from '@nestjs/websockets';
+import { CheckGameKeyDto } from './dto/check-game-key.dto';
+import { CheckReconnectionDto } from './dto/check-reconnection.dto';
 
 @Injectable()
 export class GameService {
@@ -24,6 +27,24 @@ export class GameService {
   constructor(private gameUserService: GameUserService) {
     this.gameGroups = new Map<string, GameGroup>();
     this.gameProcessUnits = new Map<string, GameProcessUnit>();
+  }
+
+  checkGameKey(dto: CheckGameKeyDto) {
+    const game = this.gameGroups.get(dto.gameKey);
+
+    if (!game) {
+      throw new WsException('');
+    }
+  }
+
+  checkReconnection(dto: CheckReconnectionDto) {
+    const user = this.gameUserService.findUserByGameKey(
+      Builder(FindGameUserByGameKeyDto).gameKey(dto.gameKey).build(),
+    );
+
+    if (user) {
+      throw new WsException('');
+    }
   }
 
   connectGame(dto: ConnectGameDto) {

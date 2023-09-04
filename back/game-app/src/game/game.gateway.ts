@@ -15,6 +15,14 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   handleConnection(client: Socket): any {
     const { gameKey } = client.handshake.auth;
 
+    try {
+      this.gameService.checkGameKey(gameKey);
+      this.gameService.checkReconnection(gameKey);
+    } catch (err) {
+      client.disconnect();
+      return;
+    }
+
     this.gameService.connectGame(
       Builder(ConnectGameDto).gameKey(gameKey).client(client).build(),
     );
