@@ -7,6 +7,11 @@ import { LinkChannelToUser } from './entity/link-channel-to-user.entity';
 import { User } from 'src/users/user/entities/user.entity';
 import { CreateLinkChannelToUserReqDto } from './dto/create-link-channel-to-user-req.dto';
 import { ChannelRole } from './enum/channel-role.enum';
+import { UserService } from 'src/users/user/user.service';
+import { Message } from './entity/message.entity';
+import { MyChannels } from './dto/my-channels.dto';
+import { RecentMessage } from './dto/recent-message.dto';
+import { Builder } from 'builder-pattern';
 
 @Injectable()
 export class ChannelService {
@@ -15,9 +20,16 @@ export class ChannelService {
 		private channelRepository: Repository<Channel>,
 		@InjectRepository(LinkChannelToUser)
 		private linkChannelToUserRepository: Repository<LinkChannelToUser>,
-		@InjectRepository(User)
-		private userRepository: Repository<User>,
+		@InjectRepository(Message)
+		private messageRepositoy: Repository<Message>,
+		private userService: UserService,
 	) {}
+
+	async isUserInChannel(link: LinkChannelToUser) {
+		if (link)
+			return true;
+		return false;
+	}
 
 	async getChannel(id: number): Promise<Channel> {
 		return await this.channelRepository.findOne({
@@ -27,15 +39,7 @@ export class ChannelService {
 		});
 	}
 
-	// async getLinksByUserId(user: User): Promise<LinkChannelToUser | null> {
-	// 	return await this.linkChannelToUserRepository.findOne({
-	// 		where: {
-	// 			user,
-	// 		}
-	// 	})
-	// }
-
-	async getLinksByChannelAndUser(user: User, channel: Channel): Promise<LinkChannelToUser | null> {
+	async getLinkByChannelAndUser(channel: Channel, user: User): Promise<LinkChannelToUser | null> {
 		return await this.linkChannelToUserRepository.findOne({
 			where: {
 				user,
@@ -57,16 +61,69 @@ export class ChannelService {
 
 	async createLinkChannelToUser(dto: CreateLinkChannelToUserReqDto)
 	: Promise<LinkChannelToUser> {
-		const { userId, channel } = dto;
-		const user = await this.userRepository.findOne({
-			where: {id: userId},
-		})
+		const { user, channel, role } = dto;
 		const link = this.linkChannelToUserRepository.create({
 			user,
 			channel,
-			role: ChannelRole.OWNER,
+			role,
 		});
 
 		return await this.linkChannelToUserRepository.save(link);
+	}
+
+	async getAllChannels(): Promise<Channel[] | null> {
+		return await this.channelRepository.find({
+			select: ['id', 'name'],
+		});
+	}
+
+	async getMyChannels(links: LinkChannelToUser[]): Promise<MyChannels[] | null> {
+		let myChannelList: MyChannels[] = [];
+
+		for (const link of links) {
+      const channel = link.channel;
+			const channelId: number = channel.id;
+			const channelName = channel.name;
+			const message: Message = await this.getRecentMessageByChannelId(channel);
+			const userId = message?.userId;
+			const nickname = userId ? link.user.nickname : null;
+			const recentMessage: RecentMessage = Builder(RecentMessage)
+			.message(message?.content ?? null)
+			.nickname(nickname)
+			.build();
+
+			myChannelList.push(Builder(MyChannels)
+			.id(channelId)
+			.name(channelName)
+			.recentMessage(recentMessage)
+			.build()
+			);
+    }
+		return myChannelList;
+	}
+
+	async getLinksRelatedChannelAndUserByUserId(userId: number): Promise<LinkChannelToUser[] | null>{
+		const user = await this.userService.getUserByUserId(userId);
+		
+		return await this.linkChannelToUserRepository.find({
+			where: {
+				user,
+			},
+			relations: [
+				"channel",
+				"user",
+			],
+		});
+	}
+
+	private async getRecentMessageByChannelId(channel: Channel): Promise<Message | null> {
+		return await this.messageRepositoy.findOne({
+			where: {
+				channel,
+			},
+			order: {
+				timestamp: 'DESC',
+			}
+		});
 	}
 }

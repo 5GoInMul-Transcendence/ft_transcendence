@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ChannelsController } from './channels.controller';
-import { ChannelsService } from './channels.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Channel } from './channel/entity/channel.entity';
 import { ChannelController } from './channel/channel.controller';
@@ -24,7 +23,6 @@ import { MessageService } from './message/message.service';
   ],
   controllers: [ChannelsController, ChannelController],
   providers: [
-    ChannelsService,
     ChannelService,
     HashService,
     MessageService,

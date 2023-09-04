@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { Message } from '../channel/entity/message.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SendMessageDto } from '../channel/dto/send-message.dto';
+import { RecentMessageAtEnter } from '../channel/dto/recent-message-at-enter.dto';
+import { Builder } from 'builder-pattern';
 
 @Injectable()
 export class MessageService {
@@ -22,5 +24,18 @@ export class MessageService {
 		});
 
 		return await this.messageRepository.save(message);
+	}
+
+	async getMessages(channel: Channel): Promise<RecentMessageAtEnter[]> {
+		const maxMessagesCount = 50;
+		const messages = await this.messageRepository
+		.createQueryBuilder('message')
+		.orderBy('message.timestamp', 'DESC')
+		.take(maxMessagesCount)
+		.getMany();
+		
+		const RecentMessages: RecentMessageAtEnter[] = [];
+
+		return RecentMessages;
 	}
 }
