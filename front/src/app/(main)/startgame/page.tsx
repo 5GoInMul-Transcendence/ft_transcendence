@@ -4,38 +4,38 @@ import { modalState } from '@/utils/recoil/atom';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import styled from 'styled-components';
-import { GameMode } from './GameMode';
 import Loading from './loading/page';
+import { GameMode } from './GameMode';
+import styled from 'styled-components';
 
 export default function StartGame() {
   const setModal = useSetRecoilState(modalState);
   const router = useRouter();
   const [socket] = useSocket('10001/main');
-  const [gameType, setGameType] = useState<string>('');
+  const [gameMode, setGameMode] = useState<string>('');
   const [gameQueue, setGameQueue] = useState<boolean>(false);
 
   const onClickMatchCancel = useCallback(() => {
     setGameQueue(false);
-    setGameType('');
+    setGameMode('');
     socket?.emit('cancelMatch');
   }, [socket]);
 
   useEffect(() => {
     socket?.on('waitMatch', () => {
       setGameQueue(false);
-      setGameType('');
+      setGameMode('');
       setModal({ type: 'MATCH-Accept' });
     });
 
     socket?.on('successMatch', (res) => {
       if (res.status === true) {
         setModal(null);
-        setGameType('');
+        setGameMode('');
         router.push('/game');
       } else if (res.status === false) {
         setModal(null);
-        setGameType('');
+        setGameMode('');
         setGameQueue(true);
       }
     });
@@ -45,14 +45,14 @@ export default function StartGame() {
     <Container>
       <Wrapper>
         <GameMode
-          gameType={gameType}
+          gameMode={gameMode}
           gameQueue={gameQueue}
           setGameQueue={setGameQueue}
-          setGameType={setGameType}
+          setGameMode={setGameMode}
           socket={socket}
         ></GameMode>
       </Wrapper>
-      <GameType> Selete Game Type : {gameType} </GameType>
+      <GameModeDiv> Selete Game Type : {gameMode} </GameModeDiv>
       {gameQueue && (
         <>
           <Loading />
@@ -76,7 +76,7 @@ const Wrapper = styled.div`
 
 const MatchCancel = styled.button``;
 
-const GameType = styled.div`
+const GameModeDiv = styled.div`
   font-size: ${({ theme }) => theme.fontSize.large};
   margin-bottom: 1rem;
 `;

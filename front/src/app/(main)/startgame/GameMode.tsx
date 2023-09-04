@@ -4,50 +4,50 @@ import { Socket } from 'socket.io-client';
 import styled from 'styled-components';
 
 interface Props {
-  gameType: string;
+  gameMode: string;
   gameQueue: boolean;
   setGameQueue: Dispatch<SetStateAction<boolean>>;
-  setGameType: Dispatch<SetStateAction<string>>;
+  setGameMode: Dispatch<SetStateAction<string>>;
   socket: Socket<any, any> | undefined;
 }
 
 export function GameMode({
-  gameType,
+  gameMode,
   gameQueue,
   setGameQueue,
-  setGameType,
+  setGameMode,
   socket,
 }: Props) {
   const onClickTypeClassic = useCallback(() => {
     if (gameQueue === true) {
       return;
     }
-    setGameType('CLASSIC!');
+    setGameMode('CLASSIC!');
     setGameQueue(true);
     emitSubmitMatch('classic');
-  }, [gameType, gameQueue]);
+  }, [gameMode, gameQueue]);
 
   const onClickTypeShotrPaddle = useCallback(() => {
     if (gameQueue === true) {
       return;
     }
-    setGameType('SHORT PADDLE!');
+    setGameMode('SHORT PADDLE!');
     setGameQueue(true);
     emitSubmitMatch('paddle');
-  }, [gameType, gameQueue]);
+  }, [gameMode, gameQueue]);
 
   const onClickTypeSpeedUp = useCallback(() => {
     if (gameQueue === true) {
       return;
     }
-    setGameType('SPEED UP!');
+    setGameMode('SPEED UP!');
     setGameQueue(true);
     emitSubmitMatch('speed');
-  }, [gameType, gameQueue]);
+  }, [gameMode, gameQueue]);
 
   const emitSubmitMatch = (type: string) => {
     socket?.emit('submitMatch', {
-      gametype: type,
+      gameMode: type,
     });
   };
 
