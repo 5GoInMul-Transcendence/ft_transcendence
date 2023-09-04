@@ -7,47 +7,53 @@ import {
 } from '@nestjs/common';
 import { EnterGameDto } from './dto/enter-game.dto';
 import { ClientGrpc } from '@nestjs/microservices';
-import { IGameServer } from './interface/game-server.interface';
+import { IGameServerService } from './grpc/interface/service.interface';
 import { FindGameDto } from './dto/find-game.dto';
-import { GameInfo } from './game-Info';
+import { GameGroup } from './game-group';
 import { Builder } from 'builder-pattern';
 import { MemoryUserService } from '../users/memoryuser/memory-user.service';
 import { FindUserDto } from '../users/memoryuser/dto/find-user.dto';
 import { FindGameReturnDto } from './dto/find-game-return.dto';
 import { GamePlayer } from './game-player';
 import { firstValueFrom } from 'rxjs';
+import { ICreateGameDto } from './grpc/interface/message.interface';
 
 @Injectable()
 export class GameService implements OnModuleInit {
-  private gameServer: IGameServer;
-  private gameInfos: Map<number, GameInfo>;
+  private gameServerService: IGameServerService;
+  private gameGroups: Map<number, GameGroup>;
 
   constructor(
     @Inject('GAME_SERVER') private client: ClientGrpc,
     private memoryUserService: MemoryUserService,
   ) {
-    this.gameInfos = new Map<number, GameInfo>();
+    this.gameGroups = new Map<number, GameGroup>();
   }
 
   onModuleInit(): any {
-    this.gameServer = this.client.getService<IGameServer>('GameService');
+    this.gameServerService =
+      this.client.getService<IGameServerService>('GameService');
   }
 
   async gameEnter(dto: EnterGameDto) {
-    const game = await firstValueFrom(this.gameServer.createGame({}));
+    const { gameId, p1GameKey, p2GameKey } = await firstValueFrom(
+      this.gameServerService.createGame(
+        Builder<ICreateGameDto>().gameType(dto.gameType).build(),
+      ),
+    );
 
-    const gameInfo = Builder(GameInfo)
-      .p1(dto.p1)
-      .p2(dto.p2)
-      .gameKey(game.gameId)
+    const gameGroup = Builder(GameGroup)
+      .gameId(gameId)
+      .p1({ id: dto.p1.id, gameKey: p1GameKey })
+      .p2({ id: dto.p2.id, gameKey: p2GameKey })
       .build();
 
-    this.gameInfos.set(dto.p1.id, gameInfo);
-    this.gameInfos.set(dto.p2.id, gameInfo);
+    this.gameGroups.set(dto.p1.id, gameGroup);
+    this.gameGroups.set(dto.p2.id, gameGroup);
   }
 
   findGameByUserId(dto: FindGameDto) {
-    const gameInfo = this.gameInfos.get(dto.userId);
+    const gameInfo = this.gameGroups.get(dto.userId);
 
     if (!gameInfo) {
       throw new HttpException('잘못된 요청입니다.', HttpStatus.OK);
@@ -75,7 +81,7 @@ export class GameService implements OnModuleInit {
           .avatar(p2MemoryUser.avatar)
           .build(),
       )
-      .gameKey(gameInfo.gameKey)
+      .gameKey(gameInfo.gameId)
       .build();
   }
 }
