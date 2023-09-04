@@ -1,26 +1,15 @@
 'use client';
 
 import { gameObject } from '@/types/IGameObject';
-import { useEffect, useRef } from 'react';
-import { io } from 'socket.io-client';
+import { useEffect, useRef, useState } from 'react';
+import { Socket } from 'socket.io-client';
 import styled from 'styled-components';
 
 interface Props {
-  gameKey: string;
+  socket: Socket<any, any>;
 }
 
-export default function GameBoard({ gameKey }: Props) {
-  const socket = io(`ws://localhost:10003/game`, {
-    transports: ['websocket'],
-    auth: {
-      gameKey: gameKey,
-    },
-  });
-
-  const readyGame = () => {
-    socket?.emit('readyGame');
-  };
-
+export default function GameBoard({ socket }: Props) {
   const gameBoardDiv = useRef<HTMLCanvasElement>(null);
   let ctx: any;
   let gameWidth: any;
@@ -98,22 +87,22 @@ export default function GameBoard({ gameKey }: Props) {
     const paddle2Down = 40;
     switch (keyPressed) {
       case paddle1Up:
-        socket?.emit('updatePaddle', { paddle: 0 });
+        socket.emit('updatePaddle', { paddle: 0 });
         break;
       case paddle1Down:
-        socket?.emit('updatePaddle', { paddle: 1 });
+        socket.emit('updatePaddle', { paddle: 1 });
         break;
       case paddle2Up:
-        socket?.emit('updatePaddle', { paddle: 0 });
+        socket.emit('updatePaddle', { paddle: 0 });
         break;
       case paddle2Down:
-        socket?.emit('updatePaddle', { paddle: 1 });
+        socket.emit('updatePaddle', { paddle: 1 });
         break;
     }
   }
 
   useEffect(() => {
-    socket?.on('updateObject', (res: gameObject) => {
+    socket.on('updateObject', (res: gameObject) => {
       const p1 = res.p1;
       const p2 = res.p2;
       const ball = res.b;
@@ -121,24 +110,6 @@ export default function GameBoard({ gameKey }: Props) {
       clearBoard();
       drawPaddles(p1.x, p1.y, p2.x, p2.y);
       drawBall(ball.x, ball.y);
-    });
-    socket.on('infoGame', (res) => {
-      if (res === 'standby') {
-        setTimeout(() => {
-          console.log('1');
-        }, 1000);
-        setTimeout(() => {
-          console.log('2');
-        }, 2000);
-        setTimeout(() => {
-          console.log('3');
-        }, 3000);
-        setTimeout(() => {
-          socket.emit('startGame');
-        }, 3000);
-      } else if (res === 'play') {
-      } else if (res === 'end') {
-      }
     });
   }, [socket]);
 
@@ -150,7 +121,6 @@ export default function GameBoard({ gameKey }: Props) {
         height='700'
         ref={gameBoardDiv}
       ></GameBoardDiv>
-      <button onClick={readyGame}>readyGame</button>
     </GameContainer>
   );
 }
