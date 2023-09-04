@@ -26,7 +26,6 @@ export class ChannelController {
 
 	@Post(':channelid/chat')
 	async sendMessage(
-		// @Param() channelId: number,
 		@Param('channelid') channelId: number,
 		@Session() session: Record<string, any>,
 		@Body() dto: SendMessageReq,
@@ -90,8 +89,8 @@ export class ChannelController {
 	@Post(':channelid/password')
 	async authenticatePassword(
 		@Session() session: Record<string, any>,
-		@Param() channelId: number,
-		@Body() password: string, // pipe
+		@Param('channelid') channelId: number,
+		@Body('password') password: string, // pipe
 	): Promise<void> {
 		const userId = session.userId;
 		const channel = await this.channelService.getChannel(channelId);
