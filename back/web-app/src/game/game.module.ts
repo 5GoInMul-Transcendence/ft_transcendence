@@ -13,7 +13,7 @@ import { GameController } from './game.controller';
         options: {
           package: 'game',
           url: 'localhost:8081',
-          protoPath: __dirname + '/proto/game.proto',
+          protoPath: __dirname + '/grpc/proto/game.proto',
         },
       },
     ]),
