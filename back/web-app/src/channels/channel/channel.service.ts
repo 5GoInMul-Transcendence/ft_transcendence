@@ -7,6 +7,7 @@ import { LinkChannelToUser } from './entity/link-channel-to-user.entity';
 import { User } from 'src/users/user/entities/user.entity';
 import { CreateLinkChannelToUserReqDto } from './dto/create-link-channel-to-user-req.dto';
 import { ChannelRole } from './enum/channel-role.enum';
+import { UserService } from 'src/users/user/user.service';
 
 @Injectable()
 export class ChannelService {
@@ -15,8 +16,7 @@ export class ChannelService {
 		private channelRepository: Repository<Channel>,
 		@InjectRepository(LinkChannelToUser)
 		private linkChannelToUserRepository: Repository<LinkChannelToUser>,
-		@InjectRepository(User)
-		private userRepository: Repository<User>,
+		private userService: UserService,
 	) {}
 
 	async createChannel(dto: CreateChannelReqDto): Promise<Channel> {
@@ -32,9 +32,7 @@ export class ChannelService {
 
 	async createLinkChannelToUser(dto: CreateLinkChannelToUserReqDto): Promise<LinkChannelToUser> {
 		const { userId, channel } = dto;
-		const user = await this.userRepository.findOne({
-			where: {id: userId},
-		})
+		const user = await this.userService.getUserByUserId(userId);
 		const link = this.linkChannelToUserRepository.create({
 			user,
 			channel,
