@@ -33,7 +33,6 @@ export class ChannelController {
 		const channel: Channel = await this.channelService.getChannel(channelId); // 채팅방이 존재하지 않을 때 에러?
 		const userId: number = session.userId;
 		const user: User = await this.userService.getUserByUserId(userId);
-		const nickname: string = user.nickname;
 		const { message } = dto;
 		const link: LinkChannelToUser | null = await this.channelService.getLinksByChannelAndUser(user, channel); // 얘 때문에 user, channel 객체가 다 필요함
 
@@ -44,7 +43,7 @@ export class ChannelController {
 			Builder(SendMessageDto)
 			.channel(channel)
 			.content(message)
-			.nickname(nickname)
+			.userId(userId)
 			.timestamp(new Date())
 			.build()
 		)

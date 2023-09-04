@@ -1,8 +1,8 @@
 import { Channel } from "../entity/channel.entity";
 
 export class SendMessageDto {
-	nickname: string;
-	channel: Channel;
-	content: string;
-	timestamp: Date;
+	readonly userId: number;
+	readonly channel: Channel;
+	readonly content: string;
+	readonly timestamp: Date;
 }

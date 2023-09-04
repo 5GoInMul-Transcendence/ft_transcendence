@@ -13,9 +13,9 @@ export class MessageService {
 	) {}
 
 	async sendMessage(dto: SendMessageDto): Promise<Message> {
-		const { nickname, channel, content, timestamp } = dto;
+		const { userId, channel, content, timestamp } = dto;
 		const message = this.messageRepository.create({
-			nickname,
+			userId,
 			channel,
 			content,
 			timestamp,

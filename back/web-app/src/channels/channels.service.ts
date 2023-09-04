@@ -28,14 +28,17 @@ export class ChannelsService {
 		});
 	}
 
-	async getLinksByUserId(userId: number): Promise<LinkChannelToUser[]>{
+	async getLinksRelatedChannelAndUserByUserId(userId: number): Promise<LinkChannelToUser[]>{
 		const user = await this.userService.getUserByUserId(userId);
 		
 		return await this.linkChannelToUserRepository.find({
 			where: {
 				user,
 			},
-			relations: ["channel"],
+			relations: [
+				"channel",
+				"user",
+			],
 		});
 	}
 
@@ -58,9 +61,11 @@ export class ChannelsService {
 			const channelId: number = channel.id;
 			const channelName = channel.name;
 			const message: Message = await this.getRecentMessageByChannelId(channel);
+			const userId = message?.userId;
+			const nickname = userId ? link.user.nickname : null;
 			const recentMessage: RecentMessage = Builder(RecentMessage)
 			.message(message?.content ?? null)
-			.nickname(message?.nickname ?? null)
+			.nickname(nickname)
 			.build();
 
 			myChannelList.push(Builder(MyChannels)
