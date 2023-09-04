@@ -10,13 +10,30 @@ import { CreateGameDto } from './dto/create-game.dto';
 import { CreateGameReturnDto } from './dto/create-game-return.dto';
 import { GameGroup } from './game-group';
 import { PlayerNumber } from './enums/player-number.enum';
+import { ConnectGameDto } from './dto/connect-game.dto';
+import { AddGameUserDto } from './gameuser/dto/add-game-user.dto';
+import { GameUserService } from './gameuser/game-user.service';
+import { FindGameUserByGameKeyDto } from './gameuser/dto/find-game-user-by-game-key.dto';
+import { GameProcessUnit } from './game-process-unit';
 
 @Injectable()
 export class GameService {
   private gameGroups: Map<string, GameGroup>;
+  private gameProcessUnits: Map<string, GameProcessUnit>;
 
-  constructor() {
+  constructor(private gameUserService: GameUserService) {
     this.gameGroups = new Map<string, GameGroup>();
+    this.gameProcessUnits = new Map<string, GameProcessUnit>();
+  }
+
+  connectGame(dto: ConnectGameDto) {
+    this.gameUserService.addUser(
+      Builder(AddGameUserDto).gameKey(dto.gameKey).client(dto.client).build(),
+    );
+
+    if (this.isRivalUserConnected(dto.gameKey)) {
+      this.addGameProcessUnit(dto.gameKey);
+    }
   }
 
   createGame(dto: CreateGameDto): CreateGameReturnDto {
@@ -58,5 +75,34 @@ export class GameService {
       case GameMode.SPEED:
         return new SpeedGame();
     }
+  }
+
+  private addGameProcessUnit(gameKey: string) {
+    const gameGroup = this.gameGroups.get(gameKey);
+
+    const user = this.gameUserService.findUserByGameKey(
+      Builder(FindGameUserByGameKeyDto).gameKey(gameKey).build(),
+    );
+    const rivalUser = this.gameUserService.findUserByGameKey(
+      Builder(FindGameUserByGameKeyDto).gameKey(gameGroup.rivalGameKey).build(),
+    );
+
+    const gameProcessUnit = Builder(GameProcessUnit)
+      .game(gameGroup.game)
+      .gamePlayers([user, rivalUser])
+      .build();
+
+    this.gameProcessUnits.set(user.gameKey, gameProcessUnit);
+    this.gameProcessUnits.set(rivalUser.gameKey, gameProcessUnit);
+  }
+
+  private isRivalUserConnected(gameKey: string) {
+    const gameGroup = this.gameGroups.get(gameKey);
+
+    const rivalUser = this.gameUserService.findUserByGameKey(
+      Builder(FindGameUserByGameKeyDto).gameKey(gameGroup.rivalGameKey).build(),
+    );
+
+    return !!rivalUser;
   }
 }
