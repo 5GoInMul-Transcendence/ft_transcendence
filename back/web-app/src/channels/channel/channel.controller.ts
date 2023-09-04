@@ -98,6 +98,9 @@ export class ChannelController {
 		if (channel === null) {
 			throw new HttpException('채널이 존재하지 않습니다.', HttpStatus.OK);
 		}
+		if (password && channel.password === null) {
+			throw new HttpException('채팅방에 비밀번호가 존재하지 않습니다!', HttpStatus.OK);
+		}
 		if (await this.hashService.hashCompare(password, channel.password) === false) {
 			throw new HttpException('비밀번호가 일치하지 않습니다!', HttpStatus.OK);
 		}
