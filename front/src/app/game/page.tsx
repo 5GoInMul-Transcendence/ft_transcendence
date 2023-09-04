@@ -26,7 +26,7 @@ export default function Game() {
         ></ScoreBoard>
       </ScoreBoardDiv>
       <GameBoardDiv>
-        <GameBoard gameKey={data.gamekey} />
+        <GameBoard gameKey={data.gameKey} />
       </GameBoardDiv>
     </Container>
   );

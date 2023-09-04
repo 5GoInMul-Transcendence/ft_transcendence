@@ -1,6 +1,5 @@
 'use client';
 
-import useSocket from '@/hooks/useSocket';
 import { gameObject } from '@/types/IGameObject';
 import { useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
@@ -11,11 +10,10 @@ interface Props {
 }
 
 export default function GameBoard({ gameKey }: Props) {
-  console.log(gameKey);
-  const socket = io(`http://localhost:10003/main`, {
+  const socket = io(`ws://localhost:10003/game`, {
     transports: ['websocket'],
     auth: {
-      gamekey: gameKey,
+      gameKey: gameKey,
     },
   });
 
@@ -100,32 +98,47 @@ export default function GameBoard({ gameKey }: Props) {
     const paddle2Down = 40;
     switch (keyPressed) {
       case paddle1Up:
-        socket?.emit('updatePaddle', { paddle: 'keyUp' });
+        socket?.emit('updatePaddle', { paddle: 0 });
         break;
       case paddle1Down:
-        socket?.emit('updatePaddle', { paddle: 'keyDown' });
+        socket?.emit('updatePaddle', { paddle: 1 });
         break;
       case paddle2Up:
-        socket?.emit('updatePaddle', { paddle: 'keyUp' });
+        socket?.emit('updatePaddle', { paddle: 0 });
         break;
       case paddle2Down:
-        socket?.emit('updatePaddle', { paddle: 'keyDown' });
+        socket?.emit('updatePaddle', { paddle: 1 });
         break;
     }
   }
 
   useEffect(() => {
     socket?.on('updateObject', (res: gameObject) => {
-      const p1 = res.data.p1;
-      const p2 = res.data.p2;
-      const ball = res.data.b;
+      const p1 = res.p1;
+      const p2 = res.p2;
+      const ball = res.b;
 
       clearBoard();
       drawPaddles(p1.x, p1.y, p2.x, p2.y);
       drawBall(ball.x, ball.y);
     });
     socket.on('infoGame', (res) => {
-      console.log(res);
+      if (res === 'standby') {
+        setTimeout(() => {
+          console.log('1');
+        }, 1000);
+        setTimeout(() => {
+          console.log('2');
+        }, 2000);
+        setTimeout(() => {
+          console.log('3');
+        }, 3000);
+        setTimeout(() => {
+          socket.emit('startGame');
+        }, 3000);
+      } else if (res === 'play') {
+      } else if (res === 'end') {
+      }
     });
   }, [socket]);
 

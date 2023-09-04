@@ -1,5 +1,5 @@
 export interface IGame {
-  gamekey: string;
+  gameKey: string;
   p1: {
     id: number;
     nickname: string;
