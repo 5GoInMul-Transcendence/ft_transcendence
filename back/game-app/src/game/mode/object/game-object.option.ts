@@ -2,27 +2,27 @@ export const SCREEN_WIDTH = 1200;
 export const SCREEN_HEIGHT = 720;
 
 export class BallOption {
-  ballRadius: number;
-  ballSpeed: number;
-  ballXDirection: number;
-  ballYDirection: number;
+  radius: number;
+  speed: number;
+  xDirection: number;
+  yDirection: number;
 
   constructor() {
-    this.ballRadius = 12.5;
-    this.ballSpeed = 8;
-    this.ballXDirection = 1;
-    this.ballYDirection = 1;
+    this.radius = 12.5;
+    this.speed = 8;
+    this.xDirection = 1;
+    this.yDirection = 1;
   }
 }
 
 export class PaddleOption {
-  paddleSpeed: number;
-  paddleWidth: number;
-  paddleHeight: number;
+  speed: number;
+  width: number;
+  height: number;
 
   constructor() {
-    this.paddleWidth = 25;
-    this.paddleHeight = 100;
-    this.paddleSpeed = 50;
+    this.width = 25;
+    this.height = 100;
+    this.speed = 50;
   }
 }
