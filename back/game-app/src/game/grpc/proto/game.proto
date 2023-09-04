@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package game;
+
+service GameService {
+  rpc createGame (CreateGameDto) returns (CreateGameReturnDto) {}
+}
+
+message CreateGameDto {
+  string gameMode = 1;
+}
+
+message CreateGameReturnDto {
+  string gameId = 1;
+  string p1GameKey = 2;
+  string p2GameKey = 3;
+}
