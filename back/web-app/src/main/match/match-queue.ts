@@ -5,11 +5,11 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export class MatchQueue {
   private matchQueues: Map<GameMode, Queue<number>>;
-  private userGameTypes: Map<number, GameMode>;
+  private userGameModes: Map<number, GameMode>;
 
   constructor() {
     this.matchQueues = new Map<GameMode, Queue<number>>();
-    this.userGameTypes = new Map<number, GameMode>();
+    this.userGameModes = new Map<number, GameMode>();
 
     for (const gameMode of Object.values(GameMode)) {
       this.matchQueues.set(gameMode, new Queue<number>());
@@ -19,13 +19,13 @@ export class MatchQueue {
   push(gameMode: GameMode, userId: number) {
     this.matchQueues.get(gameMode).push(userId);
 
-    this.userGameTypes.set(userId, gameMode);
+    this.userGameModes.set(userId, gameMode);
   }
 
   popByUserId(userId: number) {
-    const gameMode = this.userGameTypes.get(userId);
+    const gameMode = this.userGameModes.get(userId);
 
-    this.userGameTypes.delete(userId);
+    this.userGameModes.delete(userId);
 
     return this.matchQueues.get(gameMode).pop();
   }
@@ -33,7 +33,7 @@ export class MatchQueue {
   popByGameMode(gameMode: GameMode) {
     const userId = this.matchQueues.get(gameMode).pop();
 
-    this.userGameTypes.delete(userId);
+    this.userGameModes.delete(userId);
 
     return userId;
   }
