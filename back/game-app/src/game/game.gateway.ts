@@ -1,12 +1,14 @@
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
+  SubscribeMessage,
   WebSocketGateway,
 } from '@nestjs/websockets';
 import { GameService } from './game.service';
 import { Socket } from 'socket.io';
 import { Builder } from 'builder-pattern';
 import { ConnectGameDto } from './dto/connect-game.dto';
+import { ReadyGameDto } from './dto/ready-game.dto';
 
 @WebSocketGateway(10003, { namespace: 'game', cors: { origin: '*' } })
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -29,4 +31,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   handleDisconnect(client: Socket): any {}
+
+  @SubscribeMessage('readyGame')
+  readyGame(client: any) {
+    const { gameKey } = client.handshake.auth;
+
+    this.gameService.readyGame(Builder(ReadyGameDto).gameKey(gameKey).build());
+  }
 }

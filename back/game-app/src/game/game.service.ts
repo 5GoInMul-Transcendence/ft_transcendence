@@ -18,6 +18,12 @@ import { GameProcessUnit } from './game-process-unit';
 import { WsException } from '@nestjs/websockets';
 import { CheckGameKeyDto } from './dto/check-game-key.dto';
 import { CheckReconnectionDto } from './dto/check-reconnection.dto';
+import { ReadyGameDto } from './dto/ready-game.dto';
+import { GameUserStatus } from './enums/game-user-status.enum';
+import { GameActionStatus } from './enums/gam-action-status.enum';
+import { InfoGameRes } from './dto/info-game-res.dto';
+import { UpdateGameUserDto } from './gameuser/dto/update-game-user.dto';
+import { GameUser } from './gameuser/game-user';
 
 @Injectable()
 export class GameService {
@@ -51,10 +57,6 @@ export class GameService {
     this.gameUserService.addUser(
       Builder(AddGameUserDto).gameKey(dto.gameKey).client(dto.client).build(),
     );
-
-    if (this.isRivalUserConnected(dto.gameKey)) {
-      this.addGameProcessUnit(dto.gameKey);
-    }
   }
 
   createGame(dto: CreateGameDto): CreateGameReturnDto {
@@ -87,6 +89,47 @@ export class GameService {
       .build();
   }
 
+  readyGame(dto: ReadyGameDto) {
+    const gameGroup = this.gameGroups.get(dto.gameKey);
+
+    const user = this.gameUserService.findUserByGameKey(
+      Builder(FindGameUserByGameKeyDto).gameKey(dto.gameKey).build(),
+    );
+    const rivalUser = this.gameUserService.findUserByGameKey(
+      Builder(FindGameUserByGameKeyDto).gameKey(gameGroup.rivalGameKey).build(),
+    );
+
+    if (user.status !== GameUserStatus.DEFAULT || !rivalUser) {
+      return;
+    }
+
+    this.gameUserService.updateUserStatus(
+      Builder(UpdateGameUserDto)
+        .gameKey(dto.gameKey)
+        .status(GameUserStatus.GAME_READY)
+        .build(),
+    );
+    this.gameUserService.updateUserStatus(
+      Builder(UpdateGameUserDto)
+        .gameKey(rivalUser.gameKey)
+        .status(GameUserStatus.GAME_READY)
+        .build(),
+    );
+
+    const gameProcessUnit = this.addGameProcessUnit(
+      gameGroup.game,
+      user,
+      rivalUser,
+    );
+
+    for (const gamePlayer of gameProcessUnit.gamePlayers.values()) {
+      gamePlayer.client.emit(
+        'infoGame',
+        Builder(InfoGameRes).status(gameProcessUnit.gameStatus).build,
+      );
+    }
+  }
+
   private generateGame(gameMode: GameMode): AbstractGame {
     switch (gameMode) {
       case GameMode.CLASSIC:
@@ -98,32 +141,20 @@ export class GameService {
     }
   }
 
-  private addGameProcessUnit(gameKey: string) {
-    const gameGroup = this.gameGroups.get(gameKey);
-
-    const user = this.gameUserService.findUserByGameKey(
-      Builder(FindGameUserByGameKeyDto).gameKey(gameKey).build(),
-    );
-    const rivalUser = this.gameUserService.findUserByGameKey(
-      Builder(FindGameUserByGameKeyDto).gameKey(gameGroup.rivalGameKey).build(),
-    );
-
+  private addGameProcessUnit(
+    game: AbstractGame,
+    user: GameUser,
+    rivalUser: GameUser,
+  ) {
     const gameProcessUnit = Builder(GameProcessUnit)
-      .game(gameGroup.game)
+      .game(game)
       .gamePlayers([user, rivalUser])
+      .gameStatus(GameActionStatus.STANDBY)
       .build();
 
     this.gameProcessUnits.set(user.gameKey, gameProcessUnit);
     this.gameProcessUnits.set(rivalUser.gameKey, gameProcessUnit);
-  }
 
-  private isRivalUserConnected(gameKey: string) {
-    const gameGroup = this.gameGroups.get(gameKey);
-
-    const rivalUser = this.gameUserService.findUserByGameKey(
-      Builder(FindGameUserByGameKeyDto).gameKey(gameGroup.rivalGameKey).build(),
-    );
-
-    return !!rivalUser;
+    return gameProcessUnit;
   }
 }
