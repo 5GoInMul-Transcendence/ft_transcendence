@@ -1,6 +1,6 @@
-import { GameType } from '../../game/enums/game-type.enum';
+import { GameMode } from '../../game/enums/game-mode.enum';
 
 export class MatchGroup {
   rivalUserId: number;
-  gameType: GameType;
+  gameMode: GameMode;
 }

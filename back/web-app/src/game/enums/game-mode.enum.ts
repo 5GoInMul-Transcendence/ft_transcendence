@@ -1,4 +1,4 @@
-export enum GameType {
+export enum GameMode {
   CLASSIC = 'classic',
   PADDLE = 'paddle',
   SPEED = 'speed',

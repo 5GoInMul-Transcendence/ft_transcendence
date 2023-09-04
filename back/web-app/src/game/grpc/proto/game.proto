@@ -7,7 +7,7 @@ service GameService {
 }
 
 message CreateGameDto {
-  string gameType = 1;
+  string gameMode = 1;
 }
 
 message CreateGameReturnDto {

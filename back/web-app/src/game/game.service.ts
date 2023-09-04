@@ -38,7 +38,7 @@ export class GameService implements OnModuleInit {
   async gameEnter(dto: EnterGameDto) {
     const { gameId, p1GameKey, p2GameKey } = await firstValueFrom(
       this.gameServerService.createGame(
-        Builder<ICreateGameDto>().gameType(dto.gameType).build(),
+        Builder<ICreateGameDto>().gameMode(dto.gameMode).build(),
       ),
     );
 
