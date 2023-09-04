@@ -10,7 +10,7 @@ async function bootstrap() {
       options: {
         package: 'game',
         url: 'localhost:8081',
-        protoPath: __dirname + '/game/proto/game.proto',
+        protoPath: __dirname + '/game/grpc/proto/game.proto',
       },
     },
   );
