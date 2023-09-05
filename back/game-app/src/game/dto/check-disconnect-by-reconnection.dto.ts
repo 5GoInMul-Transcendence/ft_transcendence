@@ -1,6 +1,5 @@
 import { Socket } from 'socket.io';
 
-export class CheckReconnectionDto {
+export class CheckDisconnectByReconnectionDto {
   readonly client: Socket;
-  readonly gameKey: string;
 }

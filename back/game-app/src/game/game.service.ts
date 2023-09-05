@@ -28,9 +28,11 @@ import { StartGameDto } from './dto/start-game-dto';
 import { EndGameDto } from './dto/end-game.dto';
 import { GameCore } from './core/game.core';
 import { DeleteGameUserDto } from './gameuser/dto/delete-game-user.dto';
+import { CheckDisconnectByReconnectionDto } from './dto/check-disconnect-by-reconnection.dto';
 
 @Injectable()
 export class GameService {
+  private reconnection = Symbol('reconnection');
   private gameGroups: Map<string, GameGroup>;
   private gameProcessUnits: Map<string, GameProcessUnit>;
 
@@ -56,6 +58,13 @@ export class GameService {
     );
 
     if (user) {
+      dto.client[this.reconnection] = true;
+      throw new WsException('');
+    }
+  }
+
+  checkDisconnectByReconnection(dto: CheckDisconnectByReconnectionDto) {
+    if (dto.client[this.reconnection]) {
       throw new WsException('');
     }
   }
