@@ -24,6 +24,8 @@ import { GameActionStatus } from './enums/gam-action-status.enum';
 import { InfoGameRes } from './dto/info-game-res.dto';
 import { UpdateGameUserDto } from './gameuser/dto/update-game-user.dto';
 import { GameUser } from './gameuser/game-user';
+import { StartGameDto } from './dto/start-game-dto';
+import { EndGameDto } from './dto/end-game.dto';
 
 @Injectable()
 export class GameService {
@@ -130,6 +132,11 @@ export class GameService {
     }
   }
 
+  async endGame(dto: EndGameDto) {
+    // 서버로 데이터 보내기
+    console.log('end');
+  }
+
   private generateGame(gameMode: GameMode): AbstractGame {
     switch (gameMode) {
       case GameMode.CLASSIC:
@@ -150,6 +157,7 @@ export class GameService {
       .game(game)
       .gamePlayers([user, rivalUser])
       .gameStatus(GameActionStatus.STANDBY)
+      .notifyEndGame(this.endGame)
       .build();
 
     this.gameProcessUnits.set(user.gameKey, gameProcessUnit);
