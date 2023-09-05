@@ -3,9 +3,10 @@ import { GameController } from './game.controller';
 import { GameService } from './game.service';
 import { GameGateway } from './game.gateway';
 import { GameUserService } from './gameuser/game-user.service';
+import { GameCore } from './core/game.core';
 
 @Module({
   controllers: [GameController],
-  providers: [GameService, GameGateway, GameUserService],
+  providers: [GameService, GameGateway, GameUserService, GameCore],
 })
 export class GameModule {}
