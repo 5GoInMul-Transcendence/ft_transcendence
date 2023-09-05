@@ -1,4 +1,4 @@
 export enum PlayerNumber {
-  P1,
+  P1 = 1,
   P2,
 }
