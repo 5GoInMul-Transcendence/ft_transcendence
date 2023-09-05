@@ -6,7 +6,6 @@ import { CreateChannelReqDto } from './dto/create-channel-req.dto';
 import { LinkChannelToUser } from './entity/link-channel-to-user.entity';
 import { User } from 'src/users/user/entities/user.entity';
 import { CreateLinkChannelToUserReqDto } from './dto/create-link-channel-to-user-req.dto';
-import { ChannelRole } from './enum/channel-role.enum';
 import { UserService } from 'src/users/user/user.service';
 import { Message } from './entity/message.entity';
 import { MyChannels } from './dto/my-channels.dto';
@@ -25,10 +24,8 @@ export class ChannelService {
 		private userService: UserService,
 	) {}
 
-	async isUserInChannel(link: LinkChannelToUser) {
-		if (link)
-			return true;
-		return false;
+	isUserInChannel(link: LinkChannelToUser) {
+		return link !== null;
 	}
 
 	async getChannel(id: number): Promise<Channel> {

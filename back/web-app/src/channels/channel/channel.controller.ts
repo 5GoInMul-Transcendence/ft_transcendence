@@ -97,18 +97,22 @@ export class ChannelController {
 		@Param('channelid') channelId: number,
 		@Session() session: Record<string, any>,
 		): Promise<EnterChannelRes> {
+		const channel = await this.channelService.getChannel(channelId);
+		let userId: number;
+		let user: User;
+		let link: LinkChannelToUser;
+		let recentMessages: RecentMessageAtEnter[];
+
 		// if (ban 일 때)
 		// 	throw new HttpException('채널에 차단(ban)되었습니다.', HttpStatus.OK);
-
-		const channel = await this.channelService.getChannel(channelId);
 
 		if (!channel) {
 			throw new HttpException('채널이 존재하지 않습니다!', HttpStatus.OK);
 		}
 
-		const userId = session.userId;
-		const user = await this.userService.getUserByUserId(userId);
-		let link = await this.channelService.getLinkByChannelAndUser(channel, user);
+		userId = session.userId;
+		user = await this.userService.getUserByUserId(userId);
+		link = await this.channelService.getLinkByChannelAndUser(channel, user);
 
 		if (!this.channelService.isUserInChannel(link)) {
 			link = await this.channelService.createLinkChannelToUser(
@@ -120,7 +124,7 @@ export class ChannelController {
 			);
 		}
 		
-		const recentMessages: RecentMessageAtEnter[] = await this.messageService.getMessages(channel);
+		recentMessages = await this.messageService.getMessages(channel.id, user.nickname);
 
 		return Builder(EnterChannelRes)
 		.id(channel.id)
