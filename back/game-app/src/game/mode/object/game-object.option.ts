@@ -1,6 +1,14 @@
 export const SCREEN_WIDTH = 1200;
 export const SCREEN_HEIGHT = 720;
 
+export class ScoreOption {
+  max: number;
+
+  constructor() {
+    this.max = 5;
+  }
+}
+
 export class BallOption {
   radius: number;
   speed: number;
