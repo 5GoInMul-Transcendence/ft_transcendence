@@ -81,7 +81,11 @@ export class GameService implements OnModuleInit {
           .avatar(p2MemoryUser.avatar)
           .build(),
       )
-      .gameKey(gameInfo.gameId)
+      .gameKey(
+        dto.userId == gameInfo.p1.id
+          ? gameInfo.p1.gameKey
+          : gameInfo.p2.gameKey,
+      )
       .build();
   }
 }
