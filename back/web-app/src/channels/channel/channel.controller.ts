@@ -30,14 +30,21 @@ export class ChannelController {
 		@Session() session: Record<string, any>,
 		@Body() dto: SendMessageReq,
 		) {
-		const channel: Channel = await this.channelService.getChannel(channelId); // 채팅방이 존재하지 않을 때 에러?
 		const userId: number = session.userId;
-		const user: User = await this.userService.getUserByUserId(userId);
 		const { message } = dto;
-		const link: LinkChannelToUser | null = await this.channelService.getLinksByChannelAndUser(user, channel); // 얘 때문에 user, channel 객체가 다 필요함
+		let channel: Channel;
+		let user: User;
+		let link: LinkChannelToUser | null;
 
+		channel = await this.channelService.getChannel(channelId);
+		if (!channel) {
+			throw new HttpException('채널이 존재하지 않습니다!', HttpStatus.OK);
+		}
+		user = await this.userService.getUserByUserId(userId);
+		link = await this.channelService.getLinksByChannelAndUser(user, channel);
+		console.log('link', link);
 		if (link === null) {
-			throw new HttpException('채팅 방에 입장한 상태가 아닙니다.', HttpStatus.UNAUTHORIZED);
+			throw new HttpException('채널에 입장한 상태가 아닙니다.', HttpStatus.UNAUTHORIZED);
 		}
 		this.messageService.sendMessage(
 			Builder(SendMessageDto)
@@ -98,7 +105,7 @@ export class ChannelController {
 			throw new HttpException('채널이 존재하지 않습니다.', HttpStatus.OK);
 		}
 		if (password && channel.password === null) {
-			throw new HttpException('채팅방에 비밀번호가 존재하지 않습니다!', HttpStatus.OK);
+			throw new HttpException('채널에 비밀번호가 존재하지 않습니다!', HttpStatus.OK);
 		}
 		if (await this.hashService.hashCompare(password, channel.password) === false) {
 			throw new HttpException('비밀번호가 일치하지 않습니다!', HttpStatus.OK);
