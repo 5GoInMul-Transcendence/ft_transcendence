@@ -12,8 +12,8 @@ export abstract class AbstractGame {
   public objects: GameObjects;
   public score: GameScore;
   public gameId = uuid();
-  private ballOption: BallOption;
-  private paddleOption: PaddleOption;
+  protected ballOption: BallOption;
+  protected paddleOption: PaddleOption;
 
   constructor() {
     this.ballOption = new BallOption();
