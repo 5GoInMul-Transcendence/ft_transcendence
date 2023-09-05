@@ -70,4 +70,11 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     this.gameService.startGame(Builder(StartGameDto).gameKey(gameKey).build());
   }
+
+  @SubscribeMessage('updatePaddle')
+  updatePaddle(client: any, @MessageBody('paddle') playerAction: PlayerAction) {
+    const { gameKey } = client.handshake.auth;
+
+    this.gameService.updateGameObject(gameKey, playerAction);
+  }
 }

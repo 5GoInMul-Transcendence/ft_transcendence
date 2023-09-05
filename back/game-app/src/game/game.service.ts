@@ -191,6 +191,13 @@ export class GameService {
     // web-app 서버로 게임결과 보내기
   }
 
+  updateGameObject(gameKey: string, playerAction: PlayerAction) {
+    const gameGroup = this.gameGroups.get(gameKey);
+    const gameProcessUnit = this.gameProcessUnits.get(gameKey);
+
+    gameProcessUnit?.updateObject(gameGroup.playerNumber, playerAction);
+  }
+
   private generateGame(gameMode: GameMode): AbstractGame {
     switch (gameMode) {
       case GameMode.CLASSIC:
