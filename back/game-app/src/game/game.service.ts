@@ -136,12 +136,7 @@ export class GameService {
     }
   }
 
-  async endGame(dto: EndGameDto) {
-    // 서버로 데이터 보내기
-    console.log('end');
-  }
-
-  private startGame(dto: StartGameDto) {
+  startGame(dto: StartGameDto) {
     const gameGroup = this.gameGroups.get(dto.gameKey);
 
     const user = this.gameUserService.findUserByGameKey(
@@ -167,6 +162,11 @@ export class GameService {
     gameProcessUnit.gameStatus = GameActionStatus.PLAY;
 
     this.gameCore.push(gameProcessUnit);
+  }
+
+  async endGame(dto: EndGameDto) {
+    // 서버로 데이터 보내기
+    console.log('end');
   }
 
   private generateGame(gameMode: GameMode): AbstractGame {
