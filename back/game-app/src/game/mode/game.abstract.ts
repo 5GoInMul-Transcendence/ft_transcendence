@@ -9,6 +9,7 @@ import {
 import { GameObjects, GameScore } from './object/game-object';
 import { GamePlayResult } from './enums/game-play-result.enum';
 import { PlayerNumber } from '../enums/player-number.enum';
+import { PlayerAction } from './enums/player-action.enum';
 
 export abstract class AbstractGame {
   public gameId = uuid();
@@ -96,6 +97,32 @@ export abstract class AbstractGame {
     }
 
     return GamePlayResult.ROUND_PROGRESS;
+  }
+
+  updateObject(playerNumber: PlayerNumber, playerAction: PlayerAction) {
+    if (playerAction == PlayerAction.PADDLE_UP) {
+      if (PlayerNumber.P1 && this.objects.p1.y - this.paddleOption.speed < 0) {
+        this.objects.p1.y -= this.paddleOption.speed;
+      }
+      if (PlayerNumber.P2 && this.objects.p2.y - this.paddleOption.speed < 0) {
+        this.objects.p2.y -= this.paddleOption.speed;
+      }
+    }
+
+    if (playerAction == PlayerAction.PADDLE_DOWN) {
+      if (
+        PlayerNumber.P1 &&
+        this.objects.p1.y + this.paddleOption.speed > SCREEN_HEIGHT
+      ) {
+        this.objects.p1.y += this.paddleOption.speed;
+      }
+      if (
+        PlayerNumber.P2 &&
+        this.objects.p2.y + this.paddleOption.speed > SCREEN_HEIGHT
+      ) {
+        this.objects.p2.y += this.paddleOption.speed;
+      }
+    }
   }
 
   /* 게임 시작 전, 라운드 전, 게임 오브젝트를 초기화합니다. */
