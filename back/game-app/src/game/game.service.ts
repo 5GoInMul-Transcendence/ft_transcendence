@@ -26,13 +26,17 @@ import { UpdateGameUserDto } from './gameuser/dto/update-game-user.dto';
 import { GameUser } from './gameuser/game-user';
 import { StartGameDto } from './dto/start-game-dto';
 import { EndGameDto } from './dto/end-game.dto';
+import { GameCore } from './core/game.core';
 
 @Injectable()
 export class GameService {
   private gameGroups: Map<string, GameGroup>;
   private gameProcessUnits: Map<string, GameProcessUnit>;
 
-  constructor(private gameUserService: GameUserService) {
+  constructor(
+    private gameUserService: GameUserService,
+    private gameCore: GameCore,
+  ) {
     this.gameGroups = new Map<string, GameGroup>();
     this.gameProcessUnits = new Map<string, GameProcessUnit>();
   }
@@ -135,6 +139,34 @@ export class GameService {
   async endGame(dto: EndGameDto) {
     // 서버로 데이터 보내기
     console.log('end');
+  }
+
+  private startGame(dto: StartGameDto) {
+    const gameGroup = this.gameGroups.get(dto.gameKey);
+
+    const user = this.gameUserService.findUserByGameKey(
+      Builder(FindGameUserByGameKeyDto).gameKey(dto.gameKey).build(),
+    );
+
+    this.gameUserService.updateUserStatus(
+      Builder(UpdateGameUserDto)
+        .gameKey(dto.gameKey)
+        .status(GameUserStatus.GAME_START)
+        .build(),
+    );
+
+    const rivalUser = this.gameUserService.findUserByGameKey(
+      Builder(FindGameUserByGameKeyDto).gameKey(gameGroup.rivalGameKey).build(),
+    );
+
+    if (!rivalUser || rivalUser.status !== GameUserStatus.GAME_START) {
+      return;
+    }
+
+    const gameProcessUnit = this.gameProcessUnits.get(user.gameKey);
+    gameProcessUnit.gameStatus = GameActionStatus.PLAY;
+
+    this.gameCore.push(gameProcessUnit);
   }
 
   private generateGame(gameMode: GameMode): AbstractGame {
