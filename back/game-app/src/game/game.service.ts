@@ -27,6 +27,7 @@ import { GameUser } from './gameuser/game-user';
 import { StartGameDto } from './dto/start-game-dto';
 import { EndGameDto } from './dto/end-game.dto';
 import { GameCore } from './core/game.core';
+import { DeleteGameUserDto } from './gameuser/dto/delete-game-user.dto';
 
 @Injectable()
 export class GameService {
@@ -165,8 +166,18 @@ export class GameService {
   }
 
   async endGame(dto: EndGameDto) {
-    // 서버로 데이터 보내기
-    console.log('end');
+    for (const gamePlayer of dto.gamePlayers) {
+      const { gameKey, client } = gamePlayer;
+
+      this.gameGroups.delete(gameKey);
+      this.gameProcessUnits.delete(gameKey);
+      this.gameUserService.deleteUser(
+        Builder(DeleteGameUserDto).gameKey(gameKey).build(),
+      );
+
+      client.disconnect();
+    }
+    // web-app 서버로 게임결과 보내기
   }
 
   private generateGame(gameMode: GameMode): AbstractGame {

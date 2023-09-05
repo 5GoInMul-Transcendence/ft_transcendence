@@ -1,5 +1,7 @@
-import { GameScore } from '../mode/object/game-object';
+import { AbstractGame } from '../mode/game.abstract';
+import { GameUser } from '../gameuser/game-user';
 
 export class EndGameDto {
-  readonly gameScore: GameScore;
+  readonly endGame: AbstractGame;
+  readonly gamePlayers: GameUser[];
 }

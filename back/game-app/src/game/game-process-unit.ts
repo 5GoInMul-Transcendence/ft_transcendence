@@ -5,6 +5,7 @@ import { GamePlayResult } from './mode/enums/game-play-result.enum';
 import { ProcessStatus } from './core/enums/process-status.enum';
 import { EndGameDto } from './dto/end-game.dto';
 import { GameUserStatus } from './enums/game-user-status.enum';
+import { Builder } from 'builder-pattern';
 
 export class GameProcessUnit {
   game: AbstractGame;
@@ -42,6 +43,14 @@ export class GameProcessUnit {
           status: GameActionStatus.END,
         });
       }
+
+      this.notifyEndGame(
+        Builder(EndGameDto)
+          .endGame(this.game)
+          .gamePlayers(this.gamePlayers)
+          .build(),
+      );
+
       return ProcessStatus.END;
     }
 
