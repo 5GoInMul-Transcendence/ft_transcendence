@@ -32,7 +32,7 @@ export class MessageService {
 		.createQueryBuilder('message')
 		.select(['message.id', 'message.content'])
 		.where('message.channel = :channelId', {channelId})
-		// .where('message.channel.id = :channelId', {channelId})
+		// .where('message.channel.id = :channelId', {channelId}) // 위와 같은 의미라는 것을 의미, 삭제해도 됨
 		.orderBy('message.timestamp', 'DESC')
 		.take(maxMessagesCount)
 		.getMany();
