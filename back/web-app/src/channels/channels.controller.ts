@@ -3,6 +3,7 @@ import { ChannelsService } from './channels.service';
 import { UserService } from 'src/users/user/user.service';
 import { User } from 'src/users/user/entities/user.entity';
 import { LinkChannelToUser } from './channel/entity/link-channel-to-user.entity';
+import { MyChannels } from './channel/dto/my-channels.dto';
 
 @Controller('channels')
 export class ChannelsController {
@@ -16,7 +17,8 @@ export class ChannelsController {
 	}
 
   @Get('mine')
-  async getMyChannels(@Session() session: Record<string, any>,) {
+  async getMyChannels(@Session() session: Record<string, any>,)
+	:Promise<MyChannels[]> {
     const userId: number = session.userId;
     const links: LinkChannelToUser[] = await this.channelsService.getLinksRelatedChannelAndUserByUserId(userId);
 

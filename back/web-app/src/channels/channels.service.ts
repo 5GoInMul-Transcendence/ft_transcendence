@@ -22,13 +22,13 @@ export class ChannelsService {
 		private userService: UserService,
 	) {}
 
-	async getAllChannels(): Promise<Channel[]> {
+	async getAllChannels(): Promise<Channel[] | null> {
 		return await this.channelRepository.find({
 			select: ['id', 'name'],
 		});
 	}
 
-	async getLinksRelatedChannelAndUserByUserId(userId: number): Promise<LinkChannelToUser[]>{
+	async getLinksRelatedChannelAndUserByUserId(userId: number): Promise<LinkChannelToUser[] | null>{
 		const user = await this.userService.getUserByUserId(userId);
 		
 		return await this.linkChannelToUserRepository.find({
@@ -53,7 +53,7 @@ export class ChannelsService {
 		});
 	}
 
-	async getMyChannels(links: LinkChannelToUser[]): Promise<MyChannels[]> {
+	async getMyChannels(links: LinkChannelToUser[]): Promise<MyChannels[] | null> {
 		let myChannelList: MyChannels[] = [];
 
 		for (const link of links) {

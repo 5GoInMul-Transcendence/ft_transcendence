@@ -53,7 +53,7 @@ export class ChannelController {
 	async addChannel(
 		@Session() session: Record<string, any>,
 		@Body() addChannelReqDto: AddChannelReqDto, // 채널 name 파이프 구현 필요
-	) {
+	): Promise<AddChannelResDto> {
 		const {name, mode, password} = addChannelReqDto;
 		const userId = session.userId;
 		const createdChannel = await this.channelService.createChannel(
