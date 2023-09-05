@@ -2,20 +2,25 @@ import { v4 as uuid } from 'uuid';
 import {
   BallOption,
   PaddleOption,
+  ScoreOption,
   SCREEN_HEIGHT,
   SCREEN_WIDTH,
 } from './object/game-object.option';
 import { GameObjects, GameScore } from './object/game-object';
 import { GamePlayResult } from './enums/game-play-result.enum';
+import { PlayerNumber } from '../enums/player-number.enum';
 
 export abstract class AbstractGame {
-  public objects: GameObjects;
-  public score: GameScore;
   public gameId = uuid();
+  public score: GameScore;
+  public objects: GameObjects;
+  public winner: PlayerNumber;
+  protected scoreOption: ScoreOption;
   protected ballOption: BallOption;
   protected paddleOption: PaddleOption;
 
   constructor() {
+    this.scoreOption = new ScoreOption();
     this.ballOption = new BallOption();
     this.paddleOption = new PaddleOption();
     this.objects = new GameObjects();
@@ -37,16 +42,31 @@ export abstract class AbstractGame {
       this.ballOption.yDirection *= -1;
     }
 
-    /* 화면 좌 우 충돌 체크 (= 득점) */
+    /* 화면 좌 충돌 체크 (= 득점) */
     if (this.objects.b.x <= 0) {
-      this.score.p1.score += 1;
-      this.initObject();
-      return GamePlayResult.ROUND_END;
-    }
-    if (this.objects.b.x >= SCREEN_WIDTH) {
       this.score.p2.score += 1;
-      this.initObject();
-      return GamePlayResult.ROUND_END;
+
+      /* p2 최대 스코어에 도달시 */
+      if (this.score.p2.score >= this.scoreOption.max) {
+        this.winner = PlayerNumber.P2;
+        return GamePlayResult.GAME_END;
+      } else {
+        this.initObject();
+        return GamePlayResult.ROUND_END;
+      }
+    }
+    /* 화면 우 충돌 체크 (= 득점) */
+    if (this.objects.b.x >= SCREEN_WIDTH) {
+      this.score.p1.score += 1;
+
+      /* p1 최대 스코어에 도달시 */
+      if (this.score.p1.score >= this.scoreOption.max) {
+        this.winner = PlayerNumber.P1;
+        return GamePlayResult.GAME_END;
+      } else {
+        this.initObject();
+        return GamePlayResult.ROUND_END;
+      }
     }
 
     /* p1 패들 충돌 체크 */
@@ -78,7 +98,7 @@ export abstract class AbstractGame {
     return GamePlayResult.ROUND_PROGRESS;
   }
 
-  isGameOver;
+  /* 게임 시작 전, 라운드 전, 게임 오브젝트를 초기화합니다. */
   private initObject() {
     this.objects.p1.x = 0;
     this.objects.p1.y = 0;

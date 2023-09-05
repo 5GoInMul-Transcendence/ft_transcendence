@@ -21,17 +21,6 @@ export class GameProcessUnit {
       }
     }
 
-    if (playResult == GamePlayResult.ROUND_END && this.isGameOver()) {
-      for (let i = 0; i < this.gamePlayers.length; i++) {
-        this.gamePlayers[i].status = GameUserStatus.DEFAULT;
-        this.gamePlayers[i].client.emit('updateScore', this.game.score);
-        this.gamePlayers[i].client.emit('infoGame', {
-          status: GameActionStatus.END,
-        });
-      }
-      return ProcessStatus.END;
-    }
-
     if (playResult == GamePlayResult.ROUND_END) {
       this.gameStatus = GameActionStatus.STANDBY;
 
@@ -45,10 +34,17 @@ export class GameProcessUnit {
       }
     }
 
-    return ProcessStatus.PROGRESS;
-  }
+    if (playResult == GamePlayResult.GAME_END) {
+      for (let i = 0; i < this.gamePlayers.length; i++) {
+        this.gamePlayers[i].status = GameUserStatus.DEFAULT;
+        this.gamePlayers[i].client.emit('updateScore', this.game.score);
+        this.gamePlayers[i].client.emit('infoGame', {
+          status: GameActionStatus.END,
+        });
+      }
+      return ProcessStatus.END;
+    }
 
-  isGameOver() {
-    return this.game.score.p1.score >= 5 || this.game.score.p2.score >= 5;
+    return ProcessStatus.PROGRESS;
   }
 }
