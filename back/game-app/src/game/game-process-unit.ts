@@ -6,6 +6,8 @@ import { ProcessStatus } from './core/enums/process-status.enum';
 import { EndGameDto } from './dto/end-game.dto';
 import { GameUserStatus } from './enums/game-user-status.enum';
 import { Builder } from 'builder-pattern';
+import { PlayerNumber } from './enums/player-number.enum';
+import { PlayerAction } from './mode/enums/player-action.enum';
 
 export class GameProcessUnit {
   game: AbstractGame;
@@ -58,5 +60,13 @@ export class GameProcessUnit {
 
       return ProcessStatus.END;
     }
+  }
+
+  updateObject(playerNumber: PlayerNumber, playerAction: PlayerAction) {
+    if (this.gameStatus != GameActionStatus.PLAY) {
+      return;
+    }
+
+    this.game.updateObject(playerNumber, playerAction);
   }
 }
