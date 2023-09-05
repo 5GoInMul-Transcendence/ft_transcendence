@@ -20,6 +20,8 @@ export class GameProcessUnit {
       for (let i = 0; i < this.gamePlayers.length; i++) {
         this.gamePlayers[i].client.emit('updateObject', this.game.objects);
       }
+
+      return ProcessStatus.PROGRESS;
     }
 
     if (playResult == GamePlayResult.ROUND_END) {
@@ -33,6 +35,8 @@ export class GameProcessUnit {
           status: GameActionStatus.STANDBY,
         });
       }
+
+      return ProcessStatus.END;
     }
 
     if (playResult == GamePlayResult.GAME_END) {
