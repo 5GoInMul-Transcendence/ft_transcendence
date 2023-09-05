@@ -1,4 +1,5 @@
 import {
+  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   SubscribeMessage,
@@ -13,6 +14,8 @@ import { StartGameDto } from './dto/start-game-dto';
 import { CheckGameKeyDto } from './dto/check-game-key.dto';
 import { CheckReconnectionDto } from './dto/check-reconnection.dto';
 import { CheckDisconnectByReconnectionDto } from './dto/check-disconnect-by-reconnection.dto';
+import { PlayerAction } from './mode/enums/player-action.enum';
+import { DisconnectGameDto } from './dto/disconnect-game-dto';
 
 @WebSocketGateway(10003, { namespace: 'game', cors: { origin: '*' } })
 export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -39,6 +42,8 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   handleDisconnect(client: Socket): any {
+    const { gameKey } = client.handshake.auth;
+
     try {
       this.gameService.checkDisconnectByReconnection(
         Builder(CheckDisconnectByReconnectionDto).client(client).build(),
@@ -46,6 +51,10 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
     } catch (err) {
       return;
     }
+
+    this.gameService.disconnectGame(
+      Builder(DisconnectGameDto).gameKey(gameKey).build(),
+    );
   }
 
   @SubscribeMessage('readyGame')

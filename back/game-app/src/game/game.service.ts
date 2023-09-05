@@ -29,6 +29,8 @@ import { EndGameDto } from './dto/end-game.dto';
 import { GameCore } from './core/game.core';
 import { DeleteGameUserDto } from './gameuser/dto/delete-game-user.dto';
 import { CheckDisconnectByReconnectionDto } from './dto/check-disconnect-by-reconnection.dto';
+import { PlayerAction } from './mode/enums/player-action.enum';
+import { DisconnectGameDto } from './dto/disconnect-game-dto';
 
 @Injectable()
 export class GameService {
@@ -72,6 +74,14 @@ export class GameService {
   connectGame(dto: ConnectGameDto) {
     this.gameUserService.addUser(
       Builder(AddGameUserDto).gameKey(dto.gameKey).client(dto.client).build(),
+    );
+  }
+
+  disconnectGame(dto: DisconnectGameDto) {
+    this.gameGroups.delete(dto.gameKey);
+    this.gameProcessUnits.delete(dto.gameKey);
+    this.gameUserService.deleteUser(
+      Builder(DeleteGameUserDto).gameKey(dto.gameKey).build(),
     );
   }
 
@@ -176,15 +186,7 @@ export class GameService {
 
   async endGame(dto: EndGameDto) {
     for (const gamePlayer of dto.gamePlayers) {
-      const { gameKey, client } = gamePlayer;
-
-      this.gameGroups.delete(gameKey);
-      this.gameProcessUnits.delete(gameKey);
-      this.gameUserService.deleteUser(
-        Builder(DeleteGameUserDto).gameKey(gameKey).build(),
-      );
-
-      client.disconnect();
+      gamePlayer.client.disconnect();
     }
     // web-app 서버로 게임결과 보내기
   }
