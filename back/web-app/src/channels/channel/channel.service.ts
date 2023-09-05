@@ -24,7 +24,7 @@ export class ChannelService {
 		private userService: UserService,
 	) {}
 
-	isUserInChannel(link: LinkChannelToUser) {
+	isUserInChannel(link: LinkChannelToUser): boolean {
 		return link !== null;
 	}
 
