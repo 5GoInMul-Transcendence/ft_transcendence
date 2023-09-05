@@ -6,7 +6,7 @@ import {
   SCREEN_WIDTH,
 } from './object/game-object.option';
 import { GameObjects, GameScore } from './object/game-object';
-import { GamePlayResult } from './enums/round.eunm';
+import { GamePlayResult } from './enums/game-play-result.enum';
 
 export abstract class AbstractGame {
   public objects: GameObjects;
