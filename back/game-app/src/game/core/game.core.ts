@@ -10,6 +10,7 @@ export class GameCore implements OnModuleInit {
 
   constructor() {
     this.processList = new LinkedList();
+    this.deleteProcess = [];
   }
 
   onModuleInit(): any {
