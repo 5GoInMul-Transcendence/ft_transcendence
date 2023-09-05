@@ -8,13 +8,13 @@ export class LinkChannelToUser {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@ManyToOne(() => User, (user) => user.joins)
+	@ManyToOne(() => User, (user) => user.links)
 	@JoinColumn({ name: 'user_id' })
-	userId: User;
+	user: User;
 
-	@ManyToOne(() => Channel)
+	@ManyToOne(() => Channel, (channel) => channel.links)
 	@JoinColumn({ name: 'channel_id' })
-	channelId: Channel;
+	channel: Channel;
 
 	@Column('varchar', {
 		length: 5,

@@ -4,6 +4,7 @@ import { Builder } from 'builder-pattern';
 import { ChannelService } from './channel.service';
 import { CreateChannelReqDto } from './dto/create-channel-req.dto';
 import { CreateLinkChannelToUserReqDto } from './dto/create-link-channel-to-user-req.dto';
+import { AddChannelResDto } from './dto/add-channel-res.dto';
 
 @Controller('channel')
 export class ChannelController {
@@ -15,7 +16,7 @@ export class ChannelController {
 	async addChannel(
 		@Session() session: Record<string, any>,
 		@Body() addChannelReqDto: AddChannelReqDto, // 채널 name 파이프 구현 필요
-	) {
+	): Promise<AddChannelResDto> {
 		const {name, mode, password} = addChannelReqDto;
 		const userId = session.userId;
 		const createdChannel = await this.channelService.createChannel(
@@ -32,6 +33,9 @@ export class ChannelController {
 			.channel(createdChannel)
 			.build()
 		);
-		return this.channelService.getAddChannelRes(createdChannel.id, createdChannel.name);
+		return Builder(AddChannelResDto)
+		.id(createdChannel.id)
+		.name(createdChannel.name)
+		.build();
 	}
 }

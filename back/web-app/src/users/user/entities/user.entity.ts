@@ -35,6 +35,6 @@ export class User {
   })
   twoFactor: TwoFactorStatus;
 
-  @OneToMany(() => LinkChannelToUser, (join) => join.userId)
-  joins: LinkChannelToUser[]
+  @OneToMany(() => LinkChannelToUser, (link) => link.user)
+  links: LinkChannelToUser[]
 };
