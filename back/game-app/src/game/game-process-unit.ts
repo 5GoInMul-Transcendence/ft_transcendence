@@ -18,7 +18,7 @@ export class GameProcessUnit {
 
     if (playResult == GamePlayResult.ROUND_PROGRESS) {
       for (let i = 0; i < this.gamePlayers.length; i++) {
-        this.gamePlayers[i].client.emit('updateObject', this.game.score);
+        this.gamePlayers[i].client.emit('updateObject', this.game.objects);
       }
     }
 
@@ -53,7 +53,5 @@ export class GameProcessUnit {
 
       return ProcessStatus.END;
     }
-
-    return ProcessStatus.PROGRESS;
   }
 }
