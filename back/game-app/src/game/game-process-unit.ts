@@ -45,6 +45,7 @@ export class GameProcessUnit {
         this.gamePlayers[i].client.emit('updateScore', this.game.score);
         this.gamePlayers[i].client.emit('infoGame', {
           status: GameActionStatus.END,
+          message: this.game.winner,
         });
       }
 
