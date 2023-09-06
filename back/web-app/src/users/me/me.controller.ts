@@ -102,7 +102,7 @@ export class MeController {
   updateAvatar(@Session() session, @UploadedFile() file: Express.Multer.File) {
     this.userService.updateUser(
       Builder(UpdateUserDto)
-        .userId(session.useId)
+        .userId(session.userId)
         .avatar(file.filename)
         .build(),
     );
