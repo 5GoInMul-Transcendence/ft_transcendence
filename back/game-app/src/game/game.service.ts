@@ -151,7 +151,7 @@ export class GameService {
     for (const gamePlayer of gameProcessUnit.gamePlayers.values()) {
       gamePlayer.client.emit(
         'infoGame',
-        Builder(InfoGameRes).status(gameProcessUnit.gameStatus).build,
+        Builder(InfoGameRes).status(gameProcessUnit.gameStatus).build(),
       );
     }
   }
