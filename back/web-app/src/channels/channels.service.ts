@@ -21,13 +21,13 @@ export class ChannelsService {
 		private messageService: MessageService,
 	) {}
 
-	async getAllChannels(): Promise<Channel[] | null> {
+	async getAllChannels(): Promise<Channel[]> {
 		return await this.channelRepository.find({
 			select: ['id', 'name'],
 		});
 	}
 
-	async getLinksRelatedChannelAndUserByUserId(userId: number): Promise<LinkChannelToUser[] | null>{
+	async getLinksRelatedChannelAndUserByUserId(userId: number): Promise<LinkChannelToUser[]>{
 		const user = await this.userService.getUserByUserId(userId);
 		
 		return await this.linkChannelToUserRepository.find({
@@ -41,19 +41,20 @@ export class ChannelsService {
 		});
 	}
 
-	async getMyChannels(links: LinkChannelToUser[]): Promise<MyChannels[] | null> {
+	async getMyChannels(ReqUserLinks: LinkChannelToUser[]): Promise<MyChannels[]> {
 		let myChannelList: MyChannels[] = [];
 
-		for (const link of links) {
-      const channel = link.channel;
+		for (const ReqUserLink of ReqUserLinks) {
+      const channel = ReqUserLink.channel;
 			const channelId: number = channel.id;
 			const channelName = channel.name;
-			const message: Message = await this.messageService.getRecentMessageByChannelId(channel);
-			const userId = message?.userId;
-			const nickname = userId ? link.user.nickname : null;
+			const message: Message = await this.messageService.getRecentMessageRelatedUserByChannelId(channel);
+			// const userId = message?.user;
+			// const nickname = userId ? ReqUserLink.user.nickname : null;
+			const nicknameSendingMessage: string = message?.user.nickname ?? null;
 			const recentMessage: RecentMessage = Builder(RecentMessage)
 			.message(message?.content ?? null)
-			.nickname(nickname)
+			.nickname(nicknameSendingMessage)
 			.build();
 
 			myChannelList.push(Builder(MyChannels)

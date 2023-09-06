@@ -2,6 +2,7 @@ import { Controller, Get, Session } from '@nestjs/common';
 import { ChannelsService } from './channels.service';
 import { LinkChannelToUser } from './channel/entity/link-channel-to-user.entity';
 import { MyChannels } from './channel/dto/my-channels.dto';
+import { Channel } from './channel/entity/channel.entity';
 
 @Controller('channels')
 export class ChannelsController {
@@ -10,8 +11,8 @@ export class ChannelsController {
 	) {}
 
 	@Get()
-	getAllChannels() {
-		return this.channelsService.getAllChannels();
+	async getAllChannels(): Promise<Channel[]> {
+		return await this.channelsService.getAllChannels();
 	}
 
   @Get('mine')
