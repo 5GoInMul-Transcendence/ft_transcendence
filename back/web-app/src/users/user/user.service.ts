@@ -92,7 +92,7 @@ export class UserService {
     const { mail, nickname } = createUserDto;
     const user = this.userRepository.create({
       nickname,
-      avatar: 'avatar', // 이미지가 저장된 url 의 id 값만 넣는다.
+      avatar: 'default', // 이미지가 저장된 url 의 id 값만 넣는다.
       mail,
     });
     const createdUser = await this.userRepository.save(user);
