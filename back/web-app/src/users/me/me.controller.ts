@@ -20,12 +20,16 @@ import { UpdateNicknameReqDto } from './dto/update-nickname-req.dto';
 import { UserService } from '../user/user.service';
 import { UpdateUserDto } from '../user/dto/update-user.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { BroadcastFriendUpdateDto } from '../../friend/dto/broadcast-friend-update.dto';
+import { FriendService } from '../../friend/friend.service';
+import { FriendInfo } from '../../friend/friend-info';
 
 @Controller('me')
 export class MeController {
   constructor(
     private memoryUserService: MemoryUserService,
     private userService: UserService,
+    private friendService: FriendService,
   ) {}
 
   @Get()
@@ -95,7 +99,18 @@ export class MeController {
   }
   @Put('avatar')
   @UseInterceptors(FileInterceptor('file'))
-  updateAvatar(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
+  updateAvatar(@Session() session, @UploadedFile() file: Express.Multer.File) {
+    this.userService.updateUser(
+      Builder(UpdateUserDto)
+        .userId(session.useId)
+        .avatar(file.filename)
+        .build(),
+    );
+    this.friendService.broadcastFriendUpdate(
+      Builder(BroadcastFriendUpdateDto)
+        .userId(session.userId)
+        .friendInfo(Builder(FriendInfo).avatar(file.filename).build())
+        .build(),
+    );
   }
 }
