@@ -1,5 +1,5 @@
 export const SCREEN_WIDTH = 1200;
-export const SCREEN_HEIGHT = 720;
+export const SCREEN_HEIGHT = 700;
 
 export class ScoreOption {
   max: number;
