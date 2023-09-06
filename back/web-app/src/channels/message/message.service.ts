@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Channel } from '../channel/entity/channel.entity';
 import { Repository } from 'typeorm';
 import { Message } from '../channel/entity/message.entity';
 import { InjectRepository } from '@nestjs/typeorm';
