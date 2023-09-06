@@ -1,13 +1,19 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Channel } from "../../channels/channel/entity/channel.entity";
+import { User } from "src/users/user/entities/user.entity";
 
 @Entity('message')
 export class Message {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column('integer', { name: 'user_id '},)
-	userId: number;
+	@ManyToOne(() => Channel, (channel) => channel.messages)
+	@JoinColumn({ name: 'channel_id' })
+	channel: Channel;
+
+	@ManyToOne(() => User, (user) => user.messages)
+	@JoinColumn({ name: 'user_id' })
+	user: User
 
 	@Column('varchar', { length: 255 })
 	content: string;
@@ -17,8 +23,4 @@ export class Message {
 		precision: 6,					// 10^6 은 micro second
 	})
 	timestamp: Date;
-
-	@ManyToOne(() => Channel, (channel) => channel.messages)
-	@JoinColumn({ name: 'channel_id' })
-	channel: Channel;
 }

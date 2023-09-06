@@ -13,9 +13,9 @@ export class MessageService {
 	) {}
 
 	async sendMessage(dto: SendMessageDto): Promise<Message> {
-		const { userId, channel, content, timestamp } = dto;
+		const { user, channel, content, timestamp } = dto;
 		const message = this.messageRepository.create({
-			userId,
+			user,
 			channel,
 			content,
 			timestamp,
@@ -24,14 +24,17 @@ export class MessageService {
 		return await this.messageRepository.save(message);
 	}
 
-	async getRecentMessageByChannelId(channel: Channel): Promise<Message | null> {
+	async getRecentMessageRelatedUserByChannelId(channel: Channel): Promise<Message | null> {
 		return await this.messageRepository.findOne({
 			where: {
 				channel,
 			},
 			order: {
 				timestamp: 'DESC',
-			}
+			},
+			relations: [
+				'user'
+			],
 		});
 	}
 }

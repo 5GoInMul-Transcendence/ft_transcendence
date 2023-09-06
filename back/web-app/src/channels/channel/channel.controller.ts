@@ -49,10 +49,10 @@ export class ChannelController {
 			Builder(SendMessageDto)
 			.channel(channel)
 			.content(message)
-			.userId(userId)
+			.user(user)
 			.timestamp(new Date())
 			.build()
-		)
+		);
 	}
 
 	@Post()
@@ -62,23 +62,29 @@ export class ChannelController {
 	): Promise<AddChannelResDto> {
 		const {name, mode, password} = addChannelReqDto;
 		const userId = session.userId;
-		const createdChannel = await this.channelService.createChannel(
+		const channel = await this.channelService.createChannel(
 			Builder(CreateChannelReqDto)
 			.mode(mode)
 			.name(name)
 			.password(await this.hashService.hashPassword(password))
 			.build()
 		);
+		if (channel.mode !== 'protected' && password === '') {
+			throw new HttpException('지윤, 재상아 비밀번호가 없을 땐 null 로 줘야지!', HttpStatus.OK);
+		}
+		if (channel.mode !== 'protected' && password) {
+			throw new HttpException('protected가 아닌 모드에서는 비밀번호를 입력할 수 없습니다.', HttpStatus.OK);
+		}
 
 		this.channelService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.userId(userId)
-			.channel(createdChannel)
+			.channel(channel)
 			.build()
 		);
 		return Builder(AddChannelResDto)
-		.id(createdChannel.id)
-		.name(createdChannel.name)
+		.id(channel.id)
+		.name(channel.name)
 		.build();
 	}
 
@@ -103,7 +109,7 @@ export class ChannelController {
 		if (channel === null) {
 			throw new HttpException('채널이 존재하지 않습니다.', HttpStatus.OK);
 		}
-		if (password && channel.password === null) {
+		if (channel.mode !== 'protected') {
 			throw new HttpException('채널에 비밀번호가 존재하지 않습니다!', HttpStatus.OK);
 		}
 		if (await this.hashService.hashCompare(password, channel.password) === false) {
