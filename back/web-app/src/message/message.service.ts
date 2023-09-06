@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Channel } from '../channel/entity/channel.entity';
 import { Repository } from 'typeorm';
-import { Message } from '../channel/entity/message.entity';
+import { Message } from './entity/message.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SendMessageDto } from '../channel/dto/send-message.dto';
+import { SendMessageDto } from '../channels/channel/dto/send-message.dto';
+import { Channel } from '../channels/channel/entity/channel.entity';
 
 @Injectable()
 export class MessageService {
@@ -22,5 +22,16 @@ export class MessageService {
 		});
 
 		return await this.messageRepository.save(message);
+	}
+
+	async getRecentMessageByChannelId(channel: Channel): Promise<Message | null> {
+		return await this.messageRepository.findOne({
+			where: {
+				channel,
+			},
+			order: {
+				timestamp: 'DESC',
+			}
+		});
 	}
 }

@@ -2,24 +2,23 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Channel } from './channel/entity/channel.entity';
 import { Repository } from 'typeorm';
-import { User } from 'src/users/user/entities/user.entity';
 import { RecentMessage } from './channel/dto/recent-message.dto';
 import { MyChannels } from './channel/dto/my-channels.dto';
-import { Message } from './channel/entity/message.entity';
+import { Message } from '../message/entity/message.entity';
 import { Builder } from 'builder-pattern';
 import { LinkChannelToUser } from './channel/entity/link-channel-to-user.entity';
 import { UserService } from 'src/users/user/user.service';
+import { MessageService } from '../message/message.service';
 
 @Injectable()
 export class ChannelsService {
 	constructor(
 		@InjectRepository(Channel)
 		private channelRepository: Repository<Channel>,
-		@InjectRepository(Message)
-		private messageRepositoy: Repository<Message>,
 		@InjectRepository(LinkChannelToUser)
 		private linkChannelToUserRepository: Repository<LinkChannelToUser>,
 		private userService: UserService,
+		private messageService: MessageService,
 	) {}
 
 	async getAllChannels(): Promise<Channel[] | null> {
@@ -42,17 +41,6 @@ export class ChannelsService {
 		});
 	}
 
-	private async getRecentMessageByChannelId(channel: Channel): Promise<Message | null> {
-		return await this.messageRepositoy.findOne({
-			where: {
-				channel,
-			},
-			order: {
-				timestamp: 'DESC',
-			}
-		});
-	}
-
 	async getMyChannels(links: LinkChannelToUser[]): Promise<MyChannels[] | null> {
 		let myChannelList: MyChannels[] = [];
 
@@ -60,7 +48,7 @@ export class ChannelsService {
       const channel = link.channel;
 			const channelId: number = channel.id;
 			const channelName = channel.name;
-			const message: Message = await this.getRecentMessageByChannelId(channel);
+			const message: Message = await this.messageService.getRecentMessageByChannelId(channel);
 			const userId = message?.userId;
 			const nickname = userId ? link.user.nickname : null;
 			const recentMessage: RecentMessage = Builder(RecentMessage)
