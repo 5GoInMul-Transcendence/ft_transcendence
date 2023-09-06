@@ -1,7 +1,5 @@
 import { Controller, Get, Session } from '@nestjs/common';
 import { ChannelsService } from './channels.service';
-import { UserService } from 'src/users/user/user.service';
-import { User } from 'src/users/user/entities/user.entity';
 import { LinkChannelToUser } from './channel/entity/link-channel-to-user.entity';
 import { MyChannels } from './channel/dto/my-channels.dto';
 
