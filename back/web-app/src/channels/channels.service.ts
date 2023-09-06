@@ -24,6 +24,10 @@ export class ChannelsService {
 	async getAllChannels(): Promise<Channel[]> {
 		return await this.channelRepository.find({
 			select: ['id', 'name'],
+			where: [
+				{ mode: 'public' } ,
+				{ mode: 'protected' },
+      ],
 		});
 	}
 
@@ -46,20 +50,17 @@ export class ChannelsService {
 
 		for (const ReqUserLink of ReqUserLinks) {
       const channel = ReqUserLink.channel;
-			const channelId: number = channel.id;
-			const channelName = channel.name;
 			const message: Message = await this.messageService.getRecentMessageRelatedUserByChannelId(channel);
-			// const userId = message?.user;
-			// const nickname = userId ? ReqUserLink.user.nickname : null;
 			const nicknameSendingMessage: string = message?.user.nickname ?? null;
+			const messageContent: string = message?.content ?? null;
 			const recentMessage: RecentMessage = Builder(RecentMessage)
-			.message(message?.content ?? null)
+			.message(messageContent)
 			.nickname(nicknameSendingMessage)
 			.build();
 
 			myChannelList.push(Builder(MyChannels)
-			.id(channelId)
-			.name(channelName)
+			.id(channel.id)
+			.name(channel.name)
 			.recentMessage(recentMessage)
 			.build()
 			);
