@@ -76,10 +76,9 @@ export abstract class AbstractGame {
       this.objects.p1.x + this.paddleOption.width + this.ballOption.radius
     ) {
       if (
-        this.objects.b.y > this.objects.p1.y &&
-        this.objects.b.y < this.objects.p1.y + this.paddleOption.height
+        this.objects.b.y > this.objects.p1.y - this.ballOption.radius &&
+        this.objects.b.y < this.objects.p1.y + this.paddleOption.height + this.ballOption.radius
       ) {
-        this.objects.b.x = this.paddleOption.width - this.ballOption.radius - 1;
         this.ballOption.xDirection *= -1;
         this.ballOption.speed += 0.05;
       }
@@ -90,7 +89,6 @@ export abstract class AbstractGame {
         this.objects.b.y > this.objects.p2.y &&
         this.objects.b.y < this.objects.p2.y + this.paddleOption.height
       ) {
-        this.objects.b.x = this.objects.p2.x + this.ballOption.radius - 1;
         this.ballOption.xDirection *= -1;
         this.ballOption.speed += 0.05;
       }
@@ -101,24 +99,24 @@ export abstract class AbstractGame {
 
   updateObject(playerNumber: PlayerNumber, playerAction: PlayerAction) {
     if (playerAction == PlayerAction.PADDLE_UP) {
-      if (PlayerNumber.P1 && this.objects.p1.y - this.paddleOption.speed < 0) {
+      if (playerNumber == PlayerNumber.P1 && this.objects.p1.y - this.paddleOption.speed >= 0) {
         this.objects.p1.y -= this.paddleOption.speed;
       }
-      if (PlayerNumber.P2 && this.objects.p2.y - this.paddleOption.speed < 0) {
+      if (playerNumber == PlayerNumber.P2 && this.objects.p2.y - this.paddleOption.speed >= 0) {
         this.objects.p2.y -= this.paddleOption.speed;
       }
     }
 
     if (playerAction == PlayerAction.PADDLE_DOWN) {
       if (
-        PlayerNumber.P1 &&
-        this.objects.p1.y + this.paddleOption.speed > SCREEN_HEIGHT
+          playerNumber == PlayerNumber.P1 &&
+        this.objects.p1.y + this.paddleOption.height + this.paddleOption.speed <= SCREEN_HEIGHT
       ) {
         this.objects.p1.y += this.paddleOption.speed;
       }
       if (
-        PlayerNumber.P2 &&
-        this.objects.p2.y + this.paddleOption.speed > SCREEN_HEIGHT
+          playerNumber == PlayerNumber.P2 &&
+        this.objects.p2.y +  this.paddleOption.height + this.paddleOption.speed <= SCREEN_HEIGHT
       ) {
         this.objects.p2.y += this.paddleOption.speed;
       }
