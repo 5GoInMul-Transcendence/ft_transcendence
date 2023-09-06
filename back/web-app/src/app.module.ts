@@ -15,6 +15,7 @@ import { ChannelsModule } from './channels/channels.module';
 import { GameModule } from './game/game.module';
 import { MatchModule } from './main/match/match.module';
 import { MainUserModule } from './main/mainuser/main-user.module';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { MainUserModule } from './main/mainuser/main-user.module';
     MainUserModule,
     MatchModule,
     GameModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -24,6 +24,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
           .json(ApiResponseForm.redirect(message))
       );
     }
+    if (status === HttpStatus.UNAUTHORIZED) {
+      return (
+        response
+          .status(200)
+          .json(ApiResponseForm.chatBad(message))
+      );
+    }
 
     return response
       .status(200)

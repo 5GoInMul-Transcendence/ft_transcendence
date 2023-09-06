@@ -19,6 +19,23 @@ export class ChannelService {
 		private userService: UserService,
 	) {}
 
+	async getChannel(id: number): Promise<Channel> {
+		return await this.channelRepository.findOne({
+			where: {
+				id,
+			}
+		});
+	}
+
+	async getLinksByChannelAndUser(user: User, channel: Channel): Promise<LinkChannelToUser | null> {
+		return await this.linkChannelToUserRepository.findOne({
+			where: {
+				user,
+				channel,
+			}
+		})
+	}
+
 	async createChannel(dto: CreateChannelReqDto): Promise<Channel> {
 		const {name, mode, password} = dto;
 		const createdChannel = this.channelRepository.create({
@@ -30,7 +47,8 @@ export class ChannelService {
 		return await this.channelRepository.save(createdChannel);
 	}
 
-	async createLinkChannelToUser(dto: CreateLinkChannelToUserReqDto): Promise<LinkChannelToUser> {
+	async createLinkChannelToUser(dto: CreateLinkChannelToUserReqDto)
+	: Promise<LinkChannelToUser> {
 		const { userId, channel } = dto;
 		const user = await this.userService.getUserByUserId(userId);
 		const link = this.linkChannelToUserRepository.create({
