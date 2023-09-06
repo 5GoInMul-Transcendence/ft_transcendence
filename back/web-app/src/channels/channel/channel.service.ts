@@ -7,10 +7,10 @@ import { LinkChannelToUser } from './entity/link-channel-to-user.entity';
 import { User } from 'src/users/user/entities/user.entity';
 import { CreateLinkChannelToUserReqDto } from './dto/create-link-channel-to-user-req.dto';
 import { UserService } from 'src/users/user/user.service';
-import { Message } from './entity/message.entity';
 import { MyChannels } from './dto/my-channels.dto';
 import { RecentMessage } from './dto/recent-message.dto';
 import { Builder } from 'builder-pattern';
+import { Message } from 'src/message/entity/message.entity';
 
 @Injectable()
 export class ChannelService {
@@ -74,24 +74,21 @@ export class ChannelService {
 		});
 	}
 
-	async getMyChannels(links: LinkChannelToUser[]): Promise<MyChannels[] | null> {
+	async getMyChannels(reqUserLinks: LinkChannelToUser[]): Promise<MyChannels[] | null> {
 		let myChannelList: MyChannels[] = [];
 
-		for (const link of links) {
+		for (const link of reqUserLinks) {
       const channel = link.channel;
-			const channelId: number = channel.id;
-			const channelName = channel.name;
 			const message: Message = await this.getRecentMessageByChannelId(channel);
-			const userId = message?.userId;
-			const nickname = userId ? link.user.nickname : null;
+			const nicknameSendingMessage: string = message?.user.nickname;
 			const recentMessage: RecentMessage = Builder(RecentMessage)
 			.message(message?.content ?? null)
-			.nickname(nickname)
+			.nickname(nicknameSendingMessage)
 			.build();
 
 			myChannelList.push(Builder(MyChannels)
-			.id(channelId)
-			.name(channelName)
+			.id(channel.id)
+			.name(channel.name)
 			.recentMessage(recentMessage)
 			.build()
 			);
