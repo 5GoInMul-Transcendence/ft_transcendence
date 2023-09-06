@@ -6,7 +6,7 @@ import { CreateChannelReqDto } from './dto/create-channel-req.dto';
 import { CreateLinkChannelToUserReqDto } from './dto/create-link-channel-to-user-req.dto';
 import { AddChannelResDto } from './dto/add-channel-res.dto';
 import { HashService } from 'src/common/hash/hash.service';
-import { MessageService } from '../message/message.service';
+import { MessageService } from '../../message/message.service';
 import { SendMessageReq } from './dto/send-message-req.dto';
 import { SendMessageDto } from './dto/send-message.dto';
 import { UserService } from 'src/users/user/user.service';
@@ -34,7 +34,7 @@ export class ChannelController {
 		const {name, mode, password} = addChannelReqDto;
 		const userId = session.userId;
 		const user = await this.userService.getUserByUserId(userId);
-		const createdChannel = await this.channelService.createChannel(
+		const channel = await this.channelService.createChannel(
 			Builder(CreateChannelReqDto)
 			.mode(mode)
 			.name(name)
@@ -42,16 +42,22 @@ export class ChannelController {
 			.build()
 		);
 
+		if (channel.mode !== 'protected' && password === '') {
+			throw new HttpException('지윤, 재상아 비밀번호가 없을 땐 null 로 줘야지!', HttpStatus.OK);
+		}
+		if (channel.mode !== 'protected' && password) {
+			throw new HttpException('protected가 아닌 모드에서는 비밀번호를 입력할 수 없습니다.', HttpStatus.OK);
+		}
 		this.channelService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.user(user)
-			.channel(createdChannel)
+			.channel(channel)
 			.role(ChannelRole.OWNER)
 			.build()
 		);
 		return Builder(AddChannelResDto)
-		.id(createdChannel.id)
-		.name(createdChannel.name)
+		.id(channel.id)
+		.name(channel.name)
 		.build();
 	}
 
@@ -77,7 +83,7 @@ export class ChannelController {
 		if (channel === null) {
 			throw new HttpException('채널이 존재하지 않습니다.', HttpStatus.OK);
 		}
-		if (password && channel.password === null) {
+		if (channel.mode !== 'protected') {
 			throw new HttpException('채널에 비밀번호가 존재하지 않습니다!', HttpStatus.OK);
 		}
 		if (await this.hashService.hashCompare(password, channel.password) === false) {
@@ -153,7 +159,6 @@ export class ChannelController {
 		}
 		user = await this.userService.getUserByUserId(userId);
 		link = await this.channelService.getLinkByChannelAndUser(channel, user);
-		console.log('link', link);
 		if (link === null) {
 			throw new HttpException('채널에 입장한 상태가 아닙니다.', HttpStatus.UNAUTHORIZED);
 		}
@@ -161,9 +166,9 @@ export class ChannelController {
 			Builder(SendMessageDto)
 			.channel(channel)
 			.content(message)
-			.userId(userId)
+			.user(user)
 			.timestamp(new Date())
 			.build()
-		)
+		);
 	}
 }
