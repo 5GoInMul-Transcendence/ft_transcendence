@@ -1,4 +1,5 @@
 import {
+  ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -23,7 +24,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   handleConnection(client: Socket): any {
     const { gameKey } = client.handshake.auth;
-
     try {
       this.gameService.checkGameKey(
         Builder(CheckGameKeyDto).gameKey(gameKey).build(),
@@ -35,7 +35,6 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
       client.disconnect();
       return;
     }
-
     this.gameService.connectGame(
       Builder(ConnectGameDto).gameKey(gameKey).client(client).build(),
     );
@@ -72,7 +71,7 @@ export class GameGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('updatePaddle')
-  updatePaddle(client: any, @MessageBody('paddle') playerAction: PlayerAction) {
+  updatePaddle(@ConnectedSocket() client: any, @MessageBody('paddle') playerAction: PlayerAction) {
     const { gameKey } = client.handshake.auth;
 
     this.gameService.updateGameObject(gameKey, playerAction);
