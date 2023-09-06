@@ -23,7 +23,7 @@ import { UserController } from './user.controller';
       Block,
     ]),
   ],
-  controllers: [MeController, UserController],
+  controllers: [UserController],
   providers: [UserService, MemoryUserService, MemoryUserProvider],
   exports: [UserService, MemoryUserService],
 })
