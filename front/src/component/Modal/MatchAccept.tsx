@@ -26,14 +26,11 @@ export default function MatchAccept() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      // 5초 후에 확정 이벤트 실행
-      // enterMatch false && modal close
-      // todo modal 종료
       setModal(null);
       socket?.emit('enterMatch', {
         status: false,
       });
-    }, 8000);
+    }, 10000);
 
     return () => clearTimeout(timer);
   }, []);

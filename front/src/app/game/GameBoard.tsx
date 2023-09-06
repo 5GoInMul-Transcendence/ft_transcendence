@@ -6,7 +6,7 @@ import { Socket } from 'socket.io-client';
 import styled from 'styled-components';
 
 interface Props {
-  socket: Socket<any, any>;
+  socket: Socket<any, any> | undefined;
 }
 
 export default function GameBoard({ socket }: Props) {
@@ -87,22 +87,22 @@ export default function GameBoard({ socket }: Props) {
     const paddle2Down = 40;
     switch (keyPressed) {
       case paddle1Up:
-        socket.emit('updatePaddle', { paddle: 0 });
+        socket?.emit('updatePaddle', { paddle: 0 });
         break;
       case paddle1Down:
-        socket.emit('updatePaddle', { paddle: 1 });
+        socket?.emit('updatePaddle', { paddle: 1 });
         break;
       case paddle2Up:
-        socket.emit('updatePaddle', { paddle: 0 });
+        socket?.emit('updatePaddle', { paddle: 0 });
         break;
       case paddle2Down:
-        socket.emit('updatePaddle', { paddle: 1 });
+        socket?.emit('updatePaddle', { paddle: 1 });
         break;
     }
   }
 
   useEffect(() => {
-    socket.on('updateObject', (res: gameObject) => {
+    socket?.on('updateObject', (res: gameObject) => {
       const p1 = res.p1;
       const p2 = res.p2;
       const ball = res.b;

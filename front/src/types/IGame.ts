@@ -15,3 +15,8 @@ export interface IGame {
     message: string;
   };
 }
+
+export interface IInfoGame {
+  status: string;
+  message: string;
+}

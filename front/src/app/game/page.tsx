@@ -10,17 +10,13 @@ import Board from './Board';
 
 export default function Game() {
   const game = useSwrFetcher<IGame>('/game');
-  const me = useSwrFetcher<IUser>('/me');
+  // const me = useSwrFetcher<IUser>('/me');
 
-  if (!game || !me) return;
+  if (!game) return;
 
-  console.log(game, me);
   return (
     <Container>
-      <Board
-        game={game}
-        player={game.p1.nickname === me.nickname ? 'p1' : 'p2'}
-      />
+      <Board game={game} />
     </Container>
   );
 }
