@@ -16,11 +16,17 @@ import { GameModule } from './game/game.module';
 import { MatchModule } from './main/match/match.module';
 import { MainUserModule } from './main/mainuser/main-user.module';
 import { ImageModule } from './common/image/image.module';
+import {join} from 'path';
+import {ServeStaticModule} from '@nestjs/serve-static';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      renderPath: 'avatar',
     }),
     LoginModule,
     UserModule,
