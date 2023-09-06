@@ -16,8 +16,9 @@ import { GameModule } from './game/game.module';
 import { MatchModule } from './main/match/match.module';
 import { MainUserModule } from './main/mainuser/main-user.module';
 import { ImageModule } from './common/image/image.module';
-import {join} from 'path';
-import {ServeStaticModule} from '@nestjs/serve-static';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { MeModule } from './users/me/me.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import {ServeStaticModule} from '@nestjs/serve-static';
     MatchModule,
     GameModule,
     ImageModule,
+    MeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
@@ -51,9 +53,7 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     // test
     console.log('Session middleware: Receive request');
-    consumer
-      .apply(this.sessionMiddleware)
-      .forRoutes('*'); // 모든 라우트에 세션 미들웨어를 적용
+    consumer.apply(this.sessionMiddleware).forRoutes('*'); // 모든 라우트에 세션 미들웨어를 적용
     consumer
       .apply(AuthMiddleware)
       .exclude('login(.*)', 'signup(.*)', '/') //test '/'
