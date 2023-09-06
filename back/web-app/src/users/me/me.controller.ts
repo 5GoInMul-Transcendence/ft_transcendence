@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Put, Session } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Put,
+  Session,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { MemoryUserService } from '../memoryuser/memory-user.service';
 import { Builder } from 'builder-pattern';
 import { FindUserDto } from '../memoryuser/dto/find-user.dto';
@@ -11,6 +19,7 @@ import { CheckDuplicateNicknameDto } from '../memoryuser/dto/check-duplicate-nic
 import { UpdateNicknameReqDto } from './dto/update-nickname-req.dto';
 import { UserService } from '../user/user.service';
 import { UpdateUserDto } from '../user/dto/update-user.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('me')
 export class MeController {
@@ -83,5 +92,10 @@ export class MeController {
         .twoFactor(dto.twofactor)
         .build(),
     );
+  }
+  @Put('avatar')
+  @UseInterceptors(FileInterceptor('file'))
+  updateAvatar(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
   }
 }
