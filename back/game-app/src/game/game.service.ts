@@ -166,7 +166,7 @@ export class GameService {
     this.gameUserService.updateUserStatus(
       Builder(UpdateGameUserDto)
         .gameKey(dto.gameKey)
-        .status(GameUserStatus.GAME_START)
+        .status(GameUserStatus.GAME_WAIT_START)
         .build(),
     );
 
@@ -174,9 +174,26 @@ export class GameService {
       Builder(FindGameUserByGameKeyDto).gameKey(gameGroup.rivalGameKey).build(),
     );
 
-    if (!rivalUser || rivalUser.status !== GameUserStatus.GAME_START) {
+    if (
+      user.status !== GameUserStatus.GAME_WAIT_START ||
+      !rivalUser ||
+      rivalUser.status !== GameUserStatus.GAME_WAIT_START
+    ) {
       return;
     }
+
+    this.gameUserService.updateUserStatus(
+      Builder(UpdateGameUserDto)
+        .gameKey(user.gameKey)
+        .status(GameUserStatus.GAME_START)
+        .build(),
+    );
+    this.gameUserService.updateUserStatus(
+      Builder(UpdateGameUserDto)
+        .gameKey(rivalUser.gameKey)
+        .status(GameUserStatus.GAME_START)
+        .build(),
+    );
 
     const gameProcessUnit = this.gameProcessUnits.get(user.gameKey);
     gameProcessUnit.gameStatus = GameActionStatus.PLAY;
