@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { GameMode } from './enums/game-mode.enum';
 import { AbstractGame } from './mode/game.abstract';
 import { ClassicGame } from './mode/classic-game';
-import { PaddleGame } from './mode/paddle-game';
+import { GoldenPongGame } from './mode/golden-pong-game';
 import { SpeedGame } from './mode/speed-game';
 import { Builder } from 'builder-pattern';
 import { CreateGameDto } from './dto/create-game.dto';
@@ -203,7 +203,7 @@ export class GameService {
       case GameMode.CLASSIC:
         return new ClassicGame();
       case GameMode.PADDLE:
-        return new PaddleGame();
+        return new GoldenPongGame();
       case GameMode.SPEED:
         return new SpeedGame();
     }
