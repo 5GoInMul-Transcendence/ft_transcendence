@@ -8,16 +8,38 @@ import useSwrFetcher from '@/hooks/useSwrFetcher';
 import { IUserDetail } from '@/types/IUser';
 import { useSetRecoilState } from 'recoil';
 import { modalState } from '@/utils/recoil/atom';
+import { useCallback, useRef } from 'react';
 
 export default function Profile() {
   const data = useSwrFetcher<IUserDetail>('/me/details');
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const setModal = useSetRecoilState(modalState);
+  const onUploadImage = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.files) {
+        return;
+      }
+      const formData = new FormData();
+      formData.append('file', e.target.files[0]);
+      fetch('http://localhost:8080/me/upload', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include',
+      });
+    },
+    []
+  );
 
   return (
     <Container>
       <TopWrapper>
         <Wrapper $width={3}>
-          <EditProfileInput type='file' accept='image/*' />
+          <EditProfileInput
+            type='file'
+            accept='image/*'
+            ref={inputRef}
+            onChange={onUploadImage}
+          />
           <ProfileImage url='' size='250px' />
         </Wrapper>
         <Wrapper $width={7}>
