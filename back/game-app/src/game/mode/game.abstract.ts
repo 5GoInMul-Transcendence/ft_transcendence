@@ -90,7 +90,7 @@ export abstract class AbstractGame {
         this.objects.b.y < this.objects.p2.y + this.paddleOption.height
       ) {
         this.ballOption.xDirection *= -1;
-        this.ballOption.speed += 0.05;
+        this.ballOption.speed += this.ballOption.speedUp;
       }
     }
 
