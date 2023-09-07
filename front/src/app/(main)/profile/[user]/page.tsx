@@ -16,6 +16,7 @@ export default function Profile({ params }: { params: { user: string } }) {
   const data = useSwrFetcher<IUser>(`user/${params.user}`);
   const [follw, onChangeFollow] = useToggle(false);
   const [block, onChangeBlock] = useToggle(false);
+
   const onClickDM = () => {
     axiosInstance
       .post('/channel', { name: null, mode: 'dm', password: null })
@@ -23,11 +24,14 @@ export default function Profile({ params }: { params: { user: string } }) {
         //성공 시 router.push('/chats/${channelid}');
       });
   };
+
+  if (!data) return;
+
   return (
     <Container>
       <TopWrapper>
         <Wrapper $width={3}>
-          <ProfileImage url='' size='250px' />
+          <ProfileImage url={data.avatar} size='250px' />
           <TogglesWrapper>
             <Toggle
               text='follow'

@@ -33,20 +33,6 @@ export default function Board({ game }: Props) {
 
   const readyGame = () => {
     socket?.emit('readyGame');
-
-    // 테스트
-    // setStandbyGame(true);
-    // setTimeout(() => {
-    //   socket.emit('startGame');
-    //   setStandbyGame(false);
-    // }, 3000);
-    // setTimeout(() => {
-    //   setEndGame(true);
-    // }, 4000);
-    // setTimeout(() => {
-    //   setEndGame(false);
-    // }, 6000);
-
     setReadyGame(false);
   };
 
@@ -78,9 +64,9 @@ export default function Board({ game }: Props) {
   }, [socket]);
 
   if (!socket) return;
+
   return (
     <>
-      {' '}
       <ScoreBoardDiv>
         <ScoreBoard
           user1={game.p1.nickname}
