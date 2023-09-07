@@ -16,6 +16,7 @@ import { Channel } from './entity/channel.entity';
 import { EnterChannelRes } from './dto/enter-channel-res.dto';
 import { ChannelRole } from './enum/channel-role.enum';
 import { RecentMessageAtEnter } from './dto/recent-message-at-enter.dto';
+import { ChannelMode } from './enum/channel-mode.enum';
 
 @Controller('channel')
 export class ChannelController {
@@ -42,10 +43,13 @@ export class ChannelController {
 			.build()
 		);
 
-		if (channel.mode !== 'protected' && password === '') {
+		if (channel.mode !== ChannelMode.PROTECTED && password === '') { // 파이프 구현하고 삭제하기
 			throw new HttpException('지윤, 재상아 비밀번호가 없을 땐 null 로 줘야지!', HttpStatus.OK);
 		}
-		if (channel.mode !== 'protected' && password) {
+		if (channel.mode === ChannelMode.DM) {
+			throw new HttpException('DM 모드 생성은 Post /channel/dm API를 호출해야 합니다!', HttpStatus.OK);
+		}
+		if (channel.mode !== ChannelMode.PROTECTED && password) {
 			throw new HttpException('protected가 아닌 모드에서는 비밀번호를 입력할 수 없습니다.', HttpStatus.OK);
 		}
 		this.channelService.createLinkChannelToUser(
@@ -83,8 +87,8 @@ export class ChannelController {
 		if (channel === null) {
 			throw new HttpException('채널이 존재하지 않습니다.', HttpStatus.OK);
 		}
-		if (channel.mode !== 'protected') {
-			throw new HttpException('채널에 비밀번호가 존재하지 않습니다!', HttpStatus.OK);
+		if (channel.mode !== ChannelMode.PROTECTED) {
+			throw new HttpException('해당 채널은 비밀번호가 존재하지 않습니다!', HttpStatus.OK);
 		}
 		if (await this.hashService.hashCompare(password, channel.password) === false) {
 			throw new HttpException('비밀번호가 일치하지 않습니다!', HttpStatus.OK);
@@ -109,12 +113,17 @@ export class ChannelController {
 		let link: LinkChannelToUser;
 		let recentMessages: RecentMessageAtEnter[];
 
-		// if (ban 일 때)
-		// 	throw new HttpException('채널에 차단(ban)되었습니다.', HttpStatus.OK);
-
 		if (!channel) {
 			throw new HttpException('채널이 존재하지 않습니다!', HttpStatus.OK);
 		}
+		if (channel.mode === ChannelMode.PROTECTED) {
+			throw new HttpException('비밀번호를 입력하여 입장해주십시오.', HttpStatus.OK);
+		}
+		if (channel.mode === ChannelMode.PRIVATE || channel.mode === ChannelMode.DM) {
+			throw new HttpException('해당 모드의 채널엔 입장할 수 없습니다!', HttpStatus.OK);
+		}
+		// if (ban 일 때)
+		// 	throw new HttpException('채널에 차단(ban)되었습니다.', HttpStatus.OK);
 
 		userId = session.userId;
 		user = await this.userService.getUserByUserId(userId);
