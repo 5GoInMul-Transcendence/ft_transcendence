@@ -14,6 +14,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { Friend } from '../../friend/entities/friend.entity';
 import { Follower } from '../../friend/entities/follower.entity';
 import { Block } from '../../block/block.entity';
+import { Achievement } from '../../achievement/entities/achievement.entity';
 @Injectable()
 export class UserService {
   constructor(
@@ -29,7 +30,8 @@ export class UserService {
     private followerRepository: Repository<Follower>,
     @InjectRepository(Block)
     private blockRepository: Repository<Block>,
-
+    @InjectRepository(Achievement)
+    private achievementRepository: Repository<Achievement>,
     private memoryUserService: MemoryUserService,
   ) {}
 
@@ -101,6 +103,7 @@ export class UserService {
     await this.followerRepository.save({ userId });
     await this.friendRepository.save({ userId });
     await this.blockRepository.save({ userId });
+    await this.achievementRepository.save({ userId });
     return createdUser;
   }
 
