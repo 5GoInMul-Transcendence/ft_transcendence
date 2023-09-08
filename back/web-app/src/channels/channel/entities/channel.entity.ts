@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Message } from "../../../message/entity/message.entity";
+import { Message } from "../../../message/entities/message.entity";
 import { LinkChannelToUser } from "./link-channel-to-user.entity";
 
 @Entity('channel')

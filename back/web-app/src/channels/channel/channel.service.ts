@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Channel } from './entity/channel.entity';
+import { Channel } from './entities/channel.entity';
 import { Repository } from 'typeorm';
 import { CreateChannelReqDto } from './dto/create-channel-req.dto';
-import { LinkChannelToUser } from './entity/link-channel-to-user.entity';
+import { LinkChannelToUser } from './entities/link-channel-to-user.entity';
 import { User } from 'src/users/user/entities/user.entity';
 import { CreateLinkChannelToUserReqDto } from './dto/create-link-channel-to-user-req.dto';
 import { UserService } from 'src/users/user/user.service';
 import { MyChannels } from './dto/my-channels.dto';
 import { RecentMessage } from './dto/recent-message.dto';
 import { Builder } from 'builder-pattern';
-import { Message } from 'src/message/entity/message.entity';
+import { Message } from 'src/message/entities/message.entity';
 
 @Injectable()
 export class ChannelService {
@@ -79,7 +79,7 @@ export class ChannelService {
 
 		for (const link of reqUserLinks) {
       const channel = link.channel;
-			const message: Message = await this.getRecentMessageByChannelId(channel);
+			const message: Message = await this.getRecentMessageRelatedUserByChannelId(channel);
 			const nicknameSendingMessage: string = message?.user.nickname;
 			const recentMessage: RecentMessage = Builder(RecentMessage)
 			.message(message?.content ?? null)
@@ -110,14 +110,17 @@ export class ChannelService {
 		});
 	}
 
-	private async getRecentMessageByChannelId(channel: Channel): Promise<Message | null> {
+	private async getRecentMessageRelatedUserByChannelId(channel: Channel): Promise<Message | null> {
 		return await this.messageRepositoy.findOne({
 			where: {
 				channel,
 			},
 			order: {
 				timestamp: 'DESC',
-			}
+			},
+			relations: [
+				'user',
+			]
 		});
 	}
 }

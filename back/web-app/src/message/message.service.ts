@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Message } from './entity/message.entity';
+import { Message } from './entities/message.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SendMessageDto } from '../channels/channel/dto/send-message.dto';
-import { Channel } from '../channels/channel/entity/channel.entity';
+import { Channel } from '../channels/channel/entities/channel.entity';
 import { RecentMessageAtEnter } from 'src/channels/channel/dto/recent-message-at-enter.dto';
 import { Builder } from 'builder-pattern';
 
