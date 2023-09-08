@@ -11,6 +11,7 @@ import { MyChannels } from './dto/my-channels.dto';
 import { RecentMessage } from './dto/recent-message.dto';
 import { Builder } from 'builder-pattern';
 import { Message } from 'src/message/entities/message.entity';
+import { MessageService } from 'src/message/message.service';
 
 @Injectable()
 export class ChannelService {
@@ -19,8 +20,7 @@ export class ChannelService {
 		private channelRepository: Repository<Channel>,
 		@InjectRepository(LinkChannelToUser)
 		private linkChannelToUserRepository: Repository<LinkChannelToUser>,
-		@InjectRepository(Message)
-		private messageRepositoy: Repository<Message>,
+		private messageService: MessageService,
 		private userService: UserService,
 	) {}
 
@@ -37,12 +37,17 @@ export class ChannelService {
 	}
 
 	async getLinkByChannelAndUser(channel: Channel, user: User): Promise<LinkChannelToUser | null> {
-		return await this.linkChannelToUserRepository.findOne({
-			where: {
-				user,
-				channel,
-			}
-		})
+		return await this.linkChannelToUserRepository
+		.createQueryBuilder('link_channel_to_user')
+		.where('link_channel_to_user.channel = :channelId', {channelId: channel.id})
+		.where('link_channel_to_user.user = :userId', {userId: user.id})
+		.getOne();
+		// return await this.linkChannelToUserRepository.findOne({
+		// 	where: {
+		// 		user,
+		// 		channel,
+		// 	}
+		// })
 	}
 
 	async createChannel(dto: CreateChannelReqDto): Promise<Channel> {
@@ -74,12 +79,12 @@ export class ChannelService {
 		});
 	}
 
-	async getMyChannels(reqUserLinks: LinkChannelToUser[]): Promise<MyChannels[] | null> {
+	async getMyChannels(reqUserLinks: LinkChannelToUser[]): Promise<MyChannels[]> {
 		let myChannelList: MyChannels[] = [];
 
 		for (const link of reqUserLinks) {
       const channel = link.channel;
-			const message: Message = await this.getRecentMessageRelatedUserByChannelId(channel);
+			const message: Message = await this.messageService.getRecentMessageRelatedUserByChannelId(channel);
 			const nicknameSendingMessage: string = message?.user.nickname;
 			const recentMessage: RecentMessage = Builder(RecentMessage)
 			.message(message?.content ?? null)
@@ -96,31 +101,23 @@ export class ChannelService {
 		return myChannelList;
 	}
 
-	async getLinksRelatedChannelAndUserByUserId(userId: number): Promise<LinkChannelToUser[] | null>{
+	async getLinksRelatedChannelAndUserByUserId(userId: number): Promise<LinkChannelToUser[]>{
 		const user = await this.userService.getUserByUserId(userId);
 		
-		return await this.linkChannelToUserRepository.find({
-			where: {
-				user,
-			},
-			relations: [
-				"channel",
-				"user",
-			],
-		});
-	}
-
-	private async getRecentMessageRelatedUserByChannelId(channel: Channel): Promise<Message | null> {
-		return await this.messageRepositoy.findOne({
-			where: {
-				channel,
-			},
-			order: {
-				timestamp: 'DESC',
-			},
-			relations: [
-				'user',
-			]
-		});
+		return await this.linkChannelToUserRepository
+		.createQueryBuilder('link_channel_to_user')
+		.leftJoinAndSelect('link_channel_to_user.channel', 'channel')
+		.leftJoinAndSelect('link_channel_to_user.user', 'user')
+		.where('link_channel_to_user.user = :userId', {userId: user.id})
+		.getMany();
+		// return await this.linkChannelToUserRepository.find({
+		// 	where: {
+		// 		user,
+		// 	},
+		// 	relations: [
+		// 		"channel",
+		// 		"user",
+		// 	],
+		// });
 	}
 }

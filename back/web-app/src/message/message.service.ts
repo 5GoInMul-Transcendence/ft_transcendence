@@ -50,16 +50,22 @@ export class MessageService {
 	}
 
 	async getRecentMessageRelatedUserByChannelId(channel: Channel): Promise<Message | null> {
-		return await this.messageRepository.findOne({
-			where: {
-				channel,
-			},
-			order: {
-				timestamp: 'DESC',
-			},
-			relations: [
-				'user'
-			],
-		});
+		return await this.messageRepository
+		.createQueryBuilder('message')
+		.leftJoinAndSelect('message.user', 'user')
+		.where('message.channel = :channelId', {channelId: channel.id})
+		.orderBy('message.timestamp', 'DESC')
+		.getOne();
+		// return await this.messageRepository.findOne({
+		// 	where: {
+		// 		channel,
+		// 	},
+		// 	order: {
+		// 		timestamp: 'DESC',
+		// 	},
+		// 	relations: [
+		// 		'user',
+		// 	]
+		// });
 	}
 }

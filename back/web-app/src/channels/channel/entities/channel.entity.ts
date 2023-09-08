@@ -20,6 +20,9 @@ export class Channel {
 	})
 	password: string | null;
 
+  @Column('integer', { array: true, default: [] })
+	bans: number[];
+
 	@OneToMany(() => LinkChannelToUser, (link) => link.channel)
 	links: LinkChannelToUser[];
 
