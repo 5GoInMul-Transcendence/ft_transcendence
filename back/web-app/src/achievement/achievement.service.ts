@@ -1,4 +1,6 @@
 import {
+  HttpException,
+  HttpStatus,
   Injectable,
   OnModuleInit,
   ServiceUnavailableException,
@@ -33,6 +35,18 @@ export class AchievementService implements OnModuleInit {
     });
   }
 
+  async findAchievementByUserId(dto: any) {
+    const userAchievement = await this.achievementRepository.findOneBy({
+      userId: dto.userId,
+    });
+
+    if (!userAchievement) {
+      throw new HttpException('유저의 업적을 찾을 수 없습니다.', HttpStatus.OK);
+    }
+
+    return userAchievement;
+  }
+
   async updateAchievement(dto: UpdateAchievementDto) {
     const userAchievement = await this.achievementRepository.findOneBy({
       userId: dto.userId,
@@ -46,7 +60,8 @@ export class AchievementService implements OnModuleInit {
     }
 
     /* 보상 타입에 맞는 유저의 정보(레벨, 포인터)를 가져옵니다. */
-    const userAchievementGrade: AchievementGrade = userAchievement[achievementTable.entityProperty];
+    const userAchievementGrade: AchievementGrade =
+      userAchievement[achievementTable.entityProperty];
     userAchievementGrade.point += 1;
 
     /* 유저 레벨에 맞는 보상 조건을 가져오고
