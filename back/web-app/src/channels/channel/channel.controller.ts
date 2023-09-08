@@ -119,7 +119,7 @@ export class ChannelController {
 		if (channel.mode === ChannelMode.PROTECTED) {
 			throw new HttpException('비밀번호를 입력하여 입장해주십시오.', HttpStatus.OK);
 		}
-		if (channel.mode === ChannelMode.PRIVATE || channel.mode === ChannelMode.DM) {
+		if (channel.mode === ChannelMode.PRIVATE) {
 			throw new HttpException('해당 모드의 채널엔 입장할 수 없습니다!', HttpStatus.OK);
 		}
 		// if (ban 일 때)
@@ -137,6 +137,9 @@ export class ChannelController {
 				.role(ChannelRole.USER)
 				.build()
 			);
+		}
+		if (channel.mode === ChannelMode.DM) {
+
 		}
 		
 		recentMessages = await this.messageService.getMessages(channel.id, user.nickname);
