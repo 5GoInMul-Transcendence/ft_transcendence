@@ -12,6 +12,6 @@ export class Achievement {
   @Column({ type: 'json', name: 'game_win', default: { level: 0, point: 0 } })
   gameWin: AchievementGrade;
 
-  @Column({ type: 'integer', array: true, default: [] })
+  @Column({ type: 'varchar', length: '10', array: true, default: [] })
   achievements: string[];
 }
