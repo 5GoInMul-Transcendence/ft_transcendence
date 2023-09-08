@@ -10,6 +10,7 @@ import { UserModule } from 'src/users/user/user.module';
 import { Message } from '../message/entities/message.entity';
 import { MessageModule } from '../message/message.module';
 import { HashModule } from 'src/common/hash/hash.module';
+import { ChannelExceptionService } from './channel/exception/channel-exception.service';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { HashModule } from 'src/common/hash/hash.module';
   controllers: [ChannelsController, ChannelController],
   providers: [
     ChannelService,
+    ChannelExceptionService,
   ]
 })
 export class ChannelsModule {}

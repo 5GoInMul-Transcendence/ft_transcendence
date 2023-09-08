@@ -17,6 +17,7 @@ import { EnterChannelRes } from './dto/enter-channel-res.dto';
 import { ChannelRole } from './enum/channel-role.enum';
 import { RecentMessageAtEnter } from './dto/recent-message-at-enter.dto';
 import { ChannelMode } from './enum/channel-mode.enum';
+import { ChannelExceptionService } from './exception/channel-exception.service';
 
 @Controller('channel')
 export class ChannelController {
@@ -25,6 +26,7 @@ export class ChannelController {
 		private hashService: HashService,
 		private messageService: MessageService,
 		private userService: UserService,
+		private exceptionService: ChannelExceptionService,
 	) {}
 
 	@Post()
@@ -47,10 +49,10 @@ export class ChannelController {
 			throw new HttpException('지윤, 재상아 비밀번호가 없을 땐 null 로 줘야지!', HttpStatus.OK);
 		}
 		if (channel.mode === ChannelMode.DM) {
-			throw new HttpException('DM 모드 생성은 Post /channel/dm API를 호출해야 합니다!', HttpStatus.OK);
+			this.exceptionService.itIsInvalidRequest();
 		}
 		if (channel.mode !== ChannelMode.PROTECTED && password) {
-			throw new HttpException('protected가 아닌 모드에서는 비밀번호를 입력할 수 없습니다.', HttpStatus.OK);
+			this.exceptionService.itIsInvalidRequest();
 		}
 		this.channelService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
@@ -70,28 +72,31 @@ export class ChannelController {
 		const channel = await this.channelService.getChannel(channelId);
 
 		if (channel === null) {
-			throw new HttpException('채널이 존재하지 않습니다.', HttpStatus.OK);
+			this.exceptionService.notExistChannel();
 		}
 	}
 
 	@Post(':channelid/password')
 	async authenticatePassword(
-		@Session() session: Record<string, any>,
 		@Param('channelid') channelId: number,
+		@Session() session: Record<string, any>,
 		@Body('password') password: string, // pipe
 	): Promise<void> {
+		const channel = await this.channelService.getChannel(channelId);
 		const userId = session.userId;
 		const user = await this.userService.getUserByUserId(userId);
-		const channel = await this.channelService.getChannel(channelId);
 
 		if (channel === null) {
-			throw new HttpException('채널이 존재하지 않습니다.', HttpStatus.OK);
+			this.exceptionService.notExistChannel();
 		}
 		if (channel.mode !== ChannelMode.PROTECTED) {
-			throw new HttpException('해당 채널은 비밀번호가 존재하지 않습니다!', HttpStatus.OK);
+			this.exceptionService.itIsInvalidRequest();
+		}
+		if (!password) {
+			this.exceptionService.itIsInvalidRequest();
 		}
 		if (await this.hashService.hashCompare(password, channel.password) === false) {
-			throw new HttpException('비밀번호가 일치하지 않습니다!', HttpStatus.OK);
+			this.exceptionService.itIsInvalidRequest();
 		}
 		this.channelService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
@@ -114,16 +119,20 @@ export class ChannelController {
 		let recentMessages: RecentMessageAtEnter[];
 
 		if (!channel) {
-			throw new HttpException('채널이 존재하지 않습니다!', HttpStatus.OK);
+			this.exceptionService.notExistChannel();
 		}
 		if (channel.mode === ChannelMode.PROTECTED) {
-			throw new HttpException('비밀번호를 입력하여 입장해주십시오.', HttpStatus.OK);
+			this.exceptionService.itIsInvalidRequest();
 		}
 		if (channel.mode === ChannelMode.PRIVATE) {
-			throw new HttpException('해당 모드의 채널엔 입장할 수 없습니다!', HttpStatus.OK);
+			this.exceptionService.itIsInvalidRequest();
 		}
+		// dm 모드 생기면 추가
+		// if (channel.mode !== ChannelMode.DM && channel.invitedUser) {
+		// 	this.exceptionService.itIsInvalidRequest();
+		// }
 		// if (ban 일 때)
-		// 	throw new HttpException('채널에 차단(ban)되었습니다.', HttpStatus.OK);
+		// this.exceptionService.youAreBanUser();
 
 		userId = session.userId;
 		user = await this.userService.getUserByUserId(userId);
@@ -138,9 +147,9 @@ export class ChannelController {
 				.build()
 			);
 		}
-		if (channel.mode === ChannelMode.DM) {
-
-		}
+		// dm 일 때 구현
+		// if (channel.mode === ChannelMode.DM) {
+		// }
 		
 		recentMessages = await this.messageService.getMessages(channel.id, user.nickname);
 
@@ -158,7 +167,7 @@ export class ChannelController {
 		@Param('channelid') channelId: number,
 		@Session() session: Record<string, any>,
 		@Body() dto: SendMessageReq,
-		) {
+		): Promise<void> {
 		const userId: number = session.userId;
 		const { message } = dto;
 		let channel: Channel;
@@ -167,12 +176,12 @@ export class ChannelController {
 
 		channel = await this.channelService.getChannel(channelId);
 		if (!channel) {
-			throw new HttpException('채널이 존재하지 않습니다!', HttpStatus.OK);
+			this.exceptionService.notExistChannel();
 		}
 		user = await this.userService.getUserByUserId(userId);
 		link = await this.channelService.getLinkByChannelAndUser(channel, user);
 		if (link === null) {
-			throw new HttpException('채널에 입장한 상태가 아닙니다.', HttpStatus.UNAUTHORIZED);
+			this.exceptionService.notEnterUserInChannel();
 		}
 		this.messageService.sendMessage(
 			Builder(SendMessageDto)

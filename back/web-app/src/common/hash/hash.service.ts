@@ -20,8 +20,6 @@ export class HashService {
 	 * @returns 
 	 */
 	async hashCompare(input: string, origin: string): Promise<boolean> {
-		// if (!input)
-		// 	return true;
     return await bcrypt.compare(
       input,
       origin,
