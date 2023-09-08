@@ -26,21 +26,23 @@ export class MessageService {
 		return await this.messageRepository.save(message);
 	}
 
-	async getMessages(channelId: number, nickname: string): Promise<RecentMessageAtEnter[]> {
+	async getMessages(channelId: number): Promise<RecentMessageAtEnter[]> {
 		const maxMessagesCount = 50;
 		const messages = await this.messageRepository
 		.createQueryBuilder('message')
-		.select(['message.id', 'message.content'])
-		.where('message.channel = :channelId', {channelId})
-		// .where('message.channel.id = :channelId', {channelId}) // 위와 같은 의미라는 것을 의미, 삭제해도 됨
+		.select(['message.id', 'message.content', 'message.timestamp'])
+		.leftJoinAndSelect('message.user', 'user') // user 라는 사용자 entity 선택 후 이를 join 함
+		.where('message.channel = :channelId', {channelId}) // .where('message.channel.id = :channelId', {channelId}) // 위와 같은 의미라는 것을 의미, 삭제해도 됨
 		.orderBy('message.timestamp', 'DESC')
 		.take(maxMessagesCount)
 		.getMany();
 		const RecentMessages: RecentMessageAtEnter[] = messages.map((message) => {
+			const nicknameSendingMessage: string = message.user.nickname;
+
 			return Builder(RecentMessageAtEnter)
 			.id(message.id)
 			.content(message.content)
-			.nickname(nickname)
+			.nickname(nicknameSendingMessage)
 			.build()
 		});
 

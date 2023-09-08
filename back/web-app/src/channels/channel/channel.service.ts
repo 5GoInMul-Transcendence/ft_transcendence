@@ -28,7 +28,7 @@ export class ChannelService {
 		return link !== null;
 	}
 
-	async getChannel(id: number): Promise<Channel> {
+	async getChannel(id: number): Promise<Channel | null> {
 		return await this.channelRepository.findOne({
 			where: {
 				id,

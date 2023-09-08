@@ -151,7 +151,7 @@ export class ChannelController {
 		// if (channel.mode === ChannelMode.DM) {
 		// }
 		
-		recentMessages = await this.messageService.getMessages(channel.id, user.nickname);
+		recentMessages = await this.messageService.getMessages(channel.id);
 
 		return Builder(EnterChannelRes)
 		.id(channel.id)
