@@ -16,6 +16,7 @@ import { GameModule } from './game/game.module';
 import { MatchModule } from './main/match/match.module';
 import { MainUserModule } from './main/mainuser/main-user.module';
 import { MessageModule } from './message/message.module';
+import { AchievementModule } from './achievement/achievement.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { MessageModule } from './message/message.module';
     MatchModule,
     GameModule,
     MessageModule,
+    AchievementModule,
   ],
   controllers: [AppController],
   providers: [AppService],
