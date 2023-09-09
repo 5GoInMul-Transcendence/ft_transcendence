@@ -8,5 +8,6 @@ import { GameCore } from './core/game.core';
 @Module({
   controllers: [GameController],
   providers: [GameService, GameGateway, GameUserService, GameCore],
+  exports: [GameService],
 })
 export class GameModule {}
