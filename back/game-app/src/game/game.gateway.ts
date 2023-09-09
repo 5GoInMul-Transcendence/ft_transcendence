@@ -15,7 +15,7 @@ import { StartGameDto } from './dto/start-game-dto';
 import { CheckGameKeyDto } from './dto/check-game-key.dto';
 import { CheckReconnectionDto } from './dto/check-reconnection.dto';
 import { CheckDisconnectByReconnectionDto } from './dto/check-disconnect-by-reconnection.dto';
-import { PlayerAction } from './mode/enums/player-action.enum';
+import { PlayerAction } from './player/enums/player-action.enum';
 import { DisconnectGameDto } from './dto/disconnect-game-dto';
 
 @WebSocketGateway(10003, { namespace: 'game', cors: { origin: '*' } })

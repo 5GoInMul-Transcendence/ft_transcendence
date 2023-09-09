@@ -1,4 +1,4 @@
-import { GameMode } from '../enums/game-mode.enum';
+import { GameMode } from '../mode/enums/game-mode.enum';
 
 export class CreateGameDto {
   readonly gameId: string;
