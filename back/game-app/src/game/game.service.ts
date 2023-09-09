@@ -62,6 +62,7 @@ export class GameService {
     const { player } = this.gameGroup.get(dto.gameKey);
 
     player.status = PlayerStatus.CONNECT;
+    player.client = dto.client;
   }
 
   disconnectGame(dto: DisconnectGameDto) {
