@@ -44,7 +44,9 @@ export class GameService {
   }
 
   checkReconnection(dto: CheckReconnectionDto) {
-    if (user) {
+    const { player } = this.gameGroup.get(dto.gameKey);
+
+    if (player.status >= PlayerStatus.CONNECT) {
       dto.client[this.reconnection] = true;
       throw new WsException('');
     }
@@ -101,10 +103,8 @@ export class GameService {
 
   readyGame(dto: ReadyGameDto) {
     const gameGroup = this.gameGroup.get(dto.gameKey);
-    
-    const gameProcessUnit = this.addGameProcessUnit(
-      gameGroup.game,
-    );
+
+    const gameProcessUnit = this.addGameProcessUnit(gameGroup.game);
 
     for (const gamePlayer of gameProcessUnit.gamePlayers.values()) {
       gamePlayer.client.emit(
