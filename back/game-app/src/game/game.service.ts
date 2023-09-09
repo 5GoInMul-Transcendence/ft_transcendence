@@ -139,6 +139,8 @@ export class GameService {
     }
 
     game.status = GameStatus.START;
+    player.client.emit('infoGame', Builder(InfoGameRes).status(game.status).build());
+    rivalPlayer.client.emit('infoGame', Builder(InfoGameRes).status(game.status).build());
 
     this.gameCore.push(this.gameProcessUnits.get(game.id));
   }
