@@ -1,18 +1,11 @@
-import { v4 as uuid } from 'uuid';
-import {
-  BallOption,
-  PaddleOption,
-  ScoreOption,
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-} from './object/game-object.option';
+import { BallOption, PaddleOption, ScoreOption, SCREEN_HEIGHT, SCREEN_WIDTH } from './object/game-object.option';
 import { GameObjects, GameScore } from './object/game-object';
-import { GamePlayResult } from './enums/game-play-result.enum';
-import { PlayerNumber } from '../enums/player-number.enum';
-import { PlayerAction } from './enums/player-action.enum';
+import { PlayerAction } from '../player/enums/player-action.enum';
+import { GameStatus } from './enums/game-status.enum';
 
 export abstract class AbstractGame {
   public gameId: string;
+  public status: GameStatus;
   public score: GameScore;
   public objects: GameObjects;
   public winner: PlayerNumber;
@@ -22,6 +15,7 @@ export abstract class AbstractGame {
 
   constructor(gameId: string) {
     this.gameId = gameId;
+    this.status = GameStatus.CREATED;
     this.scoreOption = new ScoreOption();
     this.ballOption = new BallOption();
     this.paddleOption = new PaddleOption();
