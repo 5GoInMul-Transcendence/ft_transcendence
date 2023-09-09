@@ -23,6 +23,8 @@ import { DisconnectGameDto } from './dto/disconnect-game-dto';
 import { Player } from './player/enums/player';
 import { PlayerStatus } from './player/enums/player-status.enum';
 import { PlayerNumber } from './player/enums/player-number.enum';
+import { MainService } from '../main/main.service';
+import { EndGameDto } from './dto/end-game.dto';
 
 @Injectable()
 export class GameService {
@@ -30,7 +32,7 @@ export class GameService {
   private gameGroup: Map<string, GameGroup>;
   private gameProcessUnits: Map<string, GameProcessUnit>;
 
-  constructor(private gameCore: GameCore) {
+  constructor(private gameCore: GameCore, private mainService: MainService) {
     this.gameGroup = new Map<string, GameGroup>();
     this.gameProcessUnits = new Map<string, GameProcessUnit>();
   }
@@ -68,8 +70,21 @@ export class GameService {
   disconnectGame(dto: DisconnectGameDto) {
     const gameGroup = this.gameGroup.get(dto.gameKey);
 
+    const webServer = this.mainService.getWebServer();
+    webServer.emit(
+      'endGame',
+      Builder(EndGameDto)
+        .gameId(game.id)
+        .gameScore(game.score)
+        .winner(game.winner)
+        .build(),
+    );
+
+    game.status = GameStatus.DESTROYED;
     this.gameGroup.delete(dto.gameKey);
-    this.gameProcessUnits.delete(dto.gameKey);
+    this.gameProcessUnits.delete(game.id);
+
+    rivalPlayer.client.disconnect();
   }
 
   createGame(dto: CreateGameDto) {
