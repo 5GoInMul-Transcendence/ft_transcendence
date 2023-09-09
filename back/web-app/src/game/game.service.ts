@@ -1,8 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { EnterGameDto } from './dto/enter-game.dto';
 import { FindGameDto } from './dto/find-game.dto';
 import { GameGroup } from './game-group';
@@ -12,11 +8,15 @@ import { FindUserDto } from '../users/memoryuser/dto/find-user.dto';
 import { FindGameReturnDto } from './dto/find-game-return.dto';
 import { GamePlayer } from './game-player';
 import {
+  EventListener,
   InjectIoClientProvider,
   IoClient,
   OnConnect,
   OnConnectError,
 } from 'nestjs-io-client';
+import { v4 as uuid } from 'uuid';
+import { MainUserService } from '../main/mainuser/main-user.service';
+import { CreateGameDto } from './dto/create-game.dto';
 
 @Injectable()
 export class GameService {
@@ -25,6 +25,7 @@ export class GameService {
   constructor(
     @InjectIoClientProvider()
     private readonly gameServer: IoClient,
+    private mainUserService: MainUserService,
     private memoryUserService: MemoryUserService,
   ) {
     this.gameGroups = new Map<number, GameGroup>();
@@ -41,6 +42,20 @@ export class GameService {
   }
 
   async gameEnter(dto: EnterGameDto) {
+    const gameId = uuid();
+    const p1GameKey = uuid();
+    const p2GameKey = uuid();
+
+    this.gameServer.emit(
+      'createGame',
+      Builder(CreateGameDto)
+        .gameId(gameId)
+        .gameMode(dto.gameMode)
+        .p1GameKey(p1GameKey)
+        .p2GameKey(p2GameKey)
+        .build(),
+    );
+
     const gameGroup = Builder(GameGroup)
       .gameId(gameId)
       .p1({ id: dto.p1.id, gameKey: p1GameKey })
