@@ -47,6 +47,7 @@ export class GameProcessUnit {
         });
       }
 
+      this.players[0].client.disconnect();
       return ProcessStatus.END;
     }
   }
