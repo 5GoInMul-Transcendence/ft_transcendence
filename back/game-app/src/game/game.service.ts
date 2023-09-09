@@ -126,12 +126,21 @@ export class GameService {
   }
 
   startGame(dto: StartGameDto) {
-    const gameGroup = this.gameGroup.get(dto.gameKey);
+    const { game, player, rivalPlayer } = this.gameGroup.get(dto.gameKey);
 
-    const gameProcessUnit = this.gameProcessUnits.get(user.gameKey);
-    gameProcessUnit.gameStatus = GameStatus.PLAY;
+    if (game.status != GameStatus.STANDBY) {
+      return;
+    }
 
-    this.gameCore.push(gameProcessUnit);
+    player.status = PlayerStatus.GAME_START;
+
+    if (rivalPlayer.status != PlayerStatus.GAME_START) {
+      return;
+    }
+
+    game.status = GameStatus.START;
+
+    this.gameCore.push(this.gameProcessUnits.get(game.id));
   }
 
   updateGameObject(gameKey: string, playerAction: PlayerAction) {
