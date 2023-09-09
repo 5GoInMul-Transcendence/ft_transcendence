@@ -1,6 +1,6 @@
-import { PlayerStatus } from './player-status.enum';
 import { Socket } from 'socket.io';
-import { PlayerNumber } from './player-number.enum';
+import { PlayerNumber } from './enums/player-number.enum';
+import { PlayerStatus } from './enums/player-status.enum';
 
 export class Player {
   number: PlayerNumber;
