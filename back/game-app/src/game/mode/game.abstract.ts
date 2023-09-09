@@ -4,7 +4,7 @@ import { PlayerAction } from '../player/enums/player-action.enum';
 import { GameStatus } from './enums/game-status.enum';
 
 export abstract class AbstractGame {
-  public gameId: string;
+  public id: string;
   public status: GameStatus;
   public score: GameScore;
   public objects: GameObjects;
@@ -14,7 +14,7 @@ export abstract class AbstractGame {
   protected paddleOption: PaddleOption;
 
   constructor(gameId: string) {
-    this.gameId = gameId;
+    this.id = gameId;
     this.status = GameStatus.CREATED;
     this.scoreOption = new ScoreOption();
     this.ballOption = new BallOption();
