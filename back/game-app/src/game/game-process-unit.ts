@@ -1,14 +1,11 @@
-import { GameUser } from './gameuser/game-user';
 import { AbstractGame } from './mode/game.abstract';
-import { GameActionStatus } from './enums/gam-action-status.enum';
+import { GameStatus } from './mode/enums/game-status.enum';
 import { GamePlayResult } from './mode/enums/game-play-result.enum';
 import { ProcessStatus } from './core/enums/process-status.enum';
-import { EndGameDto } from './dto/end-game.dto';
-import { GameUserStatus } from './enums/game-user-status.enum';
-import { Builder } from 'builder-pattern';
-import { PlayerNumber } from './enums/player-number.enum';
 import { PlayerAction } from './player/enums/player-action.enum';
 import { Player } from './player/enums/player';
+import { PlayerNumber } from './player/enums/player-number.enum';
+import { PlayerStatus } from './player/enums/player-status.enum';
 
 export class GameProcessUnit {
   game: AbstractGame;
@@ -26,10 +23,10 @@ export class GameProcessUnit {
     }
 
     if (playResult == GamePlayResult.ROUND_END) {
-      this.gameStatus = GameActionStatus.STANDBY;
+      this.game.status = GameStatus.STANDBY;
 
       for (let i = 0; i < this.players.length; i++) {
-        this.players[i].status = GameUserStatus.GAME_READY;
+        this.players[i].status = PlayerStatus.GAME_READY;
         this.players[i].client.emit('updateObject', this.game.objects);
         this.players[i].client.emit('updateScore', this.game.score);
         this.players[i].client.emit('infoGame', {
@@ -42,7 +39,7 @@ export class GameProcessUnit {
 
     if (playResult == GamePlayResult.GAME_END) {
       for (let i = 0; i < this.players.length; i++) {
-        this.players[i].status = GameUserStatus.DEFAULT;
+        this.players[i].status = PlayerStatus.GAME_END;
         this.players[i].client.emit('updateScore', this.game.score);
         this.players[i].client.emit('infoGame', {
           status: GameStatus.END,
@@ -55,7 +52,7 @@ export class GameProcessUnit {
   }
 
   updateObject(playerNumber: PlayerNumber, playerAction: PlayerAction) {
-    if (this.gameStatus != GameActionStatus.PLAY) {
+    if (this.game.status != GameStatus.START) {
       return;
     }
 
