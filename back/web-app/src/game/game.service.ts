@@ -21,7 +21,7 @@ import { EndGameDto } from './dto/end-game.dto';
 
 @Injectable()
 export class GameService {
-  private gameGroups: Map<number, GameGroup>;
+  private gameGroups: Map<string, GameGroup>;
 
   constructor(
     @InjectIoClientProvider()
@@ -29,7 +29,7 @@ export class GameService {
     private mainUserService: MainUserService,
     private memoryUserService: MemoryUserService,
   ) {
-    this.gameGroups = new Map<number, GameGroup>();
+    this.gameGroups = new Map<string, GameGroup>();
   }
 
   @OnConnect()
@@ -68,22 +68,23 @@ export class GameService {
       .p2({ id: dto.p2.id, gameKey: p2GameKey })
       .build();
 
+    this.gameGroups.set(gameId, gameGroup);
     this.gameGroups.set(dto.p1.id, gameGroup);
     this.gameGroups.set(dto.p2.id, gameGroup);
   }
 
   findGameByUserId(dto: FindGameDto) {
-    const gameInfo = this.gameGroups.get(dto.userId);
+    const gameGroup = this.gameGroups.get(dto.userId.toString());
 
-    if (!gameInfo) {
+    if (!gameGroup) {
       throw new HttpException('잘못된 요청입니다.', HttpStatus.OK);
     }
 
     const p1MemoryUser = this.memoryUserService.findUserByUserId(
-      Builder(FindUserDto).userId(gameInfo.p1.id).build(),
+      Builder(FindUserDto).userId(gameGroup.p1.id).build(),
     );
     const p2MemoryUser = this.memoryUserService.findUserByUserId(
-      Builder(FindUserDto).userId(gameInfo.p2.id).build(),
+      Builder(FindUserDto).userId(gameGroup.p2.id).build(),
     );
 
     return Builder(FindGameReturnDto)
@@ -102,9 +103,9 @@ export class GameService {
           .build(),
       )
       .gameKey(
-        dto.userId == gameInfo.p1.id
-          ? gameInfo.p1.gameKey
-          : gameInfo.p2.gameKey,
+        dto.userId == gameGroup.p1.id
+          ? gameGroup.p1.gameKey
+          : gameGroup.p2.gameKey,
       )
       .build();
   }
