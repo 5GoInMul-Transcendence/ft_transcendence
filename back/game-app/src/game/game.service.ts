@@ -16,7 +16,6 @@ import { ReadyGameDto } from './dto/ready-game.dto';
 import { GameStatus } from './mode/enums/game-status.enum';
 import { InfoGameRes } from './dto/info-game-res.dto';
 import { StartGameDto } from './dto/start-game-dto';
-import { EndGameDto } from './dto/end-game.dto';
 import { GameCore } from './core/game.core';
 import { CheckDisconnectByReconnectionDto } from './dto/check-disconnect-by-reconnection.dto';
 import { PlayerAction } from './player/enums/player-action.enum';
