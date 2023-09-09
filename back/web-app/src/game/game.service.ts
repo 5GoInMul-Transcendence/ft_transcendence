@@ -21,6 +21,16 @@ import { EndGameDto } from './dto/end-game.dto';
 import { LadderService } from '../ladder/ladder.service';
 import { AchievementService } from '../achievement/achievement.service';
 import { FriendService } from '../friend/friend.service';
+import { PlayerNumber } from './enums/player-number.enum';
+import { UpdateLadderDto } from '../ladder/dto/update-ladder.dto';
+import { UpdateAchievementDto } from '../achievement/dto/update-achievement.dto';
+import { AchievementType } from '../achievement/enums/achievement-type.enum';
+import { UpdateMemoryUserDto } from '../users/memoryuser/dto/update-memory-user.dto';
+import { UserStatus } from '../users/enums/user-status.enum';
+import { UpdateMainUserDto } from '../main/dto/update-main-user.dto';
+import { MainUserStatus } from '../main/enums/main-user-status.enum';
+import { BroadcastFriendUpdateDto } from '../friend/dto/broadcast-friend-update.dto';
+import { FriendInfo } from '../friend/friend-info';
 
 @Injectable()
 export class GameService {
@@ -50,7 +60,77 @@ export class GameService {
 
   @EventListener('endGame')
   endGame(dto: EndGameDto) {
-  
+    const { p1, p2 } = this.gameGroups.get(dto.gameId);
+
+    const winnerId = dto.winner == PlayerNumber.P1 ? p1.id : p2.id;
+    const loserId = dto.winner == PlayerNumber.P1 ? p2.id : p1.id;
+
+    /* Update ladder */
+    this.ladderService.updateLadder(
+      Builder(UpdateLadderDto).userId(winnerId).isWin(true).build(),
+    );
+    this.ladderService.updateLadder(
+      Builder(UpdateLadderDto).userId(loserId).isWin(false).build(),
+    );
+
+    /* Update achievement */
+    this.achievementService.updateAchievement(
+      Builder(UpdateAchievementDto)
+        .userId(winnerId)
+        .achievementType(AchievementType.GAME_WIN)
+        .build(),
+    );
+
+    /* Update GameRecord*/
+
+    /* Update MemoryUserStatus */
+    this.memoryUserService.updateUser(
+      Builder(UpdateMemoryUserDto)
+        .userId(winnerId)
+        .status(UserStatus.ONLINE)
+        .build(),
+    );
+    this.memoryUserService.updateUser(
+      Builder(UpdateMemoryUserDto)
+        .userId(loserId)
+        .status(UserStatus.ONLINE)
+        .build(),
+    );
+
+    /* Update MainUserStatus */
+    this.mainUserService.updateUser(
+      Builder(UpdateMainUserDto)
+        .userId(winnerId)
+        .status(MainUserStatus.DEFAULT)
+        .build(),
+    );
+    this.mainUserService.updateUser(
+      Builder(UpdateMainUserDto)
+        .userId(loserId)
+        .status(MainUserStatus.DEFAULT)
+        .build(),
+    );
+
+    /* BroadCast UserStatus */
+    this.friendsService.broadcastFriendUpdate(
+      Builder(BroadcastFriendUpdateDto)
+        .userId(winnerId)
+        .friendInfo(
+          Builder(FriendInfo).id(winnerId).status(UserStatus.ONLINE).build(),
+        )
+        .build(),
+    );
+    this.friendsService.broadcastFriendUpdate(
+      Builder(BroadcastFriendUpdateDto)
+        .userId(loserId)
+        .friendInfo(
+          Builder(FriendInfo).id(loserId).status(UserStatus.ONLINE).build(),
+        )
+        .build(),
+    );
+    this.gameGroups.delete(dto.gameId);
+    this.gameGroups.delete(winnerId.toString());
+    this.gameGroups.delete(loserId.toString());
   }
 
   async gameEnter(dto: EnterGameDto) {
