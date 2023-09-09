@@ -6,7 +6,7 @@ import { GoldenPongGame } from './mode/golden-pong-game';
 import { SpeedGame } from './mode/speed-game';
 import { Builder } from 'builder-pattern';
 import { CreateGameDto } from './dto/create-game.dto';
-import { GameGroup } from './game-info';
+import { GameGroup } from './game-group';
 import { ConnectGameDto } from './dto/connect-game.dto';
 import { GameProcessUnit } from './game-process-unit';
 import { WsException } from '@nestjs/websockets';
@@ -21,6 +21,8 @@ import { GameCore } from './core/game.core';
 import { CheckDisconnectByReconnectionDto } from './dto/check-disconnect-by-reconnection.dto';
 import { PlayerAction } from './player/enums/player-action.enum';
 import { DisconnectGameDto } from './dto/disconnect-game-dto';
+import { Player } from './player/enums/player';
+import { PlayerStatus } from './player/enums/player-status.enum';
 
 @Injectable()
 export class GameService {
@@ -28,9 +30,7 @@ export class GameService {
   private gameGroup: Map<string, GameGroup>;
   private gameProcessUnits: Map<string, GameProcessUnit>;
 
-  constructor(
-    private gameCore: GameCore,
-  ) {
+  constructor(private gameCore: GameCore) {
     this.gameGroup = new Map<string, GameGroup>();
     this.gameProcessUnits = new Map<string, GameProcessUnit>();
   }
@@ -61,28 +61,37 @@ export class GameService {
 
   disconnectGame(dto: DisconnectGameDto) {
     const gameGroup = this.gameGroup.get(dto.gameKey);
-    
+
     this.gameGroup.delete(dto.gameKey);
     this.gameProcessUnits.delete(dto.gameKey);
   }
 
-  
   createGame(dto: CreateGameDto) {
     const game = this.generateGame(dto.gameId, dto.gameMode);
+
+    const p1Player = Builder(Player)
+      .status(PlayerStatus.CREATED)
+      .client(null)
+      .build();
+    const p2Player = Builder(Player)
+      .status(PlayerStatus.CREATED)
+      .client(null)
+      .build();
 
     this.gameGroup.set(
       dto.p1GameKey,
       Builder(GameGroup)
         .game(game)
-        .rivalGameKey(dto.p2GameKey)
+        .player(p1Player)
+        .rivalPlayer(p2Player)
         .build(),
     );
     this.gameGroup.set(
       dto.p2GameKey,
       Builder(GameGroup)
         .game(game)
-        .playerNumber(PlayerNumber.P2)
-        .rivalGameKey(dto.p1GameKey)
+        .player(p2Player)
+        .rivalPlayer(p1Player)
         .build(),
     );
   }
@@ -136,9 +145,7 @@ export class GameService {
     }
   }
 
-  private addGameProcessUnit(
-    game: AbstractGame,
-  ) {
+  private addGameProcessUnit(game: AbstractGame) {
     const gameProcessUnit = Builder(GameProcessUnit)
       .game(game)
       .gamePlayers([user, rivalUser])
