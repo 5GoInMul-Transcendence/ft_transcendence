@@ -17,6 +17,7 @@ import {
 import { v4 as uuid } from 'uuid';
 import { MainUserService } from '../main/mainuser/main-user.service';
 import { CreateGameDto } from './dto/create-game.dto';
+import { EndGameDto } from './dto/end-game.dto';
 
 @Injectable()
 export class GameService {
@@ -39,6 +40,11 @@ export class GameService {
   @OnConnectError()
   connectError(err: Error) {
     console.log(err);
+  }
+
+  @EventListener('endGame')
+  endGame(dto: EndGameDto) {
+  
   }
 
   async gameEnter(dto: EnterGameDto) {
