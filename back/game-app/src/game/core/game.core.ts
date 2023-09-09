@@ -34,4 +34,14 @@ export class GameCore implements OnModuleInit {
   push(processUnit: GameProcessUnit) {
     this.processList.push(processUnit);
   }
+
+  pop(popProcessUnit: GameProcessUnit) {
+    this.processList.forEach(
+      (processUnit: GameProcessUnit, tok: Token<GameProcessUnit>) => {
+        if (popProcessUnit === processUnit) {
+          tok.remove();
+        }
+      },
+    );
+  }
 }
