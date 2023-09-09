@@ -1,20 +1,20 @@
 import {
-   ConnectedSocket,
+  ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
 } from '@nestjs/websockets';
-import { GameMode } from './game/enums/game-mode.enum';
+import { Socket } from 'socket.io';
+import { GameService } from './game/game.service';
+import { CreateGameDto } from './game/dto/create-game.dto';
 
 @WebSocketGateway({ cors: { origin: '*' } })
 export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  constructor() {}
+  constructor(private gameService: GameService) {}
 
-  handleConnection(client: any): any {
-    console.log('connect');
-  }
+  handleConnection(client: any, ...args: any[]): any {}
 
   handleDisconnect(client: any): any {
     console.log('disconnect');
@@ -22,9 +22,9 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('createGame')
   createGame(
-    @ConnectedSocket() client,
-    @MessageBody('gameMode') gameMode: GameMode,
+    @ConnectedSocket() client: Socket,
+    @MessageBody('createGameDto') dto: CreateGameDto,
   ) {
-    console.log(gameMode);
+    this.gameService.createGame(dto);
   }
 }
