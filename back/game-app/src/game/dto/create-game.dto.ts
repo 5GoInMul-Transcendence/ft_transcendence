@@ -1,6 +1,5 @@
 import { GameMode } from '../enums/game-mode.enum';
-import { ICreateGameDto } from '../grpc/interface/message.interface';
 
-export class CreateGameDto implements ICreateGameDto {
+export class CreateGameDto {
   readonly gameMode: GameMode;
 }

@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { EnterGameDto } from './dto/enter-game.dto';
 import { ClientGrpc } from '@nestjs/microservices';
-import { IGameServerService } from './grpc/interface/service.interface';
 import { FindGameDto } from './dto/find-game.dto';
 import { GameGroup } from './game-group';
 import { Builder } from 'builder-pattern';
@@ -15,12 +14,9 @@ import { MemoryUserService } from '../users/memoryuser/memory-user.service';
 import { FindUserDto } from '../users/memoryuser/dto/find-user.dto';
 import { FindGameReturnDto } from './dto/find-game-return.dto';
 import { GamePlayer } from './game-player';
-import { firstValueFrom } from 'rxjs';
-import { ICreateGameDto } from './grpc/interface/message.interface';
 
 @Injectable()
 export class GameService implements OnModuleInit {
-  private gameServerService: IGameServerService;
   private gameGroups: Map<number, GameGroup>;
 
   constructor(
@@ -30,18 +26,7 @@ export class GameService implements OnModuleInit {
     this.gameGroups = new Map<number, GameGroup>();
   }
 
-  onModuleInit(): any {
-    this.gameServerService =
-      this.client.getService<IGameServerService>('GameService');
-  }
-
   async gameEnter(dto: EnterGameDto) {
-    const { gameId, p1GameKey, p2GameKey } = await firstValueFrom(
-      this.gameServerService.createGame(
-        Builder<ICreateGameDto>().gameMode(dto.gameMode).build(),
-      ),
-    );
-
     const gameGroup = Builder(GameGroup)
       .gameId(gameId)
       .p1({ id: dto.p1.id, gameKey: p1GameKey })
