@@ -172,6 +172,6 @@ export class GameService {
       .players([player1, player2])
       .build();
 
-    this.gameProcessUnits.set(game.gameId, gameProcessUnit);
+    this.gameProcessUnits.set(game.id, gameProcessUnit);
   }
 }
