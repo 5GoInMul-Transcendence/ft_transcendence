@@ -12,7 +12,7 @@ import { PlayerNumber } from '../enums/player-number.enum';
 import { PlayerAction } from './enums/player-action.enum';
 
 export abstract class AbstractGame {
-  public gameId = uuid();
+  public gameId: string;
   public score: GameScore;
   public objects: GameObjects;
   public winner: PlayerNumber;
@@ -20,7 +20,8 @@ export abstract class AbstractGame {
   protected ballOption: BallOption;
   protected paddleOption: PaddleOption;
 
-  constructor() {
+  constructor(gameId: string) {
+    this.gameId = gameId;
     this.scoreOption = new ScoreOption();
     this.ballOption = new BallOption();
     this.paddleOption = new PaddleOption();
