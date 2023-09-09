@@ -68,7 +68,19 @@ export class GameService {
   }
 
   disconnectGame(dto: DisconnectGameDto) {
-    const gameGroup = this.gameGroup.get(dto.gameKey);
+    const { game, player, rivalPlayer } = this.gameGroup.get(dto.gameKey);
+
+    if (game.status === GameStatus.DESTROYED) {
+      this.gameGroup.delete(dto.gameKey);
+      return;
+    }
+    if (game.status === GameStatus.START) {
+      const gameProcessUnit = this.gameProcessUnits.get(game.id);
+      this.gameCore.pop(gameProcessUnit);
+    }
+    if (game.status <= GameStatus.START) {
+      game.winner = player.number === PlayerNumber.P1 ? PlayerNumber.P2 : PlayerNumber.P1;
+    }
 
     const webServer = this.mainService.getWebServer();
     webServer.emit(

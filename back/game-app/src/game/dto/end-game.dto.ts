@@ -1,7 +1,8 @@
-import { AbstractGame } from '../mode/game.abstract';
-import { GameUser } from '../gameuser/game-user';
+import { GameScore } from '../mode/object/game-object';
+import { PlayerNumber } from '../player/enums/player-number.enum';
 
 export class EndGameDto {
-  readonly endGame: AbstractGame;
-  readonly gamePlayers: GameUser[];
+  readonly gameId: string;
+  readonly gameScore: GameScore;
+  readonly winner: PlayerNumber;
 }
