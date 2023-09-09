@@ -13,7 +13,6 @@ import { Player } from './player/enums/player';
 export class GameProcessUnit {
   game: AbstractGame;
   players: Player[];
-  notifyEndGame: (dto: EndGameDto) => Promise<void>;
 
   playGameByOneFrame() {
     const playResult = this.game.play();
@@ -50,13 +49,6 @@ export class GameProcessUnit {
           message: this.game.winner,
         });
       }
-
-      this.notifyEndGame(
-        Builder(EndGameDto)
-          .endGame(this.game)
-          .gamePlayers(this.gamePlayers)
-          .build(),
-      );
 
       return ProcessStatus.END;
     }
