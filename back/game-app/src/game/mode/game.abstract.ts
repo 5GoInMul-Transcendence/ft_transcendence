@@ -1,6 +1,14 @@
-import { BallOption, PaddleOption, ScoreOption, SCREEN_HEIGHT, SCREEN_WIDTH } from './object/game-object.option';
+import {
+  BallOption,
+  PaddleOption,
+  ScoreOption,
+  SCREEN_HEIGHT,
+  SCREEN_WIDTH,
+} from './object/game-object.option';
 import { GameObjects, GameScore } from './object/game-object';
 import { PlayerAction } from '../player/enums/player-action.enum';
+import { PlayerNumber } from '../player/enums/player-number.enum';
+import { GamePlayResult } from './enums/game-play-result.enum';
 import { GameStatus } from './enums/game-status.enum';
 
 export abstract class AbstractGame {
@@ -94,24 +102,30 @@ export abstract class AbstractGame {
 
   updateObject(playerNumber: PlayerNumber, playerAction: PlayerAction) {
     if (playerAction == PlayerAction.PADDLE_UP) {
-      if (playerNumber == PlayerNumber.P1 && this.objects.p1.y - this.paddleOption.speed >= 0) {
+      if (
+        playerNumber == PlayerNumber.P1 &&
+        this.objects.p1.y - this.paddleOption.speed >= 0
+      ) {
         this.objects.p1.y -= this.paddleOption.speed;
       }
-      if (playerNumber == PlayerNumber.P2 && this.objects.p2.y - this.paddleOption.speed >= 0) {
+      if (
+        playerNumber == PlayerNumber.P2 &&
+        this.objects.p2.y - this.paddleOption.speed >= 0
+      ) {
         this.objects.p2.y -= this.paddleOption.speed;
       }
     }
 
     if (playerAction == PlayerAction.PADDLE_DOWN) {
       if (
-          playerNumber == PlayerNumber.P1 &&
+        playerNumber == PlayerNumber.P1 &&
         this.objects.p1.y + this.paddleOption.height + this.paddleOption.speed <= SCREEN_HEIGHT
       ) {
         this.objects.p1.y += this.paddleOption.speed;
       }
       if (
-          playerNumber == PlayerNumber.P2 &&
-        this.objects.p2.y +  this.paddleOption.height + this.paddleOption.speed <= SCREEN_HEIGHT
+        playerNumber == PlayerNumber.P2 &&
+        this.objects.p2.y + this.paddleOption.height + this.paddleOption.speed <= SCREEN_HEIGHT
       ) {
         this.objects.p2.y += this.paddleOption.speed;
       }
