@@ -13,7 +13,7 @@ export class UserController {
 
   @Get(':nickname')
   getUserProfileByNickname(
-    @Session() session,
+    @Session() session: Record<string, any>,
     @Param() dto: GetUserProfileByNicknameReqDto,
   ) {
     const me = this.memoryUserService.findUserByUserId(

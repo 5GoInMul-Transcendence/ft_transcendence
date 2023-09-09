@@ -11,6 +11,7 @@ import { Block } from '../../block/block.entity';
 import { Follower } from '../../friend/entities/follower.entity';
 import { Friend } from '../../friend/entities/friend.entity';
 import { UserController } from './user.controller';
+import { Achievement } from '../../achievement/entities/achievement.entity';
 
 @Module({
   imports: [
@@ -21,9 +22,10 @@ import { UserController } from './user.controller';
       Friend,
       Follower,
       Block,
+      Achievement,
     ]),
   ],
-  controllers: [MeController, UserController],
+  controllers: [UserController],
   providers: [UserService, MemoryUserService, MemoryUserProvider],
   exports: [UserService, MemoryUserService],
 })

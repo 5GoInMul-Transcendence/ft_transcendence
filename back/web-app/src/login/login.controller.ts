@@ -26,7 +26,7 @@ import { MemoryUserService } from 'src/users/memoryuser/memory-user.service';
 import { UserDto } from 'src/users/user/dto/user.dto';
 import { CreateUserDto } from 'src/users/user/dto/create-user.dto';
 import { SignupService } from 'src/signup/signup.service';
-import * as bcrypt from 'bcrypt';
+import { HashService } from 'src/common/hash/hash.service';
 
 @Controller('login')
 export class LoginController {
@@ -36,6 +36,7 @@ export class LoginController {
     private sessionService: SessionService,
     private memoryUserService: MemoryUserService,
     private signupService: SignupService,
+    private hashService: HashService,
   ) {}
 
   @Post()
@@ -55,10 +56,7 @@ export class LoginController {
       );
     }
 
-    const isCorrectPassword = await bcrypt.compare(
-      password,
-      memberUser.password,
-    );
+    const isCorrectPassword = await this.hashService.hashCompare(password, memberUser.password);
 
     if (!isCorrectPassword) {
       throw new HttpException(

@@ -1,6 +1,6 @@
 import { Channel } from "../entity/channel.entity";
 
 export class CreateLinkChannelToUserReqDto {
-	userId: number;
-	channel: Channel;
+	readonly userId: number;
+	readonly channel: Channel;
 };

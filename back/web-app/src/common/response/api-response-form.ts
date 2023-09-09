@@ -28,4 +28,14 @@ export class ApiResponseForm {
       },
     }
   }
+
+  static chatBad(message: string = '', data: any = {}) {
+    return {
+      data,
+      resStatus: {
+        code : '1001',
+        message,
+      },
+    }
+  }
 }

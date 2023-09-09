@@ -10,6 +10,7 @@ import { MemberUser } from 'src/users/user/entities/member-user.entity';
 import { CreateUserDto } from 'src/users/user/dto/create-user.dto';
 import { UserDto } from 'src/users/user/dto/user.dto';
 import { SignupService } from './signup.service';
+import { HashService } from 'src/common/hash/hash.service';
 
 @Controller('signup')
 export class SignupController {
@@ -17,6 +18,7 @@ export class SignupController {
     private userService: UserService,
     private memoryUserService: MemoryUserService,
     private signupService: SignupService,
+    private hashService: HashService,
   ) {}
 
   @Post()
@@ -55,7 +57,7 @@ export class SignupController {
       Builder(CreateMemberUserDto)
       .user(user)
       .id(id)
-      .password(await this.signupService.hashMemberPassword(password))
+      .password(await this.hashService.hashPassword(password))
       .build()
     );
 

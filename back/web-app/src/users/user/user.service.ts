@@ -14,6 +14,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { Friend } from '../../friend/entities/friend.entity';
 import { Follower } from '../../friend/entities/follower.entity';
 import { Block } from '../../block/block.entity';
+import { Achievement } from '../../achievement/entities/achievement.entity';
 @Injectable()
 export class UserService {
   constructor(
@@ -29,11 +30,20 @@ export class UserService {
     private followerRepository: Repository<Follower>,
     @InjectRepository(Block)
     private blockRepository: Repository<Block>,
-
+    @InjectRepository(Achievement)
+    private achievementRepository: Repository<Achievement>,
     private memoryUserService: MemoryUserService,
   ) {}
 
-  async getOauthUserByProfileId(profileId: number): Promise<OauthUser> {
+  async getUserByUserId(id: number): Promise<User | null> {
+    return await this.userRepository.findOne({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async getOauthUserByProfileId(profileId: number): Promise<OauthUser | null> {
     return await this.signupOauthRepository.findOne({
       where: {
         profileId,
@@ -44,7 +54,7 @@ export class UserService {
     });
   }
 
-  async getMemberUserByAccountId(id: string): Promise<MemberUser> {
+  async getMemberUserByAccountId(id: string): Promise<MemberUser | null> {
     return await this.signupMemberRepository.findOne({
       where: {
         id,
@@ -84,14 +94,16 @@ export class UserService {
     const { mail, nickname } = createUserDto;
     const user = this.userRepository.create({
       nickname,
-      avatar: 'avatar', // 이미지가 저장된 url 의 id 값만 넣는다.
+      avatar: 'default', // 이미지가 저장된 url 의 id 값만 넣는다.
       mail,
     });
-
     const createdUser = await this.userRepository.save(user);
-    await this.followerRepository.save({ userId: createdUser.id });
-    await this.friendRepository.save({ userId: createdUser.id });
-    await this.blockRepository.save({ userId: createdUser.id });
+    const userId = createdUser.id;
+
+    await this.followerRepository.save({ userId });
+    await this.friendRepository.save({ userId });
+    await this.blockRepository.save({ userId });
+    await this.achievementRepository.save({ userId });
     return createdUser;
   }
 

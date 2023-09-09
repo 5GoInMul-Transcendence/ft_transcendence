@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Put, Session } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Put,
+  Session,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { MemoryUserService } from '../memoryuser/memory-user.service';
 import { Builder } from 'builder-pattern';
 import { FindUserDto } from '../memoryuser/dto/find-user.dto';
@@ -11,12 +19,17 @@ import { CheckDuplicateNicknameDto } from '../memoryuser/dto/check-duplicate-nic
 import { UpdateNicknameReqDto } from './dto/update-nickname-req.dto';
 import { UserService } from '../user/user.service';
 import { UpdateUserDto } from '../user/dto/update-user.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { BroadcastFriendUpdateDto } from '../../friend/dto/broadcast-friend-update.dto';
+import { FriendService } from '../../friend/friend.service';
+import { FriendInfo } from '../../friend/friend-info';
 
 @Controller('me')
 export class MeController {
   constructor(
     private memoryUserService: MemoryUserService,
     private userService: UserService,
+    private friendService: FriendService,
   ) {}
 
   @Get()
@@ -81,6 +94,22 @@ export class MeController {
       Builder(UpdateUserDto)
         .userId(session.userId)
         .twoFactor(dto.twofactor)
+        .build(),
+    );
+  }
+  @Put('avatar')
+  @UseInterceptors(FileInterceptor('file'))
+  updateAvatar(@Session() session, @UploadedFile() file: Express.Multer.File) {
+    this.userService.updateUser(
+      Builder(UpdateUserDto)
+        .userId(session.userId)
+        .avatar(file.filename)
+        .build(),
+    );
+    this.friendService.broadcastFriendUpdate(
+      Builder(BroadcastFriendUpdateDto)
+        .userId(session.userId)
+        .friendInfo(Builder(FriendInfo).avatar(file.filename).build())
         .build(),
     );
   }
