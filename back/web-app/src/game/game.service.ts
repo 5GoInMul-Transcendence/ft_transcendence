@@ -18,6 +18,9 @@ import { v4 as uuid } from 'uuid';
 import { MainUserService } from '../main/mainuser/main-user.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { EndGameDto } from './dto/end-game.dto';
+import { LadderService } from '../ladder/ladder.service';
+import { AchievementService } from '../achievement/achievement.service';
+import { FriendService } from '../friend/friend.service';
 
 @Injectable()
 export class GameService {
@@ -28,6 +31,9 @@ export class GameService {
     private readonly gameServer: IoClient,
     private mainUserService: MainUserService,
     private memoryUserService: MemoryUserService,
+    private ladderService: LadderService,
+    private achievementService: AchievementService,
+    private friendsService: FriendService,
   ) {
     this.gameGroups = new Map<string, GameGroup>();
   }
