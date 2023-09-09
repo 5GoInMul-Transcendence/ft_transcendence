@@ -19,6 +19,7 @@ import { ImageModule } from './common/image/image.module';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MeModule } from './users/me/me.module';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { MeModule } from './users/me/me.module';
     GameModule,
     ImageModule,
     MeModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

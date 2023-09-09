@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Builder } from 'builder-pattern';
-import { FindUserByNicknameDto } from 'src/users/memoryuser/dto/find-user-by-nickname.dto';
 import { GetUserByNicknameDto } from 'src/users/memoryuser/dto/get-user-by-nickname.dto';
 import { MemoryUser } from 'src/users/memoryuser/memory-user';
 import { MemoryUserService } from 'src/users/memoryuser/memory-user.service';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class SignupService {
@@ -38,12 +36,5 @@ export class SignupService {
 				break;
 		}
 		return nickname;
-	}
-
-	async hashMemberPassword(userInputPassword: string): Promise<string> {
-		const saltRounds = 10; // 솔트 라운드 수, 높을수록 보안 강화
-		const hashedPassword = await bcrypt.hash(userInputPassword, saltRounds);
-		
-		return hashedPassword;
 	}
 }
