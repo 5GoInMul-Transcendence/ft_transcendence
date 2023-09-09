@@ -23,6 +23,7 @@ import { PlayerAction } from './player/enums/player-action.enum';
 import { DisconnectGameDto } from './dto/disconnect-game-dto';
 import { Player } from './player/enums/player';
 import { PlayerStatus } from './player/enums/player-status.enum';
+import { PlayerNumber } from '../../dist/game/enums/player-number.enum';
 
 @Injectable()
 export class GameService {
@@ -103,16 +104,25 @@ export class GameService {
   }
 
   readyGame(dto: ReadyGameDto) {
-    const gameGroup = this.gameGroup.get(dto.gameKey);
+    const { game, player, rivalPlayer } = this.gameGroup.get(dto.gameKey);
 
-    const gameProcessUnit = this.addGameProcessUnit(gameGroup.game);
-
-    for (const gamePlayer of gameProcessUnit.gamePlayers.values()) {
-      gamePlayer.client.emit(
-        'infoGame',
-        Builder(InfoGameRes).status(gameProcessUnit.gameStatus).build(),
-      );
+    if (game.status != GameStatus.CREATED) {
+      return;
     }
+
+    player.status = PlayerStatus.GAME_READY;
+
+    if (rivalPlayer.status != PlayerStatus.GAME_READY) {
+      return;
+    }
+
+    const player1 = player.number == PlayerNumber.P1 ? player : rivalPlayer;
+    const player2 = player.number == PlayerNumber.P2 ? player : rivalPlayer;
+    this.addGameProcessUnit(game, player1, player2);
+
+    game.status = GameStatus.STANDBY;
+    player1.client.emit('infoGame', Builder(InfoGameRes).status(game.status).build());
+    player2.client.emit('infoGame', Builder(InfoGameRes).status(game.status).build());
   }
 
   startGame(dto: StartGameDto) {
@@ -122,13 +132,6 @@ export class GameService {
     gameProcessUnit.gameStatus = GameStatus.PLAY;
 
     this.gameCore.push(gameProcessUnit);
-  }
-
-  async endGame(dto: EndGameDto) {
-    for (const gamePlayer of dto.gamePlayers) {
-      gamePlayer.client.disconnect();
-    }
-    // web-app 서버로 게임결과 보내기
   }
 
   updateGameObject(gameKey: string, playerAction: PlayerAction) {
@@ -149,17 +152,16 @@ export class GameService {
     }
   }
 
-  private addGameProcessUnit(game: AbstractGame) {
+  private addGameProcessUnit(
+    game: AbstractGame,
+    player1: Player,
+    player2: Player,
+  ) {
     const gameProcessUnit = Builder(GameProcessUnit)
       .game(game)
-      .gamePlayers([user, rivalUser])
-      .gameStatus(GameStatus.STANDBY)
-      .notifyEndGame(this.endGame)
+      .players([player1, player2])
       .build();
 
-    this.gameProcessUnits.set(user.gameKey, gameProcessUnit);
-    this.gameProcessUnits.set(rivalUser.gameKey, gameProcessUnit);
-
-    return gameProcessUnit;
+    this.gameProcessUnits.set(game.gameId, gameProcessUnit);
   }
 }
