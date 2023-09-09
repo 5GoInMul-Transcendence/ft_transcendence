@@ -19,8 +19,8 @@ export class GameProcessUnit {
     const playResult = this.game.play();
 
     if (playResult == GamePlayResult.ROUND_PROGRESS) {
-      for (let i = 0; i < this.gamePlayers.length; i++) {
-        this.gamePlayers[i].client.emit('updateObject', this.game.objects);
+      for (let i = 0; i < this.players.length; i++) {
+        this.players[i].client.emit('updateObject', this.game.objects);
       }
 
       return ProcessStatus.PROGRESS;
@@ -29,12 +29,12 @@ export class GameProcessUnit {
     if (playResult == GamePlayResult.ROUND_END) {
       this.gameStatus = GameActionStatus.STANDBY;
 
-      for (let i = 0; i < this.gamePlayers.length; i++) {
-        this.gamePlayers[i].status = GameUserStatus.GAME_READY;
-        this.gamePlayers[i].client.emit('updateObject', this.game.objects);
-        this.gamePlayers[i].client.emit('updateScore', this.game.score);
-        this.gamePlayers[i].client.emit('infoGame', {
-          status: GameActionStatus.STANDBY,
+      for (let i = 0; i < this.players.length; i++) {
+        this.players[i].status = GameUserStatus.GAME_READY;
+        this.players[i].client.emit('updateObject', this.game.objects);
+        this.players[i].client.emit('updateScore', this.game.score);
+        this.players[i].client.emit('infoGame', {
+          status: GameStatus.STANDBY,
         });
       }
 
@@ -42,11 +42,11 @@ export class GameProcessUnit {
     }
 
     if (playResult == GamePlayResult.GAME_END) {
-      for (let i = 0; i < this.gamePlayers.length; i++) {
-        this.gamePlayers[i].status = GameUserStatus.DEFAULT;
-        this.gamePlayers[i].client.emit('updateScore', this.game.score);
-        this.gamePlayers[i].client.emit('infoGame', {
-          status: GameActionStatus.END,
+      for (let i = 0; i < this.players.length; i++) {
+        this.players[i].status = GameUserStatus.DEFAULT;
+        this.players[i].client.emit('updateScore', this.game.score);
+        this.players[i].client.emit('infoGame', {
+          status: GameStatus.END,
           message: this.game.winner,
         });
       }
