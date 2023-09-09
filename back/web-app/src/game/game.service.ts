@@ -1,12 +1,9 @@
 import {
   HttpException,
   HttpStatus,
-  Inject,
   Injectable,
-  OnModuleInit,
 } from '@nestjs/common';
 import { EnterGameDto } from './dto/enter-game.dto';
-import { ClientGrpc } from '@nestjs/microservices';
 import { FindGameDto } from './dto/find-game.dto';
 import { GameGroup } from './game-group';
 import { Builder } from 'builder-pattern';
@@ -14,16 +11,33 @@ import { MemoryUserService } from '../users/memoryuser/memory-user.service';
 import { FindUserDto } from '../users/memoryuser/dto/find-user.dto';
 import { FindGameReturnDto } from './dto/find-game-return.dto';
 import { GamePlayer } from './game-player';
+import {
+  InjectIoClientProvider,
+  IoClient,
+  OnConnect,
+  OnConnectError,
+} from 'nestjs-io-client';
 
 @Injectable()
-export class GameService implements OnModuleInit {
+export class GameService {
   private gameGroups: Map<number, GameGroup>;
 
   constructor(
-    @Inject('GAME_SERVER') private client: ClientGrpc,
+    @InjectIoClientProvider()
+    private readonly gameServer: IoClient,
     private memoryUserService: MemoryUserService,
   ) {
     this.gameGroups = new Map<number, GameGroup>();
+  }
+
+  @OnConnect()
+  connect() {
+    console.log('connected!');
+  }
+
+  @OnConnectError()
+  connectError(err: Error) {
+    console.log(err);
   }
 
   async gameEnter(dto: EnterGameDto) {
