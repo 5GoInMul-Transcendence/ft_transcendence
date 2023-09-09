@@ -20,6 +20,7 @@ import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MeModule } from './users/me/me.module';
 import { MessageModule } from './message/message.module';
+import { AchievementModule } from './achievement/achievement.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { MessageModule } from './message/message.module';
     ImageModule,
     MeModule,
     MessageModule,
+    AchievementModule,
   ],
   controllers: [AppController],
   providers: [AppService],
