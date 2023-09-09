@@ -145,10 +145,10 @@ export class GameService {
   }
 
   updateGameObject(gameKey: string, playerAction: PlayerAction) {
-    const gameGroup = this.gameGroup.get(gameKey);
-    const gameProcessUnit = this.gameProcessUnits.get(gameKey);
+    const { game, player } = this.gameGroup.get(gameKey);
+    const gameProcessUnit = this.gameProcessUnits.get(game.id);
 
-    gameProcessUnit?.updateObject(gameGroup.playerNumber, playerAction);
+    gameProcessUnit?.updateObject(player.number, playerAction);
   }
 
   private generateGame(gameId: string, gameMode: GameMode): AbstractGame {
