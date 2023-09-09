@@ -7,12 +7,12 @@ import { EndGameDto } from './dto/end-game.dto';
 import { GameUserStatus } from './enums/game-user-status.enum';
 import { Builder } from 'builder-pattern';
 import { PlayerNumber } from './enums/player-number.enum';
-import { PlayerAction } from './mode/enums/player-action.enum';
+import { PlayerAction } from './player/enums/player-action.enum';
+import { Player } from './player/enums/player';
 
 export class GameProcessUnit {
   game: AbstractGame;
-  gamePlayers: GameUser[];
-  gameStatus: GameActionStatus;
+  players: Player[];
   notifyEndGame: (dto: EndGameDto) => Promise<void>;
 
   playGameByOneFrame() {

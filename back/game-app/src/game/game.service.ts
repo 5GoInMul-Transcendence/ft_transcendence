@@ -23,7 +23,7 @@ import { PlayerAction } from './player/enums/player-action.enum';
 import { DisconnectGameDto } from './dto/disconnect-game-dto';
 import { Player } from './player/enums/player';
 import { PlayerStatus } from './player/enums/player-status.enum';
-import { PlayerNumber } from '../../dist/game/enums/player-number.enum';
+import { PlayerNumber } from './player/enums/player-number.enum';
 
 @Injectable()
 export class GameService {
