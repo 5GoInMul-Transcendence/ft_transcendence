@@ -155,8 +155,8 @@ export class GameService {
       .build();
 
     this.gameGroups.set(gameId, gameGroup);
-    this.gameGroups.set(dto.p1.id, gameGroup);
-    this.gameGroups.set(dto.p2.id, gameGroup);
+    this.gameGroups.set(dto.p1.id.toString(), gameGroup);
+    this.gameGroups.set(dto.p2.id.toString(), gameGroup);
   }
 
   findGameByUserId(dto: FindGameDto) {
