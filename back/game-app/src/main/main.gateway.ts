@@ -24,7 +24,7 @@ export class MainGateway implements OnGatewayConnection {
   @SubscribeMessage('createGame')
   createGame(
     @ConnectedSocket() client: Socket,
-    @MessageBody('createGameDto') dto: CreateGameDto,
+    @MessageBody() dto: CreateGameDto,
   ) {
     this.gameService.createGame(dto);
   }
