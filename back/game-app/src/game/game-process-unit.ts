@@ -3,9 +3,9 @@ import { GameStatus } from './mode/enums/game-status.enum';
 import { GamePlayResult } from './mode/enums/game-play-result.enum';
 import { ProcessStatus } from './core/enums/process-status.enum';
 import { PlayerAction } from './player/enums/player-action.enum';
-import { Player } from './player/enums/player';
 import { PlayerNumber } from './player/enums/player-number.enum';
 import { PlayerStatus } from './player/enums/player-status.enum';
+import { Player } from './player/player';
 
 export class GameProcessUnit {
   game: AbstractGame;

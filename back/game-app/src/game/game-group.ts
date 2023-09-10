@@ -1,5 +1,5 @@
 import { AbstractGame } from './mode/game.abstract';
-import { Player } from './player/enums/player';
+import { Player } from './player/player';
 
 export class GameGroup {
   game: AbstractGame;
