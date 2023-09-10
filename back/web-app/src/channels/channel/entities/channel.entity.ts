@@ -1,6 +1,7 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Message } from "../../../message/entities/message.entity";
 import { LinkChannelToUser } from "./link-channel-to-user.entity";
+import { Ban } from "./ban.entity";
 
 @Entity('channel')
 export class Channel {
@@ -20,8 +21,8 @@ export class Channel {
 	})
 	password: string | null;
 
-  @Column('integer', { array: true, default: [] })
-	bans: number[];
+	@OneToOne(() => Ban, (bans) => bans.channel)
+	ban: Ban;
 
 	@OneToMany(() => LinkChannelToUser, (link) => link.channel)
 	links: LinkChannelToUser[];
