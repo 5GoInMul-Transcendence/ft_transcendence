@@ -6,8 +6,8 @@ export class HashService {
 	private readonly saltRounds = 10; // 솔트 라운드 수, 높을수록 보안 강화
 
 	async hashPassword(inputPassword: string): Promise<string | null> {
-		if (inputPassword === null)
-			return null;
+		// if (inputPassword === null)
+		// 	return null;
 		const hashedPassword = await bcrypt.hash(inputPassword, this.saltRounds);
 		
 		return hashedPassword;
