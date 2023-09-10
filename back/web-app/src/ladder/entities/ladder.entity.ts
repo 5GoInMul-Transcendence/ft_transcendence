@@ -8,12 +8,12 @@ export class Ladder {
   @Column({ type: 'integer', name: 'user_id', unique: true })
   userId: number;
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'integer', default: 0 })
   level: number;
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'integer', default: 0 })
   win: number;
 
-  @Column({ type: 'integer' })
+  @Column({ type: 'integer', default: 0 })
   lose: number;
 }
