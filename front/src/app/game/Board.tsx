@@ -7,6 +7,7 @@ import GameBoard from './GameBoard';
 import StandByGame from './StandByGame';
 import GameEnd from './GameEnd';
 import styled from 'styled-components';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   game: IGame;
@@ -19,6 +20,7 @@ export default function Board({ game }: Props) {
   const [readGame, setReadyGame] = useState<boolean>(false);
   const [standbyGame, setStandbyGame] = useState<boolean>(false);
   const [endGame, setEndGame] = useState<boolean>(false);
+  const router = useRouter();
 
   useEffect(() => {
     setSocket(
@@ -29,16 +31,13 @@ export default function Board({ game }: Props) {
         },
       })
     );
+    setReadyGame(true);
   }, []);
 
   const readyGame = () => {
     socket?.emit('readyGame');
     setReadyGame(false);
   };
-
-  useEffect(() => {
-    setReadyGame(true);
-  }, []);
 
   useEffect(() => {
     socket?.on('infoGame', (res: IInfoGame) => {
@@ -53,6 +52,9 @@ export default function Board({ game }: Props) {
       } else if (res.status === 'play') {
       } else if (res.status === 'end') {
         setEndGame(true);
+        setTimeout(() => {
+          router.push('/main');
+        }, 2000);
       }
     });
 
@@ -60,6 +62,9 @@ export default function Board({ game }: Props) {
       console.log(res);
       setP1Score(res.p1.score);
       setP2Score(res.p2.score);
+    });
+    socket?.on('disconnect', (res) => {
+      console.log(res);
     });
   }, [socket]);
 

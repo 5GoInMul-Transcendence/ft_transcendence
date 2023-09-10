@@ -31,18 +31,18 @@ export function GameMode({
     if (gameQueue === true) {
       return;
     }
-    setGameMode('SHORT PADDLE!');
+    setGameMode('SPEED UP!');
     setGameQueue(true);
-    emitSubmitMatch('paddle');
+    emitSubmitMatch('speed');
   }, [gameMode, gameQueue]);
 
   const onClickTypeSpeedUp = useCallback(() => {
     if (gameQueue === true) {
       return;
     }
-    setGameMode('SPEED UP!');
+    setGameMode('GOLDEN PONG');
     setGameQueue(true);
-    emitSubmitMatch('speed');
+    emitSubmitMatch('goldenpong');
   }, [gameMode, gameQueue]);
 
   const emitSubmitMatch = (type: string) => {
@@ -63,12 +63,12 @@ export function GameMode({
           $color={theme.colors.green}
           onClick={onClickTypeShotrPaddle}
         >
-          2. SHORT PADDLE
+          2. SPEED UP
         </GameModeButton>
       </div>
       <div>
         <GameModeButton $color={theme.colors.pink} onClick={onClickTypeSpeedUp}>
-          3. SPEED UP
+          3. GOLDEN PONG
         </GameModeButton>
       </div>
     </div>

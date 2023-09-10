@@ -1,16 +1,17 @@
 'use client';
 
-import { ScoreBoard } from './ScoreBoard';
-import GameBoard from './GameBoard';
 import styled from 'styled-components';
-import useSwrFetcher from '@/hooks/useSwrFetcher';
 import { IGame } from '@/types/IGame';
-import { IUser } from '@/types/IUser';
 import Board from './Board';
+import { useState } from 'react';
+import { axiosInstance } from '@/utils/axios';
 
 export default function Game() {
-  const game = useSwrFetcher<IGame>('/game');
-  // const me = useSwrFetcher<IUser>('/me');
+  const [game, setGame] = useState<IGame | undefined>(undefined);
+
+  axiosInstance.get('/game').then((res) => {
+    setGame(res.data.data);
+  });
 
   if (!game) return;
 

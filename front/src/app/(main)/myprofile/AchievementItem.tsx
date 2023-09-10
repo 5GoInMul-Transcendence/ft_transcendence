@@ -14,9 +14,8 @@ export default function AchievementItem({ title, content }: Props) {
         {content?.map((data) => (
           <Achievement
             key={data}
-            src={`http://localhost:8080/avatar/${data}`}
+            src={`http://localhost:8080/achievement/${data}`}
             alt={'url'}
-            style={{ borderRadius: '70%' }}
             width={50}
             height={50}
           />
