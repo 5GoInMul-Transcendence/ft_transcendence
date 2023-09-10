@@ -12,6 +12,7 @@ import { RecentMessage } from './dto/recent-message.dto';
 import { Builder } from 'builder-pattern';
 import { Message } from 'src/message/entities/message.entity';
 import { MessageService } from 'src/message/message.service';
+import { ChannelMode } from './enum/channel-mode.enum';
 
 @Injectable()
 export class ChannelService {
@@ -34,43 +35,6 @@ export class ChannelService {
 				id,
 			}
 		});
-	}
-
-	async getLinkByChannelAndUser(channel: Channel, user: User): Promise<LinkChannelToUser | null> {
-		return await this.linkChannelToUserRepository
-		.createQueryBuilder('link_channel_to_user')
-		.where('link_channel_to_user.channel = :channelId', {channelId: channel.id})
-		.where('link_channel_to_user.user = :userId', {userId: user.id})
-		.getOne();
-		// return await this.linkChannelToUserRepository.findOne({
-		// 	where: {
-		// 		user,
-		// 		channel,
-		// 	}
-		// })
-	}
-
-	async createChannel(dto: CreateChannelReqDto): Promise<Channel> {
-		const {name, mode, password} = dto;
-		const createdChannel = this.channelRepository.create({
-			name,
-			mode,
-			password,
-		});
-
-		return await this.channelRepository.save(createdChannel);
-	}
-
-	async createLinkChannelToUser(dto: CreateLinkChannelToUserReqDto)
-	: Promise<LinkChannelToUser> {
-		const { user, channel, role } = dto;
-		const link = this.linkChannelToUserRepository.create({
-			user,
-			channel,
-			role,
-		});
-
-		return await this.linkChannelToUserRepository.save(link);
 	}
 
 	async getAllChannels(): Promise<Channel[] | null> {
@@ -101,6 +65,20 @@ export class ChannelService {
 		return myChannelList;
 	}
 
+	async getLinkByChannelAndUser(channel: Channel, user: User): Promise<LinkChannelToUser | null> {
+		return await this.linkChannelToUserRepository
+		.createQueryBuilder('link_channel_to_user')
+		.where('link_channel_to_user.channel = :channelId', {channelId: channel.id})
+		.where('link_channel_to_user.user = :userId', {userId: user.id})
+		.getOne();
+		// return await this.linkChannelToUserRepository.findOne({
+		// 	where: {
+		// 		user,
+		// 		channel,
+		// 	}
+		// })
+	}
+
 	async getLinksRelatedChannelAndUserByUserId(userId: number): Promise<LinkChannelToUser[]>{
 		const user = await this.userService.getUserByUserId(userId);
 		
@@ -119,5 +97,37 @@ export class ChannelService {
 		// 		"user",
 		// 	],
 		// });
+	}
+
+	async getLinkByUserIdAtPrivate(userId: number): Promise<LinkChannelToUser | null> {
+		return await this.linkChannelToUserRepository
+		.createQueryBuilder('link_channel_to_user')
+		.leftJoinAndSelect('link_channel_to_user.channel', 'channel')
+		.where('link_channel_to_user.user = :userId', {userId})
+		.where('channel.mode = :mode', {mode: ChannelMode.PRIVATE})
+		.getOne();
+	}
+
+	async createChannel(dto: CreateChannelReqDto): Promise<Channel> {
+		const {name, mode, password} = dto;
+		const createdChannel = this.channelRepository.create({
+			name,
+			mode,
+			password,
+		});
+
+		return await this.channelRepository.save(createdChannel);
+	}
+
+	async createLinkChannelToUser(dto: CreateLinkChannelToUserReqDto)
+	: Promise<LinkChannelToUser> {
+		const { user, channel, role } = dto;
+		const link = this.linkChannelToUserRepository.create({
+			user,
+			channel,
+			role,
+		});
+
+		return await this.linkChannelToUserRepository.save(link);
 	}
 }

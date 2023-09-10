@@ -23,6 +23,8 @@ import { CreateProtectedChannelReqDto } from './dto/create-protected-channel-req
 
 @Controller('channel')
 export class ChannelController {
+	private readonly privateChannelName = 'Private memo';
+
 	constructor(
 		private channelService: ChannelService,
 		private hashService: HashService,
@@ -79,6 +81,41 @@ export class ChannelController {
 			.mode(ChannelMode.PROTECTED)
 			.name(name)
 			.password(await this.hashService.hashPassword(password))
+			.build()
+		);
+		this.channelService.createLinkChannelToUser(
+			Builder(CreateLinkChannelToUserReqDto)
+			.channel(channel)
+			.role(ChannelRole.OWNER)
+			.user(user)
+			.build()
+		);
+		return Builder(CreateChannelResDto)
+		.id(channel.id)
+		.name(channel.name)
+		.build();
+	}
+
+	@Post('private')
+	async createPrivateChannel(
+		@Session() session: Record<string, any>,
+	) {
+		const userId: number = session.userId;
+		const user: User = await this.userService.getUserByUserId(userId);
+		const link: LinkChannelToUser = await this.channelService.getLinkByUserIdAtPrivate(userId);
+		let channel: Channel;
+
+		if (link) {
+			return Builder(CreateChannelResDto)
+			.id(link.channel.id)
+			.name(link.channel.name)
+			.build();
+		}
+		channel = await this.channelService.createChannel(
+			Builder(CreateChannelReqDto)
+			.mode(ChannelMode.PRIVATE)
+			.name(this.privateChannelName)
+			.password(null)
 			.build()
 		);
 		this.channelService.createLinkChannelToUser(
