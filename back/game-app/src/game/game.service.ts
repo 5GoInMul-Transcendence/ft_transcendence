@@ -1,30 +1,30 @@
-import {Injectable} from '@nestjs/common';
-import {GameMode} from './mode/enums/game-mode.enum';
-import {AbstractGame} from './mode/game.abstract';
-import {ClassicGame} from './mode/classic-game';
-import {GoldenPongGame} from './mode/golden-pong-game';
-import {SpeedGame} from './mode/speed-game';
-import {Builder} from 'builder-pattern';
-import {CreateGameDto} from './dto/create-game.dto';
-import {GameGroup} from './game-group';
-import {ConnectGameDto} from './dto/connect-game.dto';
-import {GameProcessUnit} from './game-process-unit';
-import {WsException} from '@nestjs/websockets';
-import {CheckGameKeyDto} from './dto/check-game-key.dto';
-import {CheckReconnectionDto} from './dto/check-reconnection.dto';
-import {ReadyGameDto} from './dto/ready-game.dto';
-import {GameStatus} from './mode/enums/game-status.enum';
-import {InfoGameRes} from './dto/info-game-res.dto';
-import {StartGameDto} from './dto/start-game-dto';
-import {GameCore} from './core/game.core';
-import {CheckDisconnectByReconnectionDto} from './dto/check-disconnect-by-reconnection.dto';
-import {PlayerAction} from './player/enums/player-action.enum';
-import {DisconnectGameDto} from './dto/disconnect-game-dto';
-import {PlayerStatus} from './player/enums/player-status.enum';
-import {PlayerNumber} from './player/enums/player-number.enum';
-import {MainService} from '../main/main.service';
-import {EndGameDto} from './dto/end-game.dto';
-import {Player} from './player/player';
+import { Injectable } from '@nestjs/common';
+import { GameMode } from './mode/enums/game-mode.enum';
+import { AbstractGame } from './mode/game.abstract';
+import { ClassicGame } from './mode/classic-game';
+import { GoldenPongGame } from './mode/golden-pong-game';
+import { SpeedGame } from './mode/speed-game';
+import { Builder } from 'builder-pattern';
+import { CreateGameDto } from './dto/create-game.dto';
+import { GameGroup } from './game-group';
+import { ConnectGameDto } from './dto/connect-game.dto';
+import { GameProcessUnit } from './game-process-unit';
+import { WsException } from '@nestjs/websockets';
+import { CheckGameKeyDto } from './dto/check-game-key.dto';
+import { CheckReconnectionDto } from './dto/check-reconnection.dto';
+import { ReadyGameDto } from './dto/ready-game.dto';
+import { GameStatus } from './mode/enums/game-status.enum';
+import { InfoGameRes } from './dto/info-game-res.dto';
+import { StartGameDto } from './dto/start-game-dto';
+import { GameCore } from './core/game.core';
+import { CheckDisconnectByReconnectionDto } from './dto/check-disconnect-by-reconnection.dto';
+import { PlayerAction } from './player/enums/player-action.enum';
+import { DisconnectGameDto } from './dto/disconnect-game-dto';
+import { PlayerStatus } from './player/enums/player-status.enum';
+import { PlayerNumber } from './player/enums/player-number.enum';
+import { MainService } from '../main/main.service';
+import { EndGameDto } from './dto/end-game.dto';
+import { Player } from './player/player';
 
 @Injectable()
 export class GameService {
@@ -134,15 +134,14 @@ export class GameService {
   readyGame(dto: ReadyGameDto) {
     const { game, player, rivalPlayer } = this.gameGroup.get(dto.gameKey);
 
-    if (game.status != GameStatus.CREATED) {
+    if (
+      game.status != GameStatus.CREATED ||
+      rivalPlayer.status != PlayerStatus.CONNECT
+    ) {
       return;
     }
 
     player.status = PlayerStatus.GAME_READY;
-
-    if (rivalPlayer.status != PlayerStatus.GAME_READY) {
-      return;
-    }
 
     const player1 = player.number == PlayerNumber.P1 ? player : rivalPlayer;
     const player2 = player.number == PlayerNumber.P2 ? player : rivalPlayer;
