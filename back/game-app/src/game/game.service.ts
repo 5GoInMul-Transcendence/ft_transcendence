@@ -182,7 +182,7 @@ export class GameService {
     switch (gameMode) {
       case GameMode.CLASSIC:
         return new ClassicGame(gameId);
-      case GameMode.PADDLE:
+      case GameMode.GOLDENPONG:
         return new GoldenPongGame(gameId);
       case GameMode.SPEED:
         return new SpeedGame(gameId);

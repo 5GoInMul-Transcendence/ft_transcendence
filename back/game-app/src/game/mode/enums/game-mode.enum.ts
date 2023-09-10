@@ -1,5 +1,5 @@
 export enum GameMode {
   CLASSIC = 'classic',
-  PADDLE = 'paddle',
+  GOLDENPONG = 'goldenpong',
   SPEED = 'speed',
 }
