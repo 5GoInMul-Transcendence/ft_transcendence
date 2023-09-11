@@ -7,6 +7,7 @@ import { useSetRecoilState } from 'recoil';
 import Loading from './loading/page';
 import { GameMode } from './GameMode';
 import styled from 'styled-components';
+import DotLoading from './DotLoading';
 
 export default function StartGame() {
   const setModal = useSetRecoilState(modalState);
@@ -52,10 +53,10 @@ export default function StartGame() {
           socket={socket}
         ></GameMode>
       </Wrapper>
-      <GameModeDiv> Selete Game Type : {gameMode} </GameModeDiv>
+      <GameModeDiv>Game Type : [ {gameMode} ] </GameModeDiv>
       {gameQueue && (
         <>
-          <Loading />
+          <DotLoading />
           <MatchCancel onClick={onClickMatchCancel}>Match Cancel</MatchCancel>
         </>
       )}
@@ -74,7 +75,9 @@ const Wrapper = styled.div`
   height: 15rem;
 `;
 
-const MatchCancel = styled.button``;
+const MatchCancel = styled.button`
+  color: ${({ theme }) => theme.colors.yellow};
+`;
 
 const GameModeDiv = styled.div`
   font-size: ${({ theme }) => theme.fontSize.large};

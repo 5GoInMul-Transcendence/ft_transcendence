@@ -18,32 +18,17 @@ export function GameMode({
   setGameMode,
   socket,
 }: Props) {
-  const onClickTypeClassic = useCallback(() => {
-    if (gameQueue === true) {
-      return;
-    }
-    setGameMode('CLASSIC!');
-    setGameQueue(true);
-    emitSubmitMatch('classic');
-  }, [gameMode, gameQueue]);
-
-  const onClickTypeShotrPaddle = useCallback(() => {
-    if (gameQueue === true) {
-      return;
-    }
-    setGameMode('SPEED UP!');
-    setGameQueue(true);
-    emitSubmitMatch('speed');
-  }, [gameMode, gameQueue]);
-
-  const onClickTypeSpeedUp = useCallback(() => {
-    if (gameQueue === true) {
-      return;
-    }
-    setGameMode('GOLDEN PONG');
-    setGameQueue(true);
-    emitSubmitMatch('goldenpong');
-  }, [gameMode, gameQueue]);
+  const onClickGameMode = useCallback(
+    (gameModeText: string, gameApiText: string) => {
+      if (gameQueue === true) {
+        return;
+      }
+      setGameMode(gameModeText);
+      setGameQueue(true);
+      emitSubmitMatch(gameApiText);
+    },
+    [gameMode, gameQueue]
+  );
 
   const emitSubmitMatch = (type: string) => {
     socket?.emit('submitMatch', {
@@ -51,37 +36,63 @@ export function GameMode({
     });
   };
 
+  const gameModes = [
+    {
+      text: '1. CLASSIC PONG',
+      color: theme.colors.blue,
+      gameMode: 'CLASSIC !!',
+      gameApi: 'classic',
+    },
+    {
+      text: '2. SPEED UP',
+      color: theme.colors.green,
+      gameMode: 'SPEED UP !!',
+      gameApi: 'speed',
+    },
+    {
+      text: '3. GOLDEN PONG',
+      color: theme.colors.pink,
+      gameMode: 'GOLDEN PONG !!',
+      gameApi: 'goldenpong',
+    },
+    // Add more gameModes here
+  ];
+
   return (
-    <div>
-      <div>
-        <GameModeButton $color={theme.colors.blue} onClick={onClickTypeClassic}>
-          1. CLASSIC PONG
-        </GameModeButton>
-      </div>
-      <div>
+    <>
+      {gameModes.map((game) => (
         <GameModeButton
-          $color={theme.colors.green}
-          onClick={onClickTypeShotrPaddle}
+          $nonSelected={gameMode === ''}
+          $selected={game.gameMode === gameMode}
+          $color={game.color}
+          key={game.gameMode}
+          onClick={() => onClickGameMode(game.gameMode, game.gameApi)}
         >
-          2. SPEED UP
+          <>
+            {console.log(game.gameMode, gameMode, gameMode === game.gameMode)}
+          </>
+          {game.text}
         </GameModeButton>
-      </div>
-      <div>
-        <GameModeButton $color={theme.colors.pink} onClick={onClickTypeSpeedUp}>
-          3. GOLDEN PONG
-        </GameModeButton>
-      </div>
-    </div>
+      ))}
+    </>
   );
 }
 
-const GameModeButton = styled.button<{ $color: string }>`
-  &:hover {
-    font-size: ${({ theme }) => theme.fontSize.xxxxlarge};
-    margin: 1rem 0 1rem 0;
-  }
+const GameModeButton = styled.button<{
+  $color: string;
+  $selected: boolean;
+  $nonSelected: boolean;
+}>`
+  ${({ $nonSelected }) =>
+    $nonSelected
+      ? `&:hover {
+    font-size: ${theme.fontSize.xxxxlarge};
+  }`
+      : ``}
+  background-color: ${({ $selected }) => ($selected ? 'blue' : '')};
+  width: 100%;
   margin: 1rem 0 0 0;
-
   color: ${({ $color }) => $color};
-  font-size: ${({ theme }) => theme.fontSize.xxxlarge};
+  font-size: ${({ $selected, theme }) =>
+    $selected ? theme.fontSize.xxxxlarge : theme.fontSize.xxxlarge};
 `;
