@@ -20,6 +20,9 @@ import { ChannelMode } from './enum/channel-mode.enum';
 import { ChannelExceptionService } from './exception/channel-exception.service';
 import { CreatePublicChannelReqDto } from './dto/create-public-channel-req.dto';
 import { CreateProtectedChannelReqDto } from './dto/create-protected-channel-req.dto';
+import { CreateDmChannelReqDto } from './dto/create-dm-channel-req.dto';
+import { MemoryUserService } from 'src/users/memoryuser/memory-user.service';
+import { FindUserDto } from 'src/users/memoryuser/dto/find-user.dto';
 
 @Controller('channel')
 export class ChannelController {
@@ -31,6 +34,7 @@ export class ChannelController {
 		private messageService: MessageService,
 		private userService: UserService,
 		private exceptionService: ChannelExceptionService,
+		private memoryUserService: MemoryUserService,
 	) {}
 
 	@Post('public')
@@ -131,46 +135,97 @@ export class ChannelController {
 		.build();
 	}
 
-	// @Post()
-	// async addChannel(
-	// 	@Session() session: Record<string, any>,
-	// 	@Body() addChannelReqDto: AddChannelReqDto, // 채널 name 파이프 구현 필요
-	// ): Promise<CreateChannelResDto> {
-	// 	const {name, mode, password} = addChannelReqDto;
-	// 	const userId = session.userId;
-	// 	const user = await this.userService.getUserByUserId(userId);
-	// 	let channel: Channel;
+	@Post('dm')
+	async createDmChannel(
+		@Session() session: Record<string, any>,
+		@Body() reqDto: CreateDmChannelReqDto,
+	): Promise<CreateChannelResDto> {
+		const { invitedUserId } = reqDto;
+		const invitedNickname: string = this.memoryUserService.getNicknameByUserId(invitedUserId); // invited User 없으면 예외
+		const userId: number = session.userId;
+		const dmChannelInfo = await this.channelService.getCreateDmChannelRes(userId, invitedUserId);
 
-	// 	if (mode !== ChannelMode.PROTECTED && password === '') { // 파이프 구현하고 삭제하기
-	// 		throw new HttpException('지윤, 재상아 비밀번호가 없을 땐 null 로 줘야지!', HttpStatus.OK);
-	// 	}
-	// 	if (mode === ChannelMode.DM) {
-	// 		this.exceptionService.itIsInvalidRequest();
-	// 	}
-	// 	if (mode !== ChannelMode.PROTECTED && password) {
-	// 		this.exceptionService.itIsInvalidRequest();
-	// 	}
-	// 	// 이미 private 이 자신이 만든적이 있다면 예외처리
+		if (!dmChannelInfo) {
+			const nickname: string = this.memoryUserService.getNicknameByUserId(userId);
+			const user: User = await this.userService.getUserByUserId(userId);
+			const invitedUser: User = await this.userService.getUserByUserId(invitedUserId)
+			const channelName: string = `${nickname} and ${invitedNickname} DM`;
+			const channel: Channel = await this.channelService.createChannel(
+				Builder(CreateChannelReqDto)
+				.mode(ChannelMode.DM)
+				.name(channelName)
+				.password(null)
+				.build()
+			);
 
-	// 	channel = await this.channelService.createChannel(
-	// 		Builder(CreateChannelReqDto)
-	// 		.mode(mode)
-	// 		.name(name)
-	// 		.password(await this.hashService.hashPassword(password))
-	// 		.build()
-	// 	);
-	// 	this.channelService.createLinkChannelToUser(
-	// 		Builder(CreateLinkChannelToUserReqDto)
-	// 		.user(user)
-	// 		.channel(channel)
-	// 		.role(ChannelRole.OWNER)
-	// 		.build()
-	// 	);
-	// 	return Builder(CreateChannelResDto)
-	// 	.id(channel.id)
-	// 	.name(channel.name)
-	// 	.build();
-	// }
+			this.channelService.createLinkChannelToUser(
+				Builder(CreateLinkChannelToUserReqDto)
+				.channel(channel)
+				.user(user)
+				.role(ChannelRole.OWNER)
+				.build()
+			);
+			this.channelService.createLinkChannelToUser(
+				Builder(CreateLinkChannelToUserReqDto)
+				.channel(channel)
+				.user(invitedUser)
+				.role(ChannelRole.USER)
+				.build()
+			);
+			return Builder(CreateChannelResDto)
+			.id(channel.id)
+			.name(channel.name)
+			.build();
+		}
+		return Builder(CreateChannelResDto)
+		.id(dmChannelInfo.id)
+		.name(dmChannelInfo.name)
+		.build();
+	}
+
+	/** 삭제 예정 */
+	@Post()
+	async addChannel(
+		@Session() session: Record<string, any>,
+		@Body() addChannelReqDto: AddChannelReqDto, // 채널 name 파이프 구현 필요
+	): Promise<CreateChannelResDto> {
+		const {name, mode, password} = addChannelReqDto;
+		const userId = session.userId;
+		const user = await this.userService.getUserByUserId(userId);
+		let channel: Channel;
+
+		if (mode !== ChannelMode.PROTECTED && password === '') { // 파이프 구현하고 삭제하기
+			throw new HttpException('지윤, 재상아 비밀번호가 없을 땐 null 로 줘야지!', HttpStatus.OK);
+		}
+		// if (mode === ChannelMode.DM) {
+		// 	this.exceptionService.itIsInvalidRequest();
+		// }
+		if (mode !== ChannelMode.PROTECTED && password) {
+			this.exceptionService.itIsInvalidRequest();
+		}
+		// 이미 private 이 자신이 만든적이 있다면 예외처리
+
+		channel = await this.channelService.createChannel(
+			Builder(CreateChannelReqDto)
+			.mode(mode)
+			.name(name)
+			.password(null)
+			// .password(await this.hashService.hashPassword(password))
+			.build()
+		);
+		this.channelService.createLinkChannelToUser(
+			Builder(CreateLinkChannelToUserReqDto)
+			.user(user)
+			.channel(channel)
+			.role(ChannelRole.OWNER)
+			.build()
+		);
+		return Builder(CreateChannelResDto)
+		.id(channel.id)
+		.name(channel.name)
+		.build();
+	}
+	/** 삭제 예정 */
 
 	@Get(':channelid/check')
 	async checkChannel(@Param('channelid') channelId: number): Promise<void> {
@@ -223,6 +278,8 @@ export class ChannelController {
 		let link: LinkChannelToUser;
 		let recentMessages: RecentMessageAtEnter[];
 
+		console.log('@@@@@@@2channel', channel)
+
 		if (!channel) {
 			this.exceptionService.notExistChannel();
 		}
@@ -243,6 +300,7 @@ export class ChannelController {
 		user = await this.userService.getUserByUserId(userId);
 		link = await this.channelService.getLinkByChannelAndUser(channel, user);
 
+		console.log('@@@@@@@@@2link', link);
 		if (!this.channelService.isUserInChannel(link)) {
 			link = await this.channelService.createLinkChannelToUser(
 				Builder(CreateLinkChannelToUserReqDto)
