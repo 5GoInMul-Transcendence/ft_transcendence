@@ -56,16 +56,5 @@ export class MessageService {
 		.where('message.channel = :channelId', {channelId: channel.id})
 		.orderBy('message.timestamp', 'DESC')
 		.getOne();
-		// return await this.messageRepository.findOne({
-		// 	where: {
-		// 		channel,
-		// 	},
-		// 	order: {
-		// 		timestamp: 'DESC',
-		// 	},
-		// 	relations: [
-		// 		'user',
-		// 	]
-		// });
 	}
 }

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Message } from "../../../message/entities/message.entity";
 import { LinkChannelToUser } from "./link-channel-to-user.entity";
 import { Ban } from "./ban.entity";

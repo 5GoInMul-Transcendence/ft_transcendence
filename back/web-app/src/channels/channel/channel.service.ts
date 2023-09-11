@@ -13,7 +13,6 @@ import { Builder } from 'builder-pattern';
 import { Message } from 'src/message/entities/message.entity';
 import { MessageService } from 'src/message/message.service';
 import { ChannelMode } from './enum/channel-mode.enum';
-import { GetCreateDmChannelRes } from './dto/get-create-dm-channel-res.dto';
 
 @Injectable()
 export class ChannelService {
@@ -38,10 +37,13 @@ export class ChannelService {
 		});
 	}
 
-	async getAllChannels(): Promise<Channel[] | null> {
-		return await this.channelRepository.find({
-			select: ['id', 'name'],
-		});
+	async getAllChannels(): Promise<Channel[]> {
+		return await this.channelRepository
+		.createQueryBuilder('channel')
+		.select(['channel.id', 'channel.name'])
+		.where('channel.mode = :modeA', {modeA: ChannelMode.PUBLIC})
+		.orWhere('channel.mode = :modeB', {modeB: ChannelMode.PROTECTED})
+		.getMany();
 	}
 
 	async getMyChannels(reqUserLinks: LinkChannelToUser[]): Promise<MyChannels[]> {
@@ -72,12 +74,6 @@ export class ChannelService {
 		.where('link_channel_to_user.channel = :channelId', {channelId: channel.id})
 		.andWhere('link_channel_to_user.user = :userId', {userId: user.id}) // andWhere은 OR 연산자이다.
 		.getOne();
-		// return await this.linkChannelToUserRepository.findOne({
-		// 	where: {
-		// 		user,
-		// 		channel,
-		// 	}
-		// })
 	}
 
 	async getLinksRelatedChannelAndUserByUserId(userId: number): Promise<LinkChannelToUser[]>{
@@ -89,15 +85,6 @@ export class ChannelService {
 		.leftJoinAndSelect('link_channel_to_user.user', 'user')
 		.where('link_channel_to_user.user = :userId', {userId: user.id})
 		.getMany();
-		// return await this.linkChannelToUserRepository.find({
-		// 	where: {
-		// 		user,
-		// 	},
-		// 	relations: [
-		// 		"channel",
-		// 		"user",
-		// 	],
-		// });
 	}
 
 	async getLinkByUserIdAtPrivate(userId: number): Promise<LinkChannelToUser | null> {
@@ -109,39 +96,30 @@ export class ChannelService {
 		.getOne();
 	}
 
-	async getCreateDmChannelRes(userIdA: number, userIdB: number): Promise<GetCreateDmChannelRes | null> {
-		let linksA: LinkChannelToUser[];
-		let linksB: LinkChannelToUser[];
-
-		linksA = await this.linkChannelToUserRepository
+	async getCreateDmChannelRes(userIdA: number, userIdB: number): Promise<LinkChannelToUser[]> {
+		const linksA = await this.linkChannelToUserRepository
 		.createQueryBuilder('linkA')
 		.innerJoinAndSelect('linkA.user', 'userA', 'userA.id = :userIdA', {userIdA})
 		.innerJoinAndSelect('linkA.channel', 'channel', 'channel.mode = :mode', {mode: ChannelMode.DM})
 		.getMany();
-
-		if (!linksA.length)
-			return null;
-
-		linksB = await this.linkChannelToUserRepository
+		const linksB = await this.linkChannelToUserRepository
 		.createQueryBuilder('linkB')
 		.innerJoinAndSelect('linkB.user', 'userB', 'userB.id = :userIdB', {userIdB})
 		.innerJoinAndSelect('linkB.channel', 'channel', 'channel.mode = :mode', {mode: ChannelMode.DM})
 		.getMany();
+		const retLinks: LinkChannelToUser[] = [];
 
-		if (!linksB.length)
-			return null;
-
+		if (!linksA.length || !linksB.length)
+			return [];
 		for (const linkA of linksA) {
 			for (const linkB of linksB) {
 				if (linkA.channel.id === linkB.channel.id) {
-					return Builder(GetCreateDmChannelRes)
-					.id(linkA.channel.id)
-					.name(linkA.channel.name)
-					.build();
+					retLinks.push(linkA);
+					retLinks.push(linkB);
+					return retLinks;
 				}
 			}
 		}
-		return null;
 	}
 
 	async createChannel(dto: CreateChannelReqDto): Promise<Channel> {

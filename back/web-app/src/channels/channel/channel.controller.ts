@@ -141,14 +141,22 @@ export class ChannelController {
 		@Body() reqDto: CreateDmChannelReqDto,
 	): Promise<CreateChannelResDto> {
 		const { invitedUserId } = reqDto;
-		const invitedNickname: string = this.memoryUserService.getNicknameByUserId(invitedUserId); // invited User 없으면 예외
+		const { nickname: invitedNickname } = this.memoryUserService.findUserByUserId(
+			Builder(FindUserDto)
+			.userId(invitedUserId)
+			.build()
+		); // invited User 없으면 예외
 		const userId: number = session.userId;
-		const dmChannelInfo = await this.channelService.getCreateDmChannelRes(userId, invitedUserId);
-
-		if (!dmChannelInfo) {
-			const nickname: string = this.memoryUserService.getNicknameByUserId(userId);
+		let links: LinkChannelToUser[]
+		
+		if (invitedUserId === userId) {
+			this.exceptionService.itIsInvalidRequest();
+		}
+		links= await this.channelService.getCreateDmChannelRes(userId, invitedUserId);
+		if (links.length < 2) {
 			const user: User = await this.userService.getUserByUserId(userId);
 			const invitedUser: User = await this.userService.getUserByUserId(invitedUserId)
+			const nickname: string = user.nickname;
 			const channelName: string = `${nickname} and ${invitedNickname} DM`;
 			const channel: Channel = await this.channelService.createChannel(
 				Builder(CreateChannelReqDto)
@@ -178,8 +186,8 @@ export class ChannelController {
 			.build();
 		}
 		return Builder(CreateChannelResDto)
-		.id(dmChannelInfo.id)
-		.name(dmChannelInfo.name)
+		.id(links[0].channel.id)
+		.name(links[0].channel.name)
 		.build();
 	}
 
