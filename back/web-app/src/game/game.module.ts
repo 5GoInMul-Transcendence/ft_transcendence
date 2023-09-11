@@ -3,9 +3,13 @@ import { GameService } from './game.service';
 import { UserModule } from '../users/user/user.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { GameController } from './game.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { GameHistory } from './entities/game-history.entity';
+import { User } from '../users/user/entities/user.entity';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([User, GameHistory]),
     ClientsModule.register([
       {
         name: 'GAME_SERVER',
