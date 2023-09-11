@@ -41,7 +41,7 @@ export default function MainLayout({
       <SideContainer>
         <Link href='/myprofile'>
           <MyProfile>
-            <ProfileImage url={data.avatar} size='45px' />
+            <ProfileImage url={data?.avatar} size='45px' />
             &nbsp;
             {data?.nickname}
           </MyProfile>

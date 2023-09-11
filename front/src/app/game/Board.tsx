@@ -53,6 +53,7 @@ export default function Board({ game }: Props) {
       } else if (res.status === 'end') {
         setEndGame(true);
         setTimeout(() => {
+          socket?.disconnect();
           router.push('/main');
         }, 2000);
       }
@@ -64,7 +65,7 @@ export default function Board({ game }: Props) {
       setP2Score(res.p2.score);
     });
     socket?.on('disconnect', (res) => {
-      console.log(res);
+      console.log('game socket disconnect', res);
     });
   }, [socket]);
 

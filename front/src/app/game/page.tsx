@@ -3,15 +3,17 @@
 import styled from 'styled-components';
 import { IGame } from '@/types/IGame';
 import Board from './Board';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { axiosInstance } from '@/utils/axios';
 
 export default function Game() {
   const [game, setGame] = useState<IGame | undefined>(undefined);
 
-  axiosInstance.get('/game').then((res) => {
-    setGame(res.data.data);
-  });
+  useEffect(() => {
+    axiosInstance.get('/game').then((res) => {
+      setGame(res.data.data);
+    });
+  }, []);
 
   if (!game) return;
 
