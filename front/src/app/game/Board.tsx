@@ -8,6 +8,7 @@ import StandByGame from './StandByGame';
 import GameEnd from './GameEnd';
 import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
+import { mutate } from 'swr';
 
 interface Props {
   game: IGame;
@@ -54,6 +55,7 @@ export default function Board({ game }: Props) {
         setEndGame(true);
         setTimeout(() => {
           socket?.disconnect();
+          mutate('/friend/list');
           router.push('/main');
         }, 2000);
       }
