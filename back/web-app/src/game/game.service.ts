@@ -20,6 +20,8 @@ import { FindGameHistoryByUserIdDto } from './dto/find-game-history-by-userid.dt
 import { Repository } from 'typeorm';
 import { User } from '../users/user/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AddGameHistoryDto } from './dto/add-game-history.dto';
+import { GameHistory } from './entities/game-history.entity';
 
 @Injectable()
 export class GameService implements OnModuleInit {
@@ -30,6 +32,8 @@ export class GameService implements OnModuleInit {
     @Inject('GAME_SERVER') private client: ClientGrpc,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(GameHistory)
+    private gameHistoryRepository: Repository<GameHistory>,
     private memoryUserService: MemoryUserService,
   ) {
     this.gameInfos = new Map<number, GameInfo>();
@@ -96,5 +100,22 @@ export class GameService implements OnModuleInit {
     });
 
     return user.gameHistories == null ? [] : user.gameHistories;
+  }
+
+  async addGameHistory(dto: AddGameHistoryDto) {
+    const { player1Id, player2Id, player1Score, player2Score } = dto;
+
+    const gameHistory = this.gameHistoryRepository.create({
+      player1Id,
+      player2Id,
+      player1Score,
+      player2Score,
+    });
+
+    const player1User = await this.userRepository.findOneBy({ id: player1Id });
+    const player2User = await this.userRepository.findOneBy({ id: player2Id });
+    gameHistory.users = [player1User, player2User];
+
+    this.gameHistoryRepository.save(gameHistory);
   }
 }
