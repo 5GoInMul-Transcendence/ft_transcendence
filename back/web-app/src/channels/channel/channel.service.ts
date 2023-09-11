@@ -25,10 +25,6 @@ export class ChannelService {
 		private userService: UserService,
 	) {}
 
-	isUserInChannel(link: LinkChannelToUser): boolean {
-		return link !== null;
-	}
-
 	async getChannel(id: number): Promise<Channel | null> {
 		return await this.channelRepository.findOne({
 			where: {

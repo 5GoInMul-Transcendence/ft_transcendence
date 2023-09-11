@@ -31,8 +31,8 @@ export class MessageService {
 		const messages = await this.messageRepository
 		.createQueryBuilder('message')
 		.select(['message.id', 'message.content', 'message.timestamp'])
-		.leftJoinAndSelect('message.user', 'user') // user 라는 사용자 entity 선택 후 이를 join 함
-		.where('message.channel = :channelId', {channelId}) // .where('message.channel.id = :channelId', {channelId}) // 위와 같은 의미라는 것을 의미, 삭제해도 됨
+		.leftJoinAndSelect('message.user', 'user')
+		.where('message.channel = :channelId', {channelId})
 		.orderBy('message.timestamp', 'DESC')
 		.take(maxMessagesCount)
 		.getMany();

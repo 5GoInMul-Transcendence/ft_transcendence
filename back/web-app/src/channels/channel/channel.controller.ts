@@ -1,5 +1,4 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Session } from '@nestjs/common';
-import { AddChannelReqDto } from './dto/add-channel-req.dto';
 import { Builder } from 'builder-pattern';
 import { ChannelService } from './channel.service';
 import { CreateChannelReqDto } from './dto/create-channel-req.dto';
@@ -191,50 +190,6 @@ export class ChannelController {
 		.build();
 	}
 
-	/** 삭제 예정 */
-	@Post()
-	async addChannel(
-		@Session() session: Record<string, any>,
-		@Body() addChannelReqDto: AddChannelReqDto, // 채널 name 파이프 구현 필요
-	): Promise<CreateChannelResDto> {
-		const {name, mode, password} = addChannelReqDto;
-		const userId = session.userId;
-		const user = await this.userService.getUserByUserId(userId);
-		let channel: Channel;
-
-		if (mode !== ChannelMode.PROTECTED && password === '') { // 파이프 구현하고 삭제하기
-			throw new HttpException('지윤, 재상아 비밀번호가 없을 땐 null 로 줘야지!', HttpStatus.OK);
-		}
-		// if (mode === ChannelMode.DM) {
-		// 	this.exceptionService.itIsInvalidRequest();
-		// }
-		if (mode !== ChannelMode.PROTECTED && password) {
-			this.exceptionService.itIsInvalidRequest();
-		}
-		// 이미 private 이 자신이 만든적이 있다면 예외처리
-
-		channel = await this.channelService.createChannel(
-			Builder(CreateChannelReqDto)
-			.mode(mode)
-			.name(name)
-			.password(null)
-			// .password(await this.hashService.hashPassword(password))
-			.build()
-		);
-		this.channelService.createLinkChannelToUser(
-			Builder(CreateLinkChannelToUserReqDto)
-			.user(user)
-			.channel(channel)
-			.role(ChannelRole.OWNER)
-			.build()
-		);
-		return Builder(CreateChannelResDto)
-		.id(channel.id)
-		.name(channel.name)
-		.build();
-	}
-	/** 삭제 예정 */
-
 	@Get(':channelid/check')
 	async checkChannel(@Param('channelid') channelId: number): Promise<void> {
 		const channel = await this.channelService.getChannel(channelId);
@@ -249,67 +204,43 @@ export class ChannelController {
 		@Param('channelid') channelId: number,
 		@Session() session: Record<string, any>,
 		@Body('password') password: string, // pipe
-	): Promise<void> {
+	): Promise<CreateChannelResDto> {
 		const channel = await this.channelService.getChannel(channelId);
 		const userId = session.userId;
 		const user = await this.userService.getUserByUserId(userId);
+		let link: LinkChannelToUser;
+		let recentMessages: RecentMessageAtEnter[];
 
 		if (channel === null) {
 			this.exceptionService.notExistChannel();
 		}
-		if (channel.mode !== ChannelMode.PROTECTED) {
-			this.exceptionService.itIsInvalidRequest();
-		}
-		if (!password) {
+		if (channel.mode !== ChannelMode.PROTECTED
+			|| !password
+			|| await this.channelService.getLinkByChannelAndUser(channel, user)
+			) {
 			this.exceptionService.itIsInvalidRequest();
 		}
 		if (await this.hashService.hashCompare(password, channel.password) === false) {
-			this.exceptionService.itIsInvalidRequest();
+			this.exceptionService.passwordIsNotValid();
 		}
-		this.channelService.createLinkChannelToUser(
+		link = await this.channelService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.channel(channel)
 			.user(user)
 			.role(ChannelRole.USER)
 			.build()
 		);
+		return Builder(CreateChannelResDto)
+		.id(channel.id)
+		.name(channel.name)
+		.build();
 	}
 
-	@Get(':channelid')
-	async enterChannel(
-		@Param('channelid') channelId: number,
-		@Session() session: Record<string, any>,
-		): Promise<EnterChannelRes> {
-		const channel = await this.channelService.getChannel(channelId);
-		let userId: number;
-		let user: User;
-		let link: LinkChannelToUser;
-		let recentMessages: RecentMessageAtEnter[];
-
-		console.log('@@@@@@@2channel', channel)
-
-		if (!channel) {
-			this.exceptionService.notExistChannel();
-		}
-		if (channel.mode === ChannelMode.PROTECTED) {
-			this.exceptionService.itIsInvalidRequest();
-		}
-		if (channel.mode === ChannelMode.PRIVATE) {
-			this.exceptionService.itIsInvalidRequest();
-		}
-		// dm 모드 생기면 추가
-		// if (channel.mode !== ChannelMode.DM && channel.invitedUser) {
-		// 	this.exceptionService.itIsInvalidRequest();
-		// }
-		// if (ban 일 때)
-		// this.exceptionService.youAreBanUser();
-
-		userId = session.userId;
-		user = await this.userService.getUserByUserId(userId);
-		link = await this.channelService.getLinkByChannelAndUser(channel, user);
-
-		console.log('@@@@@@@@@2link', link);
-		if (!this.channelService.isUserInChannel(link)) {
+	/**
+	 * Enter Channel
+	 */
+	private async enterPublic(link: LinkChannelToUser, channel: Channel, user: User): Promise<LinkChannelToUser> {
+		if (!link) {
 			link = await this.channelService.createLinkChannelToUser(
 				Builder(CreateLinkChannelToUserReqDto)
 				.user(user)
@@ -318,9 +249,43 @@ export class ChannelController {
 				.build()
 			);
 		}
-		// dm 일 때 구현
-		// if (channel.mode === ChannelMode.DM) {
-		// }
+		return link;
+	}
+
+	private isNotUserInChannel(link: LinkChannelToUser): boolean {
+		return !link;
+	}
+
+	@Get(':channelid')
+	async enterChannel(
+		@Param('channelid') channelId: number,
+		@Session() session: Record<string, any>,
+		): Promise<EnterChannelRes> {
+		const channel: Channel | null = await this.channelService.getChannel(channelId);
+		let userId: number;
+		let user: User;
+		let link: LinkChannelToUser;
+		let recentMessages: RecentMessageAtEnter[];
+
+		if (!channel) {
+			this.exceptionService.notExistChannel();
+		}
+		// if (ban 일 때)
+		// this.exceptionService.youAreBanUser();
+		userId = session.userId;
+		user = await this.userService.getUserByUserId(userId);
+		link = await this.channelService.getLinkByChannelAndUser(channel, user);
+		switch(channel.mode) {
+			case ChannelMode.PUBLIC:
+				link = await this.enterPublic(link, channel, user);
+				break;
+			case ChannelMode.PROTECTED:
+			case ChannelMode.PRIVATE:
+			case ChannelMode.DM:
+				if (this.isNotUserInChannel(link) === true) {
+					this.exceptionService.itIsInvalidRequest();
+				}
+		}
 		
 		recentMessages = await this.messageService.getMessages(channel.id);
 
@@ -351,7 +316,7 @@ export class ChannelController {
 		}
 		user = await this.userService.getUserByUserId(userId);
 		link = await this.channelService.getLinkByChannelAndUser(channel, user);
-		if (!this.channelService.isUserInChannel(link)) {
+		if (!link) {
 			this.exceptionService.notEnterUserInChannel();
 		}
 		this.messageService.sendMessage(
