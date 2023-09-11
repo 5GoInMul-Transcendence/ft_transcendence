@@ -16,6 +16,10 @@ import { FindUserDto } from '../users/memoryuser/dto/find-user.dto';
 import { FindGameReturnDto } from './dto/find-game-return.dto';
 import { GamePlayer } from './game-player';
 import { firstValueFrom } from 'rxjs';
+import { FindGameHistoryByUserIdDto } from './dto/find-game-history-by-userid.dto';
+import { Repository } from 'typeorm';
+import { User } from '../users/user/entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class GameService implements OnModuleInit {
@@ -24,6 +28,8 @@ export class GameService implements OnModuleInit {
 
   constructor(
     @Inject('GAME_SERVER') private client: ClientGrpc,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
     private memoryUserService: MemoryUserService,
   ) {
     this.gameInfos = new Map<number, GameInfo>();
@@ -77,5 +83,18 @@ export class GameService implements OnModuleInit {
       )
       .gameKey(gameInfo.gameKey)
       .build();
+  }
+
+  async findGameHistoryByUserId(dto: FindGameHistoryByUserIdDto) {
+    const user = await this.userRepository.findOne({
+      where: {
+        id: dto.userId,
+      },
+      relations: {
+        gameHistories: true,
+      },
+    });
+
+    return user.gameHistories == null ? [] : user.gameHistories;
   }
 }
