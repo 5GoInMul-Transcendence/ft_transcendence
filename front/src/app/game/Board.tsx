@@ -8,13 +8,14 @@ import StandByGame from './StandByGame';
 import GameEnd from './GameEnd';
 import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
-import { mutate } from 'swr';
+import { useSWRConfig } from 'swr';
 
 interface Props {
   game: IGame;
 }
 
 export default function Board({ game }: Props) {
+  const { mutate } = useSWRConfig();
   const [p1Score, setP1Score] = useState<number>(0);
   const [p2Score, setP2Score] = useState<number>(0);
   const [socket, setSocket] = useState<Socket<any, any> | undefined>(undefined);
@@ -42,7 +43,6 @@ export default function Board({ game }: Props) {
 
   useEffect(() => {
     socket?.on('infoGame', (res: IInfoGame) => {
-      console.log(res, 'infoGame');
       if (res.status === 'standby') {
         setReadyGame(false);
         setStandbyGame(true);
@@ -50,7 +50,6 @@ export default function Board({ game }: Props) {
           socket.emit('startGame');
           setStandbyGame(false);
         }, 3000);
-      } else if (res.status === 'play') {
       } else if (res.status === 'end') {
         setEndGame(true);
         setTimeout(() => {
@@ -62,10 +61,10 @@ export default function Board({ game }: Props) {
     });
 
     socket?.on('updateScore', (res: IScore) => {
-      console.log(res);
       setP1Score(res.p1.score);
       setP2Score(res.p2.score);
     });
+
     socket?.on('disconnect', (res) => {
       console.log('game socket disconnect', res);
     });
@@ -87,7 +86,7 @@ export default function Board({ game }: Props) {
       </ScoreBoardDiv>
       <GameBoardDiv>
         <GameBoard socket={socket} />
-        {standbyGame && <StandByGame />}
+        {standbyGame && <StandByGame count={3} />}
         {readGame && (
           <GameStartDiv>
             <button onClick={readyGame}>READY GAME</button>

@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-export default function StandByGame() {
-  const [count, setCount] = useState<number>();
+interface Props {
+  count: number;
+}
+export default function StandByGame({ count }: Props) {
+  const [countText, setCountText] = useState<number>();
 
   useEffect(() => {
-    setTimeout(() => {
-      setCount(3);
-    }, 0);
-    setTimeout(() => {
-      setCount(2);
-    }, 1000);
-    setTimeout(() => {
-      setCount(1);
-    }, 2000);
+    for (let i = 0; i < count; i++) {
+      setTimeout(() => {
+        setCountText(count - i);
+      }, i * 1000);
+    }
   }, []);
-  return <Container>{count}</Container>;
+  return <Container>{countText}</Container>;
 }
 
 const Container = styled.div`

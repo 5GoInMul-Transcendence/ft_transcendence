@@ -6,8 +6,9 @@ import { IMatch } from '@/types/IMatch';
 import styled from 'styled-components';
 import mockFetcher from '@/utils/mockFetcher';
 
-export default function History() {
-  const { data: match, error } = useSwr('/api/match', mockFetcher);
+export default function History({ params }: { params: { user: string } }) {
+  // const { data: match, error } = useSwr(`/api/match/${params}`, mockFetcher);
+  const { data: match, error } = useSwr(`/api/match/`, mockFetcher);
 
   if (!match) return null;
 
