@@ -156,7 +156,7 @@ export class ChannelController {
 			const user: User = await this.userService.getUserByUserId(userId);
 			const invitedUser: User = await this.userService.getUserByUserId(invitedUserId)
 			const nickname: string = user.nickname;
-			const channelName: string = `${nickname} and ${invitedNickname} DM`;
+			const channelName: string = `${nickname}, ${invitedNickname} Dm`; // max 32
 			const channel: Channel = await this.channelService.createChannel(
 				Builder(CreateChannelReqDto)
 				.mode(ChannelMode.DM)
@@ -208,8 +208,6 @@ export class ChannelController {
 		const channel = await this.channelService.getChannel(channelId);
 		const userId = session.userId;
 		const user = await this.userService.getUserByUserId(userId);
-		let link: LinkChannelToUser;
-		let recentMessages: RecentMessageAtEnter[];
 
 		if (channel === null) {
 			this.exceptionService.notExistChannel();
@@ -223,7 +221,7 @@ export class ChannelController {
 		if (await this.hashService.hashCompare(password, channel.password) === false) {
 			this.exceptionService.passwordIsNotValid();
 		}
-		link = await this.channelService.createLinkChannelToUser(
+		this.channelService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.channel(channel)
 			.user(user)
