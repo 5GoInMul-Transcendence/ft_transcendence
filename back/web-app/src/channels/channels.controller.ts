@@ -19,7 +19,7 @@ export class ChannelsController {
   async getMyChannels(@Session() session: Record<string, any>,)
 	:Promise<MyChannels[]> {
     const userId: number = session.userId;
-    const links: LinkChannelToUser[] = await this.channelService.getLinksRelatedChannelAndUserByUserId(userId);
+    const links: LinkChannelToUser[] = await this.channelService.getLinksRelatedChannelByUserId(userId);
 
 		return await this.channelService.getMyChannels(links);
   }

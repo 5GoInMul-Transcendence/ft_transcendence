@@ -68,18 +68,15 @@ export class ChannelService {
 		return await this.linkChannelToUserRepository
 		.createQueryBuilder('link_channel_to_user')
 		.where('link_channel_to_user.channel = :channelId', {channelId: channel.id})
-		.andWhere('link_channel_to_user.user = :userId', {userId: user.id}) // andWhere은 OR 연산자이다.
+		.andWhere('link_channel_to_user.user = :userId', {userId: user.id}) // andWhere은 OR 연산이다.
 		.getOne();
 	}
 
-	async getLinksRelatedChannelAndUserByUserId(userId: number): Promise<LinkChannelToUser[]>{
-		const user = await this.userService.getUserByUserId(userId);
-		
+	async getLinksRelatedChannelByUserId(userId: number): Promise<LinkChannelToUser[]>{
 		return await this.linkChannelToUserRepository
 		.createQueryBuilder('link_channel_to_user')
 		.leftJoinAndSelect('link_channel_to_user.channel', 'channel')
-		.leftJoinAndSelect('link_channel_to_user.user', 'user')
-		.where('link_channel_to_user.user = :userId', {userId: user.id})
+		.where('link_channel_to_user.user = :userId', {userId})
 		.getMany();
 	}
 
@@ -88,7 +85,7 @@ export class ChannelService {
 		.createQueryBuilder('link_channel_to_user')
 		.leftJoinAndSelect('link_channel_to_user.channel', 'channel')
 		.where('link_channel_to_user.user = :userId', {userId})
-		.where('channel.mode = :mode', {mode: ChannelMode.PRIVATE})
+		.andWhere('channel.mode = :mode', {mode: ChannelMode.PRIVATE})
 		.getOne();
 	}
 
@@ -109,6 +106,8 @@ export class ChannelService {
 			return [];
 		for (const linkA of linksA) {
 			for (const linkB of linksB) {
+				console.log('A:', linkA)
+				console.log('B:', linkB);
 				if (linkA.channel.id === linkB.channel.id) {
 					retLinks.push(linkA);
 					retLinks.push(linkB);
@@ -116,6 +115,7 @@ export class ChannelService {
 				}
 			}
 		}
+		return [];
 	}
 
 	async createChannel(dto: CreateChannelReqDto): Promise<Channel> {

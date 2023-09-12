@@ -8,7 +8,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar', { length: 36 }) // length: 12
+  @Column('varchar', { length: 12 })
   nickname: string;
 
   @Column('varchar', { length: 64 })
