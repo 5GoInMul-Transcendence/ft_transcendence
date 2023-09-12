@@ -36,10 +36,10 @@ export class MainUserService {
   updateUser(dto: Partial<UpdateMainUserDto> & { userId: number }) {
     const user = this.mainUsers.get(dto.userId);
 
-    if (user) {
+    if (!user) {
       return;
     }
-    
+
     Object.keys(dto).forEach((key) => {
       user[key] = dto[key];
     });
