@@ -69,7 +69,7 @@ export class LoginController {
 
     if (this.loginService.checkTwoFactorOn(memberUser.user.id)) {
       session.tempUserId = memberUser.user.id;
-      return RedirectResource.AUTH;
+      return RedirectResource.TWOFACTOR;
     }
 
     this.sessionService.setSession(session, memberUser.user.id);
@@ -119,7 +119,7 @@ export class LoginController {
 
     if (this.loginService.checkTwoFactorOn(user.id)) {
       session.tempUserId = user.id;
-      res.redirect('http://localhost:3000/auth');
+      res.redirect('http://localhost:3000/2fa');
     }
 
     this.sessionService.setSession(session, user.id);
