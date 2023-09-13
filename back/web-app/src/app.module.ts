@@ -60,7 +60,7 @@ export class AppModule implements NestModule {
     consumer.apply(this.sessionMiddleware).forRoutes('*'); // 모든 라우트에 세션 미들웨어를 적용
     consumer
       .apply(AuthMiddleware)
-      .exclude('login(.*)', 'signup(.*)', '/') //test '/'
+      .exclude('login(.*)', 'signup(.*)', 'auth/2fa', '/') //test '/'
       .forRoutes('*');
   }
 }
