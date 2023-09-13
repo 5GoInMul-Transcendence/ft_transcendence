@@ -6,23 +6,24 @@ import { Form, FormWrapper } from '@/app/(auth)/styles';
 import styled from 'styled-components';
 import { useCallback } from 'react';
 import { axiosInstance } from '@/utils/axios';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
+  const route = useRouter();
   const [id, , onChangeId] = useInput('');
   const [password, , onChangePassword] = useInput('');
 
   const onSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      console.log(id, password);
-      try {
-        const res = await axiosInstance.post('/login', {
+      axiosInstance
+        .post('/login', {
           id: id,
           password: password,
+        })
+        .then((res) => {
+          route.push(res.data.data);
         });
-      } catch (error) {
-        console.log(error, 'error');
-      }
     },
     [id, password]
   );
