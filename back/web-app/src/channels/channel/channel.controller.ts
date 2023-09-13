@@ -22,6 +22,7 @@ import { CreateProtectedChannelReqDto } from './dto/create-protected-channel-req
 import { CreateDmChannelReqDto } from './dto/create-dm-channel-req.dto';
 import { MemoryUserService } from 'src/users/memoryuser/memory-user.service';
 import { FindUserDto } from 'src/users/memoryuser/dto/find-user.dto';
+import { CheckChannelResDto } from './dto/check-channel-res.dto';
 
 @Controller('channel')
 export class ChannelController {
@@ -191,12 +192,15 @@ export class ChannelController {
 	}
 
 	@Get(':channelid/check')
-	async checkChannel(@Param('channelid') channelId: number): Promise<void> {
+	async checkChannel(@Param('channelid') channelId: number): Promise<CheckChannelResDto> {
 		const channel = await this.channelService.getChannel(channelId);
 
 		if (channel === null) {
 			this.exceptionService.notExistChannel();
 		}
+		return Builder(CheckChannelResDto)
+		.mode(channel.mode)
+		.build();
 	}
 
 	@Post(':channelid/password')
