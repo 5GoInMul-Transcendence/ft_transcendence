@@ -67,10 +67,11 @@ export class LoginController {
       );
     }
 
-    if (this.loginService.isTwoFaOn(memberUser.user.twoFactor) == true) {
-      // 2FA
-      // 세션만 생성하고, userId 는 넣어주면 안 됨
+    if (this.loginService.checkTwoFactorOn(memberUser.user.id)) {
+      session.tempUserId = memberUser.user.id;
+      return RedirectResource.AUTH;
     }
+
     this.sessionService.setSession(session, memberUser.user.id);
     return RedirectResource.MAIN;
   }
