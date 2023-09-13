@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Channel } from './entities/channel.entity';
-import { Repository, createQueryBuilder } from 'typeorm';
+import { Repository, SelectQueryBuilder, createQueryBuilder } from 'typeorm';
 import { CreateChannelReqDto } from './dto/create-channel-req.dto';
 import { LinkChannelToUser } from './entities/link-channel-to-user.entity';
 import { User } from 'src/users/user/entities/user.entity';
@@ -90,32 +90,22 @@ export class ChannelService {
 	}
 
 	async getCreateDmChannelRes(userIdA: number, userIdB: number): Promise<LinkChannelToUser[]> {
-		const linksA = await this.linkChannelToUserRepository
+		const subQuery: SelectQueryBuilder<LinkChannelToUser> = this.linkChannelToUserRepository
 		.createQueryBuilder('linkA')
-		.innerJoinAndSelect('linkA.user', 'userA', 'userA.id = :userIdA', {userIdA})
-		.innerJoinAndSelect('linkA.channel', 'channel', 'channel.mode = :mode', {mode: ChannelMode.DM})
-		.getMany();
-		const linksB = await this.linkChannelToUserRepository
+		.select('linkA.channel')
+		.innerJoin('linkA.channel', 'channelA', 'channelA.mode = :modeA', {modeA: ChannelMode.DM})
+		.where('linkA.user = :userIdA', {userIdA})
+		const mainQuery: SelectQueryBuilder<LinkChannelToUser> = this.linkChannelToUserRepository
 		.createQueryBuilder('linkB')
-		.innerJoinAndSelect('linkB.user', 'userB', 'userB.id = :userIdB', {userIdB})
-		.innerJoinAndSelect('linkB.channel', 'channel', 'channel.mode = :mode', {mode: ChannelMode.DM})
-		.getMany();
-		const retLinks: LinkChannelToUser[] = [];
+		.select('linkB.channel')
+		.innerJoinAndSelect('linkB.channel', 'channel', 'channel.mode = :modeB', {modeB: ChannelMode.DM})
+		.where('linkB.user = :userIdB', {userIdB})
+		.andWhere(`linkB.channel In (${subQuery.getQuery()})`);
+		const links: any[] = await mainQuery
+		.setParameters(subQuery.getParameters())
+		.getRawMany();
 
-		if (!linksA.length || !linksB.length)
-			return [];
-		for (const linkA of linksA) {
-			for (const linkB of linksB) {
-				console.log('A:', linkA)
-				console.log('B:', linkB);
-				if (linkA.channel.id === linkB.channel.id) {
-					retLinks.push(linkA);
-					retLinks.push(linkB);
-					return retLinks;
-				}
-			}
-		}
-		return [];
+		return links;
 	}
 
 	async createChannel(dto: CreateChannelReqDto): Promise<Channel> {

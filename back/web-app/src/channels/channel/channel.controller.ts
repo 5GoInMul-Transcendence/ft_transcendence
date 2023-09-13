@@ -146,13 +146,13 @@ export class ChannelController {
 			.build()
 		); // invited User 없으면 예외
 		const userId: number = session.userId;
-		let links: LinkChannelToUser[]
+		let links: any[]
 		
 		if (invitedUserId === userId) {
 			this.exceptionService.itIsInvalidRequest();
 		}
-		links= await this.channelService.getCreateDmChannelRes(userId, invitedUserId);
-		if (links.length < 2) {
+		links = await this.channelService.getCreateDmChannelRes(userId, invitedUserId);
+		if (links.length < 1) {
 			const user: User = await this.userService.getUserByUserId(userId);
 			const invitedUser: User = await this.userService.getUserByUserId(invitedUserId)
 			const nickname: string = user.nickname;
@@ -185,8 +185,8 @@ export class ChannelController {
 			.build();
 		}
 		return Builder(CreateChannelResDto)
-		.id(links[0].channel.id)
-		.name(links[0].channel.name)
+		.id(links[0].channel_id)
+		.name(links[0].channel_name)
 		.build();
 	}
 
