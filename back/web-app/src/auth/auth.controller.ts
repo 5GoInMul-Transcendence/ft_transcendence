@@ -1,4 +1,11 @@
-import { Body, Controller, Post, Session } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Session,
+} from '@nestjs/common';
 import { Builder } from 'builder-pattern';
 import { AuthService } from './auth.service';
 import { AuthMailDto } from './dto/auth-mail.dto';
@@ -7,10 +14,15 @@ import { AuthPhoneReqDto } from './dto/auth-phone-req.dto';
 import { AuthPhoneDto } from './dto/auth-phone.dto';
 import { CheckAuthCodeReqDto } from './dto/check-auth-code-req.dto';
 import { CheckAuthCodeDto } from './dto/check-auth-code.dto';
+import { RedirectResource } from '../common/response/redirect-resource.enum';
+import { SessionService } from '../session/session.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private sessionService: SessionService,
+  ) {}
 
   @Post('mail')
   authMail(@Session() session, @Body() dto: AuthMailReqDto) {
@@ -31,5 +43,24 @@ export class AuthController {
     this.authService.checkAuthCode(
       Builder(CheckAuthCodeDto).userId(session.userId).code(dto.code).build(),
     );
+  }
+
+  @Post('2fa')
+  @HttpCode(HttpStatus.FOUND)
+  checkAuthCodeBy2faLogin(
+    @Session() session,
+    @Body() dto: CheckAuthCodeReqDto,
+  ) {
+    this.authService.checkAuthCode(
+      Builder(CheckAuthCodeDto)
+        .userId(session.tempUserId)
+        .code(dto.code)
+        .build(),
+    );
+
+    delete session.tempUserId;
+    this.sessionService.setSession(session, session.tempUserId);
+
+    return RedirectResource.MAIN;
   }
 }
