@@ -15,6 +15,7 @@ export default function FriendList() {
   const [socket] = useSocket('10001/main');
   useEffect(() => {
     socket?.on('friend_update', (res: any) => {
+      console.log(res, 'friends_update');
       setFriends((cur) => {
         cur.forEach((element) => {
           if (element.id === res.data.id) {
@@ -28,6 +29,7 @@ export default function FriendList() {
 
   useEffect(() => {
     setFriends(friendsData || []);
+    console.log(friendsData, 'friendsData updatae');
   }, [friendsData]);
 
   if (!friends) return null;
@@ -58,14 +60,17 @@ const FriendItem = styled.div`
   }
 `;
 
+// todo : ingame
 const StatusDiv = styled.div<{ $status: string }>`
   width: 10px;
   height: 10px;
   border-radius: 100%;
   background-color: ${({ $status, theme }) =>
-    $status === 'online'
+    $status === 'ingame'
+      ? theme.colors.yellow
+      : 'online'
       ? theme.colors.green
       : 'offline'
       ? theme.colors.pink
-      : theme.colors.yellow};
+      : theme.colors.pink};
 `;

@@ -14,11 +14,10 @@ export default function AchievementItem({ title, content }: Props) {
         {content?.map((data) => (
           <Achievement
             key={data}
-            src={gravatar.url('kipark@ki.com', {
-              s: `50px`,
-              d: 'retro',
-            })}
-            alt={'kipark'}
+            src={`http://localhost:8080/achievement/${data}`}
+            alt={'url'}
+            width={50}
+            height={50}
           />
         ))}
       </div>

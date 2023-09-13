@@ -1,16 +1,15 @@
 'use client';
 
-import useSocket from '@/hooks/useSocket';
 import { gameObject } from '@/types/IGameObject';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Socket } from 'socket.io-client';
 import styled from 'styled-components';
 
-export default function GameBoard() {
-  const [socket] = useSocket('8081');
-  const startGame = () => {
-    socket?.emit('startGame');
-  };
+interface Props {
+  socket: Socket<any, any> | undefined;
+}
 
+export default function GameBoard({ socket }: Props) {
   const gameBoardDiv = useRef<HTMLCanvasElement>(null);
   let ctx: any;
   let gameWidth: any;
@@ -75,7 +74,6 @@ export default function GameBoard() {
     ctx.strokeStyle = ballBorderColor;
     ctx.lineWidth = 2;
     ctx.beginPath();
-    // console.log(ballX, ballY);
     ctx.arc(ballX, ballY, ballRadius, 0, 2 * Math.PI);
     ctx.stroke();
     ctx.fill();
@@ -89,25 +87,25 @@ export default function GameBoard() {
     const paddle2Down = 40;
     switch (keyPressed) {
       case paddle1Up:
-        socket?.emit('updatePaddle', { paddle: 'paddle1Up' });
+        socket?.emit('updatePaddle', { paddle: 0 });
         break;
       case paddle1Down:
-        socket?.emit('updatePaddle', { paddle: 'paddle1Down' });
+        socket?.emit('updatePaddle', { paddle: 1 });
         break;
       case paddle2Up:
-        socket?.emit('updatePaddle', { paddle: 'paddle2Up' });
+        socket?.emit('updatePaddle', { paddle: 0 });
         break;
       case paddle2Down:
-        socket?.emit('updatePaddle', { paddle: 'paddle2Down' });
+        socket?.emit('updatePaddle', { paddle: 1 });
         break;
     }
   }
 
   useEffect(() => {
     socket?.on('updateObject', (res: gameObject) => {
-      const p1 = res.data.p1;
-      const p2 = res.data.p2;
-      const ball = res.data.b;
+      const p1 = res.p1;
+      const p2 = res.p2;
+      const ball = res.b;
 
       clearBoard();
       drawPaddles(p1.x, p1.y, p2.x, p2.y);
@@ -123,7 +121,6 @@ export default function GameBoard() {
         height='700'
         ref={gameBoardDiv}
       ></GameBoardDiv>
-      <button onClick={startGame}>startGame</button>
     </GameContainer>
   );
 }

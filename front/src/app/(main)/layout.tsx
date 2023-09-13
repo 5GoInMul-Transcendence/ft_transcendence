@@ -4,15 +4,12 @@ import Link from 'next/link';
 import Pong from '@/component/Pong';
 import ProfileImage from '@/component/ProfileImage';
 import FriendList from '@/component/FriendList';
-import useSocket from '@/hooks/useSocket';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
-import { useEffect } from 'react';
+import useSocket from '@/hooks/useSocket';
 import { useSetRecoilState } from 'recoil';
 import { modalState } from '@/utils/recoil/atom';
 import { IUser } from '@/types/IUser';
 import styled from 'styled-components';
-
-const name = 'kipark';
 
 export default function MainLayout({
   children,
@@ -23,16 +20,10 @@ export default function MainLayout({
   const data = useSwrFetcher<IUser>('/me');
   const setModal = useSetRecoilState(modalState);
 
-  useEffect(() => {
-    socket?.on('connect', () => {
-      console.log('socket connect');
-      console.log(socket);
-    });
-  }, [socket]);
-
   const onClickAddFriend = () => {
     setModal({ type: 'ADD-Friend' });
   };
+
   return (
     <Container>
       <MainContainer>
@@ -50,7 +41,7 @@ export default function MainLayout({
       <SideContainer>
         <Link href='/myprofile'>
           <MyProfile>
-            <ProfileImage url='' size='45px' />
+            <ProfileImage url={data?.avatar} size='45px' />
             &nbsp;
             {data?.nickname}
           </MyProfile>

@@ -8,12 +8,11 @@ interface Props {
 export default function ProfileImage({ url, size }: Props) {
   return (
     <img
-      src={gravatar.url('kipark@ki.com', {
-        s: `${size}`,
-        d: 'retro',
-      })}
-      alt={'kipark'}
+      src={`http://localhost:8080/avatar/${url}`}
+      alt={'url'}
       style={{ borderRadius: '70%' }}
+      width={size}
+      height={size}
     />
   );
 }

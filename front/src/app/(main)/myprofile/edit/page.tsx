@@ -21,8 +21,8 @@ export default function Profile() {
       }
       const formData = new FormData();
       formData.append('file', e.target.files[0]);
-      fetch('http://localhost:8080/me/upload', {
-        method: 'POST',
+      fetch('http://localhost:8080/me/avatar', {
+        method: 'PUT',
         body: formData,
         credentials: 'include',
       });
@@ -30,6 +30,7 @@ export default function Profile() {
     []
   );
 
+  if (!data) return;
   return (
     <Container>
       <TopWrapper>
@@ -40,7 +41,7 @@ export default function Profile() {
             ref={inputRef}
             onChange={onUploadImage}
           />
-          <ProfileImage url='' size='250px' />
+          <ProfileImage url={data.avatar} size='250px' />
         </Wrapper>
         <Wrapper $width={7}>
           <EditItem

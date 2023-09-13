@@ -7,6 +7,7 @@ import GlobalStyle from '@/styles/global-style';
 import Modal from '@/component/Modal';
 import { RecoilRoot } from 'recoil';
 import AxiosApiHadling from '@/utils/AxiosApiHadling';
+import useSocket from '@/hooks/useSocket';
 
 export default function RootLayout({
   children,
