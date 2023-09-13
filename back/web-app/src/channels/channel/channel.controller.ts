@@ -208,16 +208,24 @@ export class ChannelController {
 		const channel = await this.channelService.getChannel(channelId);
 		const userId = session.userId;
 		const user = await this.userService.getUserByUserId(userId);
+		let link: LinkChannelToUser;
 
 		if (channel === null) {
 			this.exceptionService.notExistChannel();
 		}
 		if (channel.mode !== ChannelMode.PROTECTED
 			|| !password
-			|| await this.channelService.getLinkByChannelAndUser(channel, user)
 			) {
 			this.exceptionService.itIsInvalidRequest();
 		}
+		link = await this.channelService.getLinkRelatedChannelByChannelAndUser(channel, user);
+		if (link) {
+			return Builder(CreateChannelResDto)
+			.id(channel.id)
+			.name(channel.name)
+			.build();
+		}
+
 		if (await this.hashService.hashCompare(password, channel.password) === false) {
 			this.exceptionService.passwordIsNotValid();
 		}

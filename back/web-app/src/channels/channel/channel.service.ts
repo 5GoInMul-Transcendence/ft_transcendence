@@ -64,6 +64,15 @@ export class ChannelService {
 		return myChannelList;
 	}
 
+	async getLinkRelatedChannelByChannelAndUser(channel: Channel, user: User): Promise<LinkChannelToUser | null> {
+		return await this.linkChannelToUserRepository
+		.createQueryBuilder('link')
+		.where('link.user_id = :userId', {userId: user.id}) // andWhere은 OR 연산이다.
+		.innerJoinAndSelect('link.channel', 'channel')
+		.andWhere('channel.id = :channelId', {channelId: channel.id})
+		.getOne();
+	}
+
 	async getLinkByChannelAndUser(channel: Channel, user: User): Promise<LinkChannelToUser | null> {
 		return await this.linkChannelToUserRepository
 		.createQueryBuilder('link_channel_to_user')
