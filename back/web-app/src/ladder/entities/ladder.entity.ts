@@ -8,7 +8,7 @@ export class Ladder {
   @Column({ type: 'integer', name: 'user_id', unique: true })
   userId: number;
 
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'integer', default: 1 })
   level: number;
 
   @Column({ type: 'integer', default: 0 })
