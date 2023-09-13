@@ -23,7 +23,7 @@ export default function Channel() {
   };
 
   useEffect(() => {
-    axiosInstance.get(`/api/channel/${channelId}`).then((data) => {
+    axiosInstance.get(`/channel/${channelId}`).then((data) => {
       setData(data.data.data);
       setRecentMessage(data.data.data.recentMessage);
     });

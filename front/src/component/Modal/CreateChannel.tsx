@@ -42,19 +42,16 @@ export default function CreateChannel() {
       axiosInstance
         .post(`/channel/${mode}`, { name: channelName, password })
         .then((data) => {
-          router.push(data.data.data.id);
+          router.push(`/chats/${data.data.data.id}`);
+          setModal(null);
         });
-      return;
-    } else if (mode === 'private') {
-      axiosInstance.post(`/channel/${mode}`).then((data) => {
-        router.push(data.data.data.id);
-      });
       return;
     }
     axiosInstance
       .post(`/channel/${mode}`, { name: channelName })
       .then((data) => {
-        router.push(data.data.data.id);
+        router.push(`/chats/${data.data.data.id}`);
+        setModal(null);
       });
   };
   return (
@@ -83,14 +80,6 @@ export default function CreateChannel() {
           checked={mode === 'protected'}
         />
         protected
-        <RadioInput
-          type='radio'
-          name='mode'
-          value='private'
-          onChange={onChangeMode}
-          checked={mode === 'private'}
-        />
-        private
       </RadioWrapper>
       {mode === 'protected' && (
         <>

@@ -3,11 +3,11 @@
 import styled from 'styled-components';
 import ProfileImage from '@/component/ProfileImage';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { modalState, recentMessageState } from '@/utils/recoil/atom';
 import { IMessage } from '@/types/IChannel';
 import { useEffect, useState } from 'react';
+import { axiosInstance } from '@/utils/axios';
 
 interface ChannelItemProps {
   channelId: number;
@@ -29,8 +29,9 @@ export default function ChannelItem({
       router.push(`/chats/${channelId}`);
       return;
     }
-    axios.get(`/channel/${channelId}/check`).then((data) => {
-      if (data.data.data.env === 'protected') {
+    axiosInstance.get(`/channel/${channelId}/check`).then((data) => {
+      console.log(data.data);
+      if (data.data.data.mode === 'protected') {
         setModal({
           type: 'ENTER-Channel',
           modalProps: { channelName, channelId },

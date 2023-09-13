@@ -1,7 +1,9 @@
 'use client';
 
 import ProfileImage from '@/component/ProfileImage';
+import { userState } from '@/utils/recoil/atom';
 import Link from 'next/link';
+import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 interface ChatItemProps {
@@ -10,7 +12,7 @@ interface ChatItemProps {
 }
 
 export default function ChatItem({ nickname, content }: ChatItemProps) {
-  const mynick = 'jiyokim';
+  const mynick = useRecoilValue(userState);
   //TODO: 내 정보 저장해두기
   return (
     <Container $me={mynick === nickname}>

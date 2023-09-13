@@ -18,9 +18,10 @@ export default function Profile({ params }: { params: { user: string } }) {
   const [follw, onChangeFollow] = useToggle(false);
   const [block, onChangeBlock] = useToggle(false);
   const router = useRouter();
+
   const onClickDM = () => {
-    axiosInstance.post("/channel/dm", { name: params.user }).then((data) => {
-      router.push(`/chats/${data.data.channelid}`);
+    axiosInstance.post("/channel/dm", { invitedUserId: data.id }).then((data) => {
+      router.push(`/chats/${data.data.data.id}`);
     });
   };
 
