@@ -14,8 +14,8 @@ import styled from 'styled-components';
 
 export default function Profile({ params }: { params: { user: string } }) {
   const data = useSwrFetcher<IUser>(`user/${params.user}`);
-  const [follw, onChangeFollow] = useToggle(false);
-  const [block, onChangeBlock] = useToggle(false);
+  const [follw] = useToggle(false);
+  const [block] = useToggle(false);
 
   const onClickDM = () => {
     axiosInstance
@@ -37,13 +37,13 @@ export default function Profile({ params }: { params: { user: string } }) {
               text='follow'
               color='green'
               checked={follw}
-              onToggle={onChangeFollow}
+              // onToggle={onChangeFollow}
             />
             <Toggle
               text='block'
               color='pink'
               checked={block}
-              onToggle={onChangeBlock}
+              // onToggle={onChangeBlock}
             />
           </TogglesWrapper>
         </Wrapper>
