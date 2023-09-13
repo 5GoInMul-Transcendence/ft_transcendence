@@ -58,8 +58,8 @@ export class AuthController {
         .build(),
     );
 
-    delete session.tempUserId;
     this.sessionService.setSession(session, session.tempUserId);
+    delete session.tempUserId;
 
     return RedirectResource.MAIN;
   }
