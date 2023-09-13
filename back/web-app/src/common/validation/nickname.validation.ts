@@ -9,8 +9,8 @@ import {
 export class IsNicknameConstraint implements ValidatorConstraintInterface {
   private readonly pattern: RegExp = /^[A-Za-z0-9]{2,12}$/;
 
-  validate(nickname: string): boolean {
-    return this.pattern.test(nickname);
+  validate(nickname: unknown): boolean {
+    return typeof nickname === 'string' && this.pattern.test(nickname);
   }
 
   defaultMessage(): string {
