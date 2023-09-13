@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Post,
   Req,
+  Res,
   Session,
   UseGuards,
   Redirect,
@@ -27,6 +28,7 @@ import { UserDto } from 'src/users/user/dto/user.dto';
 import { CreateUserDto } from 'src/users/user/dto/create-user.dto';
 import { SignupService } from 'src/signup/signup.service';
 import { HashService } from 'src/common/hash/hash.service';
+import { Response } from 'express';
 
 @Controller('login')
 export class LoginController {
@@ -82,6 +84,7 @@ export class LoginController {
   @Redirect('http://localhost:3000/main')
   async ftAuthRedirect(
     @Req() req: any, // 유효성 검사 해야 하나?
+    @Res() res: Response,
     @Session() session: Record<string, any>,
   ) : Promise<void> {
     const reqUser: any = req.user;
@@ -113,10 +116,11 @@ export class LoginController {
       );
     }
 
-    if (this.loginService.isTwoFaOn(user.twoFactor) == true) {
-      // 2FA
-      // 세션만 생성하고, userId 는 넣어주면 안 됨
+    if (this.loginService.checkTwoFactorOn(user.id)) {
+      session.tempUserId = user.id;
+      res.redirect('http://localhost:3000/auth');
     }
+
     this.sessionService.setSession(session, user.id);
     // return users; // Need to redirecte 200, /main
   }
