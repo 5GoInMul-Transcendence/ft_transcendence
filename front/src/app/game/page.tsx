@@ -5,7 +5,6 @@ import { IGame } from '@/types/IGame';
 import Board from './Board';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '@/utils/axios';
-import useSocket from '@/hooks/useSocket';
 
 export default function Game() {
   const [game, setGame] = useState<IGame | undefined>(undefined);
