@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 import { modalState } from '@/utils/recoil/atom';
 import { axiosInstance } from '@/utils/axios';
+import { useRouter } from 'next/navigation';
 
 export default function CreateChannel() {
   const [channelName, , onChangeChannelName] = useInput('');
@@ -15,6 +16,7 @@ export default function CreateChannel() {
   const [mode, setMode] = useState('public');
   const [invalidMsg, setInvalidMsg] = useState<string>('');
   const setModal = useSetRecoilState(modalState);
+  const router = useRouter();
 
   const onChangeMode = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMode(e.target.value);
@@ -38,13 +40,22 @@ export default function CreateChannel() {
         return;
       }
       axiosInstance
-        .post('/channel', { name: channelName, mode, password })
-        .then((data) => {});
+        .post(`/channel/${mode}`, { name: channelName, password })
+        .then((data) => {
+          router.push(data.data.data.id);
+        });
+      return;
+    } else if (mode === 'private') {
+      axiosInstance.post(`/channel/${mode}`).then((data) => {
+        router.push(data.data.data.id);
+      });
       return;
     }
     axiosInstance
-      .post('/channel', { name: channelName, mode, password: null })
-      .then((data) => {});
+      .post(`/channel/${mode}`, { name: channelName })
+      .then((data) => {
+        router.push(data.data.data.id);
+      });
   };
   return (
     <Wrapper>

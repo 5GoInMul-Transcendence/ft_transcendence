@@ -23,29 +23,25 @@ export default function ChannelList() {
   };
   useEffect(() => {
     axios.get('/api/me/channels').then((data) => {
-      if (data.data.resStatus.code === '0000') setMyChannels(data.data.data);
+      setMyChannels(data.data.data);
     });
     axios.get('/api/channels').then((data) => {
-      if (data.data.resStatus.code === '0000') setAllChannels(data.data.data);
+      setAllChannels(data.data.data);
     });
   }, []);
 
   useEffect(() => {
     socket?.on('addAllChannel', ({ data }: { data: IAllChannel }) => {
       setAllChannels((cur) => [...cur, data]);
-      console.log(data);
     });
     socket?.on('deleteAllChannel', ({ data }: { data: IAllChannel }) => {
       setAllChannels((cur) => cur.filter((e) => e.id !== data.id));
-      console.log(data);
     });
     socket?.on('addMyChannel', ({ data }: { data: IMyChannel }) => {
       setMyChannels((cur) => [...cur, data]);
-      console.log(data);
     });
     socket?.on('deleteMyChannel', ({ data }: { data: IMyChannel }) => {
       setMyChannels((cur) => cur.filter((e) => e.id !== data.id));
-      console.log(data);
     });
     socket?.on('updateMyChannel', ({ data }: { data: IMyChannel }) => {
       setRecentMessage(data);
@@ -55,7 +51,6 @@ export default function ChannelList() {
         });
         return [...cur];
       });
-      console.log(data);
     });
   }, [socket]);
 
