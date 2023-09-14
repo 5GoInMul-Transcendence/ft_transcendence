@@ -20,20 +20,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (status === HttpStatus.FOUND) {
       return (
         response
-          .status(200)
+          .status(400)
           .json(ApiResponseForm.redirect(message))
       );
     }
     if (status === HttpStatus.UNAUTHORIZED) {
       return (
         response
-          .status(200)
+          .status(400)
           .json(ApiResponseForm.chatBad(message))
       );
     }
 
     return response
-      .status(200)
+      .status(400)
       .json(ApiResponseForm.bad(message));
   }
 }

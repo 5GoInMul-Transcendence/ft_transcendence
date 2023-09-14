@@ -23,6 +23,7 @@ export class ResponseInterceptor implements NestInterceptor {
             response.status(HttpStatus.OK);
             return ApiResponseForm.redirect(data);
           }
+          response.status(HttpStatus.OK);
           return ApiResponseForm.ok(data);
         }),
       );
