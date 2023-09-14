@@ -80,6 +80,15 @@ export class MeController {
         .nickname(dto.nickname)
         .build(),
     );
+
+    this.friendService.broadcastFriendUpdate(
+      Builder(BroadcastFriendUpdateDto)
+        .userId(session.userId)
+        .friendInfo(
+          Builder(FriendInfo).id(session.userId).nickname(dto.nickname).build(),
+        )
+        .build(),
+    );
   }
 
   @Put('twofactor')
