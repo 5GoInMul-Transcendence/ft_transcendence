@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import useInput from '@/hooks/useInput';
@@ -15,17 +15,21 @@ export default function SignUp() {
   const onChangePasswordCheck = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setPasswordCheck(e.target.value);
-      setMismatchError(e.target.value === password);
     },
     [passwordCheck]
   );
+  console.log(password, passwordCheck);
   const onChangePassword = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setPassword(e.target.value);
-      setMismatchError(e.target.value === passwordCheck);
     },
     [password]
   );
+
+  useEffect(() => {
+    setMismatchError(password === passwordCheck);
+  }, [password, passwordCheck]);
+
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -34,6 +38,7 @@ export default function SignUp() {
     },
     [id, password, passwordCheck, mismatchError]
   );
+
   return (
     <FormWrapper>
       <Form onSubmit={onSubmit}>
