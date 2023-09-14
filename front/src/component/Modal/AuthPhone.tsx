@@ -5,28 +5,33 @@ import Button from '@/component/Buttons/Button';
 import InvalidMsg from './InvalidMsg';
 import styled from 'styled-components';
 import { axiosInstance } from '@/utils/axios';
+import { useSWRConfig } from 'swr';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { invalidMsgState, modalState } from '@/utils/recoil/atom';
 
 export default function AuthPhone() {
+  const { mutate } = useSWRConfig();
   const [phone, , onChangePhone] = useInput('');
   const [code, , onChangeCode] = useInput('');
-  const [invalidPhoneMsg, setInvalidPhoneMsg] = useState<string>('');
-  const [invalidCodeMsg, setInvalidCodeMsg] = useState<string>('');
+  const setModal = useSetRecoilState(modalState);
+  const [invalidMsg] = useRecoilState(invalidMsgState);
 
   const sendPhoneHandler = async () => {
     const regExp = /\d{2,3}-\d{3,4}-\d{4}/g;
     if (regExp.test(phone) === false) {
-      axiosInstance.post('/auth/phone', { phone: phone }).then();
-      setInvalidPhoneMsg(() => 'Wrong phone number');
+      axiosInstance.post('/auth/phone', { phone: phone }).then(() => {});
       return;
     }
-    setInvalidPhoneMsg(() => '');
     /* todo: 폰 data 요청, response에 따라 invalidPhoneMsg설정 */
   };
 
   const authPhoneHandler = async () => {
     /* todo: 인증 data 요청, response에 따라 invalidCodeMsg 설정 */
-    axiosInstance.post('/auth', { code: code }).then();
-    setInvalidCodeMsg(() => 'Wrong Code');
+    axiosInstance.post('/auth', { code: code }).then(() => {
+      mutate('/me');
+      mutate('/me/details');
+      setModal(null);
+    });
   };
 
   return (
@@ -46,7 +51,7 @@ export default function AuthPhone() {
           onClick={sendPhoneHandler}
         />
       </InputButtonWrapper>
-      <InvalidMsg text={invalidPhoneMsg} />
+      <InvalidMsg text={invalidMsg} />
       <Input
         label='Code'
         type='text'
@@ -54,7 +59,7 @@ export default function AuthPhone() {
         onChange={onChangeCode}
         maxLength={100}
       />
-      <InvalidMsg text={invalidCodeMsg} />
+      <InvalidMsg text={invalidMsg} />
       <Button text='submit' color='green' onClick={authPhoneHandler} />
     </>
   );

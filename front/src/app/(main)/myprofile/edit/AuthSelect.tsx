@@ -1,16 +1,22 @@
 import { axiosInstance } from '@/utils/axios';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useSWRConfig } from 'swr';
 
 interface AuthSelectProps {
   twoFactor: string;
 }
 
 export default function AuthSelect({ twoFactor }: AuthSelectProps) {
+  const { mutate } = useSWRConfig();
   const [auth, setAuth] = useState(twoFactor);
 
   const onChangeAuth = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    axiosInstance.put('me/twofactor', { twofactor: e.target.value }).then();
+    axiosInstance
+      .put('me/twofactor', { twofactor: e.target.value })
+      .then(() => {
+        mutate('/me/details');
+      });
   };
 
   useEffect(() => {

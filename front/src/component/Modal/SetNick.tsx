@@ -5,12 +5,14 @@ import Button from '@/component/Buttons/Button';
 import InvalidMsg from './InvalidMsg';
 import axios from 'axios';
 import { axiosInstance } from '@/utils/axios';
-import { useSetRecoilState } from 'recoil';
-import { modalState } from '@/utils/recoil/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { invalidMsgState, modalState } from '@/utils/recoil/atom';
+import { useSWRConfig } from 'swr';
 
 export default function SetNick() {
+  const { mutate } = useSWRConfig();
   const [keyword, , onChangeKeyword] = useInput('');
-  const [invalidMsg, setInvalidMsg] = useState<string>('');
+  const [invalidMsg, setInvalidMsg] = useRecoilState(invalidMsgState);
   const setModal = useSetRecoilState(modalState);
 
   const setNickHandler = async () => {
@@ -19,8 +21,9 @@ export default function SetNick() {
       return;
     }
     axiosInstance.put('/me/nickname', { nickname: keyword }).then(() => {
-      // setModal(null);
-      // 성공 처리
+      mutate('/me');
+      mutate('/me/details');
+      setModal(null);
     });
   };
 
