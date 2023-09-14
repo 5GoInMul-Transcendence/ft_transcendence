@@ -2,8 +2,8 @@ import useInput from '@/hooks/useInput';
 import Input from '@/component/Input';
 import Button from '@/component/Buttons/Button';
 import InvalidMsg from './InvalidMsg';
-import { useRecoilState } from 'recoil';
-import { invalidMsgState } from '@/utils/recoil/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { invalidMsgState, modalState } from '@/utils/recoil/atom';
 import { axiosInstance } from '@/utils/axios';
 import { useSWRConfig } from 'swr';
 
@@ -11,6 +11,7 @@ export default function AddFriend() {
   const { mutate } = useSWRConfig();
   const [keyword, , onChangeKeyword] = useInput('');
   const [invalidMsg, setInvalidMsg] = useRecoilState(invalidMsgState);
+  const setModal = useSetRecoilState(modalState);
 
   const addFriendHandler = async () => {
     if (keyword === '') {
@@ -19,6 +20,7 @@ export default function AddFriend() {
     }
     axiosInstance.post('/friend', { nickname: keyword }).then(() => {
       mutate('/friend/list');
+      setModal(null);
     });
   };
 
