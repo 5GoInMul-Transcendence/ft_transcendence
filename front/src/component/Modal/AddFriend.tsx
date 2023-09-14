@@ -5,8 +5,10 @@ import InvalidMsg from './InvalidMsg';
 import { useRecoilState } from 'recoil';
 import { invalidMsgState } from '@/utils/recoil/atom';
 import { axiosInstance } from '@/utils/axios';
+import { useSWRConfig } from 'swr';
 
 export default function AddFriend() {
+  const { mutate } = useSWRConfig();
   const [keyword, , onChangeKeyword] = useInput('');
   const [invalidMsg, setInvalidMsg] = useRecoilState(invalidMsgState);
 
@@ -15,7 +17,9 @@ export default function AddFriend() {
       setInvalidMsg(() => 'nickname is empty');
       return;
     }
-    axiosInstance.post('/friend', { nickname: keyword }).then();
+    axiosInstance.post('/friend', { nickname: keyword }).then(() => {
+      mutate('/friend/list');
+    });
   };
 
   return (
