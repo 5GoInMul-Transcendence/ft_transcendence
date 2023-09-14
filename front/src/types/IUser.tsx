@@ -10,6 +10,11 @@ export interface IUser {
   };
 }
 
+export interface IUserFriedns extends IUser {
+  isBlock: boolean;
+  isFriend: boolean;
+}
+
 export interface IUserDetail {
   id: 1;
   nickname: string;

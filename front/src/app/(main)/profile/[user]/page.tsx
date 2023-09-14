@@ -7,16 +7,14 @@ import MatchItem from '@/component/MatchItem';
 import ProfileImage from '@/component/ProfileImage';
 import Toggle from '@/component/Toggle';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
-import useToggle from '@/hooks/useToggle';
-import { IUser } from '@/types/IUser';
+import { IUserFriedns } from '@/types/IUser';
 import { axiosInstance } from '@/utils/axios';
 import styled from 'styled-components';
 
 export default function Profile({ params }: { params: { user: string } }) {
-  const data = useSwrFetcher<IUser>(`user/${params.user}`);
-  const [follw] = useToggle(false);
-  const [block] = useToggle(false);
+  const data = useSwrFetcher<IUserFriedns>(`user/${params.user}`);
 
+  const onClickTogle = () => {};
   const onClickDM = () => {
     axiosInstance
       .post('/channel', { name: null, mode: 'dm', password: null })
@@ -36,14 +34,14 @@ export default function Profile({ params }: { params: { user: string } }) {
             <Toggle
               text='follow'
               color='green'
-              checked={follw}
-              // onToggle={onChangeFollow}
+              checked={data?.isFriend}
+              onToggle={onClickTogle}
             />
             <Toggle
               text='block'
               color='pink'
-              checked={block}
-              // onToggle={onChangeBlock}
+              checked={data?.isBlock}
+              onToggle={onClickTogle}
             />
           </TogglesWrapper>
         </Wrapper>

@@ -1,4 +1,3 @@
-import gravatar from 'gravatar';
 import styled from 'styled-components';
 
 interface Props {
@@ -13,12 +12,8 @@ export default function AchievementItem({ title, content }: Props) {
       <div>
         {content.map((data, index) => (
           <Achievement
-            key={data}
-            src={gravatar.url('kipark@ki.com', {
-              s: `50px`,
-              d: 'retro',
-            })}
-            alt={'kipark'}
+            src={`http://localhost:8080/avatar/${data}`}
+            key={index}
             style={{ borderRadius: '0.8rem' }}
           />
         ))}

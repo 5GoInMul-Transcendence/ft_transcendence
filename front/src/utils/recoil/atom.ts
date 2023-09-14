@@ -20,3 +20,13 @@ export const recentMessageState = atom<IMyChannel | null>({
   key: 'recentMessageState',
   default: null,
 });
+
+export const gameModeState = atom<string>({
+  key: 'gameModeState',
+  default: '',
+});
+
+export const gameQueueState = atom<boolean>({
+  key: 'gameQueueState',
+  default: false,
+});

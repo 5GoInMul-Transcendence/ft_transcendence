@@ -4,14 +4,19 @@ interface Props {
   text: string;
   color: string;
   checked: boolean;
-  // onToggle: () => void;
+  onToggle: () => void;
 }
 
-export default function Toggle({ text, color, checked }: Props) {
+export default function Toggle({ text, color, checked, onToggle }: Props) {
   return (
     <Wrapper>
       <ToggleLabel $color={color} htmlFor={`${text}-toggle`}>
-        <input type='checkbox' id={`${text}-toggle`} checked={checked} />
+        <input
+          type='checkbox'
+          id={`${text}-toggle`}
+          checked={checked}
+          onChange={onToggle}
+        />
         <SwitchSpan />
       </ToggleLabel>
       {text}
