@@ -26,7 +26,7 @@ export class GameHistory {
   player2Score: number;
 
   @CreateDateColumn({ name: 'created_date' })
-  createdDate: string;
+  createdDate: Date;
 
   @ManyToMany(() => User, (user) => user.gameHistories)
   @JoinTable({ name: 'user_game_history' })
