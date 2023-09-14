@@ -6,8 +6,10 @@ import styled from 'styled-components';
 import useInput from '@/hooks/useInput';
 import { Form, FormWrapper } from '../styles';
 import { axiosInstance } from '@/utils/axios';
+import { useRouter } from 'next/navigation';
 
 export default function SignUp() {
+  const route = useRouter();
   const [id, , onChangeId] = useInput('');
   const [password, setPassword] = useInput('');
   const [passwordCheck, setPasswordCheck] = useInput('');
@@ -16,7 +18,7 @@ export default function SignUp() {
   const onChangePasswordCheck = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setPasswordCheck(e.target.value);
-      setMismatchError(e.target.value === password);
+      setMismatchError(e.target.value !== password);
     },
     [passwordCheck]
   );
@@ -31,12 +33,15 @@ export default function SignUp() {
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
+      if (passwordCheck) return;
       axiosInstance
         .post('http://localhost:8080/signup', {
           id: id,
           password: password,
         })
-        .then();
+        .then((res) => {
+          if (res) route.push(res?.data?.data);
+        });
       if (mismatchError) {
       }
     },

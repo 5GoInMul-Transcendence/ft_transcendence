@@ -20,7 +20,8 @@ export default function SetNick() {
       setInvalidMsg(() => 'nickname is empty');
       return;
     }
-    axiosInstance.put('/me/nickname', { nickname: keyword }).then(() => {
+    axiosInstance.put('/me/nickname', { nickname: keyword }).then((res) => {
+      if (res === undefined) return;
       mutate('/me');
       mutate('/me/details');
       setModal(null);

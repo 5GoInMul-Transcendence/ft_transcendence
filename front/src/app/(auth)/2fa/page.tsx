@@ -12,7 +12,7 @@ export default function TwoFactor() {
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    axiosInstance.post('/auth', { code: code }).then((res) => {
+    axiosInstance.post('/auth/2fa', { code: code }).then((res) => {
       route.push(res.data.data);
     });
   };

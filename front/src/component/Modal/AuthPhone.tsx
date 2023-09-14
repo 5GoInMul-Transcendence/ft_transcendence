@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import useInput from '@/hooks/useInput';
 import Input from '@/component/Input';
 import Button from '@/component/Buttons/Button';
@@ -51,7 +50,6 @@ export default function AuthPhone() {
           onClick={sendPhoneHandler}
         />
       </InputButtonWrapper>
-      <InvalidMsg text={invalidMsg} />
       <Input
         label='Code'
         type='text'

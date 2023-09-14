@@ -22,6 +22,7 @@ export default function Login() {
           password: password,
         })
         .then((res) => {
+          console.log('res', res);
           route.push(res.data.data);
         });
     },
