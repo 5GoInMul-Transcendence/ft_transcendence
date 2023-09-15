@@ -47,16 +47,11 @@ export class GameService {
   ) {
     this.gameGroups = new Map<string, GameGroup>();
   }
-
-  @OnConnect()
-  connect() {
-    console.log('connected!');
-  }
-
-  @OnConnectError()
-  connectError(err: Error) {
-    console.log(err);
-  }
+  
+  // @OnConnectError()
+  // connectError(err: Error) {
+  //   console.log(err);
+  // }
 
   @EventListener('endGame')
   endGame(dto: EndGameDto) {
