@@ -11,6 +11,24 @@ services:
     ports:
       - "8080:8080"
       - "10001:10001"
+      - "10002:10002"
+    depends_on:
+      - game-app
+      - postgres
+    networks:
+      - back_end_net
+    restart: always
+
+  game-app:
+    image: game:18-alpine3.17
+    container_name: game-app
+    build:
+      context: ../../../
+      dockerfile: docker/back/srcs/game-app/Dockerfile
+    ports:
+      - "10003:10003"
+    expose:
+      - "8081"
     networks:
       - back_end_net
     restart: always
