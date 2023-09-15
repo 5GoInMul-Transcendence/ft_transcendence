@@ -26,6 +26,7 @@ import { AchievementModule } from './achievement/achievement.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: process.env.NODE_ENV === 'dev' ? '.env' : '.env.prod',
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
