@@ -1,23 +1,23 @@
 import { Module } from '@nestjs/common';
 import { GameService } from './game.service';
 import { UserModule } from '../users/user/user.module';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { GameController } from './game.controller';
+import { IoClientModule } from 'nestjs-io-client';
+import { LadderModule } from '../ladder/ladder.module';
+import { AchievementModule } from '../achievement/achievement.module';
+import { FriendModule } from '../friend/friend.module';
+import { MainUserModule } from '../main/mainuser/main-user.module';
 
 @Module({
   imports: [
-    ClientsModule.register([
-      {
-        name: 'GAME_SERVER',
-        transport: Transport.GRPC,
-        options: {
-          package: 'game',
-          url: 'localhost:8081',
-          protoPath: __dirname + '/proto/game.proto',
-        },
-      },
-    ]),
+    IoClientModule.forRoot({
+      uri: 'ws://localhost:8081',
+    }),
     UserModule,
+    LadderModule,
+    AchievementModule,
+    FriendModule,
+    MainUserModule,
   ],
   providers: [GameService],
   controllers: [GameController],

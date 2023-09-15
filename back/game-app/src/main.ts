@@ -1,19 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      transport: Transport.GRPC,
-      options: {
-        package: 'game',
-        url: 'localhost:8081',
-        protoPath: __dirname + '/game/proto/game.proto',
-      },
-    },
-  );
-  await app.listen();
+  const app = await NestFactory.create(AppModule);
+  app.useWebSocketAdapter(new IoAdapter(app));
+  await app.listen(8081);
 }
 bootstrap();

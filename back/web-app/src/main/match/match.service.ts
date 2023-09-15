@@ -44,11 +44,11 @@ export class MatchService {
     }
 
     // 큐 상태 확인
-    const isEmptyQueue = this.matchQueue.isEmpty(dto.gameType);
+    const isEmptyQueue = this.matchQueue.isEmpty(dto.gameMode);
 
     // 큐가 비어있다면
     if (isEmptyQueue) {
-      this.matchQueue.push(dto.gameType, dto.userId);
+      this.matchQueue.push(dto.gameMode, dto.userId);
       this.mainUserService.updateUser(
         Builder(UpdateMainUserDto)
           .userId(dto.userId)
@@ -60,21 +60,21 @@ export class MatchService {
     // 큐가 비어있지 않다면
     if (isEmptyQueue === false) {
       // 큐 요소에서 대기유저 가져오기
-      const rivalUserId = this.matchQueue.popByGameType(dto.gameType);
+      const rivalUserId = this.matchQueue.popByGameMode(dto.gameMode);
 
       // 유저 그룹스에 추가
       this.matchGroup.set(
         rivalUserId,
         Builder(MatchGroup)
           .rivalUserId(dto.userId)
-          .gameType(dto.gameType)
+          .gameMode(dto.gameMode)
           .build(),
       );
       this.matchGroup.set(
         dto.userId,
         Builder(MatchGroup)
           .rivalUserId(rivalUserId)
-          .gameType(dto.gameType)
+          .gameMode(dto.gameMode)
           .build(),
       );
 
@@ -141,7 +141,7 @@ export class MatchService {
       return;
     }
 
-    const { rivalUserId, gameType } = this.matchGroup.get(dto.userId);
+    const { rivalUserId, gameMode } = this.matchGroup.get(dto.userId);
 
     const rivalUser = this.mainUserService.findUserByUserId(
       Builder(FindUserDto).userId(rivalUserId).build(),
@@ -167,12 +167,12 @@ export class MatchService {
       this.mainUserService.sendMessage(
         Builder(SendMessageDto)
           .userId(rivalUserId)
-           .event('successMatch')
+          .event('successMatch')
           .data({ status: false })
           .build(),
       );
       this.enterMatch(
-        Builder(EnterMatchDto).userId(rivalUserId).gameType(gameType).build(),
+        Builder(EnterMatchDto).userId(rivalUserId).gameMode(gameMode).build(),
       );
     }
 
@@ -221,7 +221,7 @@ export class MatchService {
       );
 
       this.gameService.gameEnter(
-        Builder(EnterGameDto).p1(p1).p2(p2).gameType(gameType).build(),
+        Builder(EnterGameDto).p1(p1).p2(p2).gameMode(gameMode).build(),
       );
 
       // 게임 승락 알리기
