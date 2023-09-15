@@ -135,7 +135,7 @@ export class GameService {
     const { game, player, rivalPlayer } = this.gameGroup.get(dto.gameKey);
 
     if (
-      game.status != GameStatus.CREATED ||
+      game.status !== GameStatus.CREATED ||
       rivalPlayer.status != PlayerStatus.CONNECT
     ) {
       return;
@@ -155,7 +155,7 @@ export class GameService {
   startGame(dto: StartGameDto) {
     const { game, player, rivalPlayer } = this.gameGroup.get(dto.gameKey);
 
-    if (game.status != GameStatus.STANDBY) {
+    if (game.status !== GameStatus.STANDBY) {
       return;
     }
 

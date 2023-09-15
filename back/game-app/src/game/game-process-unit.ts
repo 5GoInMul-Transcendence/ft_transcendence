@@ -53,7 +53,7 @@ export class GameProcessUnit {
   }
 
   updateObject(playerNumber: PlayerNumber, playerAction: PlayerAction) {
-    if (this.game.status != GameStatus.START) {
+    if (this.game.status !== GameStatus.START) {
       return;
     }
 
