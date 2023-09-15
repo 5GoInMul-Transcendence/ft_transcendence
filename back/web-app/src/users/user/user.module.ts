@@ -4,7 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { OauthUser } from './entities/oauth-user.entity';
 import { MemberUser } from './entities/member-user.entity';
-import { MeController } from '../me/me.controller';
 import { MemoryUserService } from '../memoryuser/memory-user.service';
 import { MemoryUserProvider } from '../memoryuser/memory-user.provider';
 import { Block } from '../../block/block.entity';
@@ -12,6 +11,7 @@ import { Follower } from '../../friend/entities/follower.entity';
 import { Friend } from '../../friend/entities/friend.entity';
 import { UserController } from './user.controller';
 import { Achievement } from '../../achievement/entities/achievement.entity';
+import { Ladder } from '../../ladder/entities/ladder.entity';
 
 @Module({
   imports: [
@@ -23,6 +23,7 @@ import { Achievement } from '../../achievement/entities/achievement.entity';
       Follower,
       Block,
       Achievement,
+      Ladder,
     ]),
   ],
   controllers: [UserController],

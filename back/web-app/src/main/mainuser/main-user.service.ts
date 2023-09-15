@@ -34,10 +34,14 @@ export class MainUserService {
   }
 
   updateUser(dto: Partial<UpdateMainUserDto> & { userId: number }) {
-    const mainUser = this.mainUsers.get(dto.userId);
+    const user = this.mainUsers.get(dto.userId);
+
+    if (!user) {
+      return;
+    }
 
     Object.keys(dto).forEach((key) => {
-      mainUser[key] = dto[key];
+      user[key] = dto[key];
     });
   }
 

@@ -1,13 +1,7 @@
-import {
-  Column,
-  Entity,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { TwoFactorStatus } from '../../enums/twoFactor-status.enum';
-import { LinkChannelToUser } from 'src/channels/channel/entity/link-channel-to-user.entity';
-import { Message } from 'src/message/entity/message.entity';
+import { Column, Entity, OneToMany, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { TwoFactorStatus } from "../../enums/twoFactor-status.enum";
+import { LinkChannelToUser } from "src/channels/channel/entities/link-channel-to-user.entity";
+import { Message } from "src/message/entities/message.entity";
 import { GameHistory } from '../../../game/entities/game-history.entity';
 
 @Entity('user')
@@ -15,7 +9,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('varchar', { length: 36 }) // length: 12
+  @Column('varchar', { length: 12 })
   nickname: string;
 
   @Column('varchar', { length: 64 })

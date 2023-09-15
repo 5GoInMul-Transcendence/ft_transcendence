@@ -1,44 +1,44 @@
 import { Queue } from '@datastructures-js/queue';
-import { GameType } from '../../game/enums/game-type.enum';
+import { GameMode } from '../../game/enums/game-mode.enum';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class MatchQueue {
-  private matchQueues: Map<GameType, Queue<number>>;
-  private userGameTypes: Map<number, GameType>;
+  private matchQueues: Map<GameMode, Queue<number>>;
+  private userGameModes: Map<number, GameMode>;
 
   constructor() {
-    this.matchQueues = new Map<GameType, Queue<number>>();
-    this.userGameTypes = new Map<number, GameType>();
+    this.matchQueues = new Map<GameMode, Queue<number>>();
+    this.userGameModes = new Map<number, GameMode>();
 
-    for (const gameType of Object.values(GameType)) {
-      this.matchQueues.set(gameType, new Queue<number>());
+    for (const gameMode of Object.values(GameMode)) {
+      this.matchQueues.set(gameMode, new Queue<number>());
     }
   }
 
-  push(gameType: GameType, userId: number) {
-    this.matchQueues.get(gameType).push(userId);
+  push(gameMode: GameMode, userId: number) {
+    this.matchQueues.get(gameMode).push(userId);
 
-    this.userGameTypes.set(userId, gameType);
+    this.userGameModes.set(userId, gameMode);
   }
 
   popByUserId(userId: number) {
-    const gameType = this.userGameTypes.get(userId);
+    const gameMode = this.userGameModes.get(userId);
 
-    this.userGameTypes.delete(userId);
+    this.userGameModes.delete(userId);
 
-    return this.matchQueues.get(gameType).pop();
+    return this.matchQueues.get(gameMode).pop();
   }
 
-  popByGameType(gameType: GameType) {
-    const userId = this.matchQueues.get(gameType).pop();
+  popByGameMode(gameMode: GameMode) {
+    const userId = this.matchQueues.get(gameMode).pop();
 
-    this.userGameTypes.delete(userId);
+    this.userGameModes.delete(userId);
 
     return userId;
   }
 
-  isEmpty(gameType: GameType) {
-    return this.matchQueues.get(gameType).isEmpty();
+  isEmpty(gameMode: GameMode) {
+    return this.matchQueues.get(gameMode).isEmpty();
   }
 }

@@ -1,6 +1,6 @@
-import { GameType } from '../../../game/enums/game-type.enum';
+import { GameMode } from '../../../game/enums/game-mode.enum';
 
 export class EnterMatchDto {
   userId: number;
-  gameType: GameType;
+  gameMode: GameMode;
 }

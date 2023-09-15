@@ -1,5 +1,5 @@
 import { User } from "src/users/user/entities/user.entity";
-import { Channel } from "../entity/channel.entity";
+import { Channel } from "../entities/channel.entity";
 
 export class SendMessageDto {
 	readonly user: User;

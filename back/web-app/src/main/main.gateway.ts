@@ -22,7 +22,7 @@ import { LeaveMatchDto } from './match/dto/leave-match.dto';
 import { AcceptMatchDto } from './match/dto/accept-match.dto';
 import { MatchService } from './match/match.service';
 import { DisconnectMatchDto } from './match/dto/disconnect-match.dto';
-import { GameType } from '../game/enums/game-type.enum';
+import { GameMode } from '../game/enums/game-mode.enum';
 
 @WebSocketGateway(10001, { namespace: 'main', cors: { origin: '*' } })
 export class MainGateway
@@ -85,12 +85,12 @@ export class MainGateway
   @SubscribeMessage('submitMatch')
   submitMatch(
     @ConnectedSocket() client: any,
-    @MessageBody('gametype') gameType: GameType,
+    @MessageBody('gameMode') gameMode: GameMode,
   ) {
     const session = client.handshake.session;
 
     this.matchService.enterMatch(
-      Builder(EnterMatchDto).userId(session.userId).gameType(gameType).build(),
+      Builder(EnterMatchDto).userId(session.userId).gameMode(gameMode).build(),
     );
   }
 

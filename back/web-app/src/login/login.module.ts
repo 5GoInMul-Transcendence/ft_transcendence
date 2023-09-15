@@ -7,6 +7,7 @@ import { UserModule } from 'src/users/user/user.module';
 import { SessionModule } from 'src/session/session.module';
 import { SignupService } from 'src/signup/signup.service';
 import { HashModule } from 'src/common/hash/hash.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { HashModule } from 'src/common/hash/hash.module';
     UserModule,
     SessionModule,
     HashModule,
+    AuthModule,
   ],
   controllers: [LoginController],
   providers: [

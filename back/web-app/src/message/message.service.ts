@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Message } from './entity/message.entity';
+import { Message } from './entities/message.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SendMessageDto } from '../channels/channel/dto/send-message.dto';
-import { Channel } from '../channels/channel/entity/channel.entity';
+import { Channel } from '../channels/channel/entities/channel.entity';
+import { RecentMessageAtEnter } from 'src/channels/channel/dto/recent-message-at-enter.dto';
+import { Builder } from 'builder-pattern';
 
 @Injectable()
 export class MessageService {
@@ -24,17 +26,35 @@ export class MessageService {
 		return await this.messageRepository.save(message);
 	}
 
-	async getRecentMessageRelatedUserByChannelId(channel: Channel): Promise<Message | null> {
-		return await this.messageRepository.findOne({
-			where: {
-				channel,
-			},
-			order: {
-				timestamp: 'DESC',
-			},
-			relations: [
-				'user'
-			],
+	async getMessages(channelId: number): Promise<RecentMessageAtEnter[]> {
+		const maxMessagesCount = 50;
+		const messages = await this.messageRepository
+		.createQueryBuilder('message')
+		.select(['message.id', 'message.content', 'message.timestamp'])
+		.leftJoinAndSelect('message.user', 'user')
+		.where('message.channel = :channelId', {channelId})
+		.orderBy('message.timestamp', 'DESC')
+		.take(maxMessagesCount)
+		.getMany();
+		const RecentMessages: RecentMessageAtEnter[] = messages.map((message) => {
+			const nicknameSendingMessage: string = message.user.nickname;
+
+			return Builder(RecentMessageAtEnter)
+			.id(message.id)
+			.content(message.content)
+			.nickname(nicknameSendingMessage)
+			.build()
 		});
+
+		return RecentMessages;
+	}
+
+	async getRecentMessageRelatedUserByChannelId(channel: Channel): Promise<Message | null> {
+		return await this.messageRepository
+		.createQueryBuilder('message')
+		.leftJoinAndSelect('message.user', 'user')
+		.where('message.channel = :channelId', {channelId: channel.id})
+		.orderBy('message.timestamp', 'DESC')
+		.getOne();
 	}
 }
