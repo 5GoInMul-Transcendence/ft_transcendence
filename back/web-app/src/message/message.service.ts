@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Message } from './entities/message.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -27,15 +27,21 @@ export class MessageService {
 	}
 
 	async getMessages(channelId: number): Promise<RecentMessageAtEnter[]> {
-		const maxMessagesCount = 50;
-		const messages = await this.messageRepository
+		const maxMessagesCount: number = 50;
+		const messages: Message[] = await this.messageRepository
 		.createQueryBuilder('message')
 		.select(['message.id', 'message.content', 'message.timestamp'])
 		.leftJoinAndSelect('message.user', 'user')
 		.where('message.channel = :channelId', {channelId})
 		.orderBy('message.timestamp', 'DESC')
 		.take(maxMessagesCount)
-		.getMany();
+		.getMany()
+		.then(value => {
+			return value.reverse();
+		})
+		.catch(() => {
+			throw new HttpException(`Can't load messages`, HttpStatus.BAD_REQUEST);
+		})
 		const RecentMessages: RecentMessageAtEnter[] = messages.map((message) => {
 			const nicknameSendingMessage: string = message.user.nickname;
 
