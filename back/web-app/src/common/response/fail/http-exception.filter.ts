@@ -1,4 +1,4 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus, BadRequestException } from "@nestjs/common";
 import { Request, Response } from 'express';
 import { ApiResponseForm } from '../api-response-form';
 
@@ -14,7 +14,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
-    const message: string = exception.message;
+    const message: string = this.getExceptionMessage(exception);
 
     console.log('Exception filter\nSend Response\n');
     if (status === HttpStatus.FOUND) {
@@ -35,5 +35,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
     return response
       .status(400)
       .json(ApiResponseForm.bad(message));
+  }
+
+  private getExceptionMessage(exception: HttpException) {
+    if (exception instanceof BadRequestException) {
+      return (exception as any).getResponse().message[0];
+    }
+
+    return exception.message;
   }
 }
