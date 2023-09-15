@@ -10,13 +10,12 @@ import { LadderModule } from '../ladder/ladder.module';
 import { AchievementModule } from '../achievement/achievement.module';
 import { FriendModule } from '../friend/friend.module';
 import { MainUserModule } from '../main/mainuser/main-user.module';
+import { ioClientOption } from './game.config';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, GameHistory]),
-    IoClientModule.forRoot({
-      uri: 'ws://localhost:8081',
-    }),
+    IoClientModule.forRootAsync(ioClientOption),
     UserModule,
     LadderModule,
     AchievementModule,
