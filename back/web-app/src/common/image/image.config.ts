@@ -15,20 +15,14 @@ export const multerOptions = {
       );
     }
 
-    // 이미지 사이즈는 10MB까지 허용합니다.
-    if (file.size > IMAGE_MAX_SIZE) {
-      callback(
-        new HttpException(
-          '파일당 10MB까지 업로드 할 수 있습니다.',
-          HttpStatus.OK,
-        ),
-        false,
-      );
-    }
-
     callback(null, true);
   },
-
+  
+  limits: {
+    fileSize: IMAGE_MAX_SIZE, // 10 MB
+    files: 1,
+  },
+  
   storage: diskStorage({
     // 이미지 저장 경로를 설정합니다.
     destination: (request, file, callback) => {
