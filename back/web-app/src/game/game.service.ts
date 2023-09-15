@@ -36,6 +36,7 @@ import { UpdateMainUserDto } from '../main/dto/update-main-user.dto';
 import { MainUserStatus } from '../main/enums/main-user-status.enum';
 import { BroadcastFriendUpdateDto } from '../friend/dto/broadcast-friend-update.dto';
 import { FriendInfo } from '../friend/friend-info';
+import { FindGameHistoryByUserIdDto } from './dto/find-game-history-by-userid.dto';
 
 @Injectable()
 export class GameService {
