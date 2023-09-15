@@ -1,3 +1,10 @@
+import {
+  EventListener,
+  InjectIoClientProvider,
+  IoClient,
+  OnConnect,
+  OnConnectError,
+} from 'nestjs-io-client';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { EnterGameDto } from './dto/enter-game.dto';
 import { FindGameDto } from './dto/find-game.dto';
@@ -7,13 +14,11 @@ import { MemoryUserService } from '../users/memoryuser/memory-user.service';
 import { FindUserDto } from '../users/memoryuser/dto/find-user.dto';
 import { FindGameReturnDto } from './dto/find-game-return.dto';
 import { GamePlayer } from './game-player';
-import {
-  EventListener,
-  InjectIoClientProvider,
-  IoClient,
-  OnConnect,
-  OnConnectError,
-} from 'nestjs-io-client';
+import { Repository } from 'typeorm';
+import { User } from '../users/user/entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { AddGameHistoryDto } from './dto/add-game-history.dto';
+import { GameHistory } from './entities/game-history.entity';
 import { v4 as uuid } from 'uuid';
 import { MainUserService } from '../main/mainuser/main-user.service';
 import { CreateGameDto } from './dto/create-game.dto';
@@ -31,12 +36,17 @@ import { UpdateMainUserDto } from '../main/dto/update-main-user.dto';
 import { MainUserStatus } from '../main/enums/main-user-status.enum';
 import { BroadcastFriendUpdateDto } from '../friend/dto/broadcast-friend-update.dto';
 import { FriendInfo } from '../friend/friend-info';
+import { FindGameHistoryByUserIdDto } from './dto/find-game-history-by-userid.dto';
 
 @Injectable()
 export class GameService {
   private gameGroups: Map<string, GameGroup>;
 
   constructor(
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    @InjectRepository(GameHistory)
+    private gameHistoryRepository: Repository<GameHistory>,
     @InjectIoClientProvider()
     private readonly gameServer: IoClient,
     private mainUserService: MainUserService,
@@ -189,5 +199,35 @@ export class GameService {
           : gameGroup.p2.gameKey,
       )
       .build();
+  }
+
+  async findGameHistoryByUserId(dto: FindGameHistoryByUserIdDto) {
+    const user = await this.userRepository.findOne({
+      where: {
+        id: dto.userId,
+      },
+      relations: {
+        gameHistories: true,
+      },
+    });
+
+    return user.gameHistories == null ? [] : user.gameHistories;
+  }
+
+  async addGameHistory(dto: AddGameHistoryDto) {
+    const { player1Id, player2Id, player1Score, player2Score } = dto;
+
+    const gameHistory = this.gameHistoryRepository.create({
+      player1Id,
+      player2Id,
+      player1Score,
+      player2Score,
+    });
+
+    const player1User = await this.userRepository.findOneBy({ id: player1Id });
+    const player2User = await this.userRepository.findOneBy({ id: player2Id });
+    gameHistory.users = [player1User, player2User];
+
+    this.gameHistoryRepository.save(gameHistory);
   }
 }
