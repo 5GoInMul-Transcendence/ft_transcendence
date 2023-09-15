@@ -6,5 +6,6 @@ import { Ladder } from './entities/ladder.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Ladder])],
   providers: [LadderService],
+  exports: [LadderService],
 })
 export class LadderModule {}

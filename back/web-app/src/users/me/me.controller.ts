@@ -23,6 +23,10 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { BroadcastFriendUpdateDto } from '../../friend/dto/broadcast-friend-update.dto';
 import { FriendService } from '../../friend/friend.service';
 import { FriendInfo } from '../../friend/friend-info';
+import { LadderService } from '../../ladder/ladder.service';
+import { AchievementService } from '../../achievement/achievement.service';
+import { FindAchievementDto } from '../../achievement/dto/find-achievement.dto';
+import { FindLadderDto } from '../../ladder/dto/find-ladder.dto';
 
 @Controller('me')
 export class MeController {
@@ -30,19 +34,27 @@ export class MeController {
     private memoryUserService: MemoryUserService,
     private userService: UserService,
     private friendService: FriendService,
+    private ladderService: LadderService,
+    private achievementService: AchievementService,
   ) {}
 
   @Get()
-  getUserProfile(@Session() session) {
+  async getUserProfile(@Session() session) {
     const me = this.memoryUserService.findUserByUserId(
       Builder(FindUserDto).userId(session.userId).build(),
     );
+    const achievement = await this.achievementService.findAchievementByUserId(
+      Builder(FindAchievementDto).userId(session.userId).build(),
+    );
+    const ladder = await this.ladderService.findLadderByUserId(
+      Builder(FindLadderDto).userId(session.userId).build(),
+    );
 
     const gameRecordDto = Builder(GameRecordDto)
-      .win(10)
-      .loss(10)
-      .ladderLevel(10)
-      .achievement(['0123456789abcdef', '0123456789abcdef'])
+      .win(ladder.win)
+      .lose(ladder.lose)
+      .ladderLevel(ladder.level)
+      .achievement(achievement.achievements)
       .build();
     return Builder(GetUserProfileResDto)
       .id(me.id)

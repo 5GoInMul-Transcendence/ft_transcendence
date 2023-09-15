@@ -7,5 +7,6 @@ import { AchievementTableProvider } from './table/achievement-table.provider';
 @Module({
   imports: [TypeOrmModule.forFeature([Achievement])],
   providers: [AchievementService, AchievementTableProvider],
+  exports: [AchievementService],
 })
 export class AchievementModule {}
