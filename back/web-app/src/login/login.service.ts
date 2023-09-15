@@ -37,8 +37,4 @@ export class LoginService {
 
     return true;
   }
-
-  isTwoFaOn(twoFactorStatus: TwoFactorStatus): boolean {
-    return twoFactorStatus != TwoFactorStatus.DISABLED;
-  }
 }
