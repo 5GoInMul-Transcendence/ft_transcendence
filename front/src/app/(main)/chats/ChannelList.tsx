@@ -8,6 +8,7 @@ import { IAllChannel, IMyChannel } from '@/types/IChannel';
 import useSocket from '@/hooks/useSocket';
 import { useSetRecoilState } from 'recoil';
 import { recentMessageState } from '@/utils/recoil/atom';
+import { axiosInstance } from '@/utils/axios';
 
 export default function ChannelList() {
   const [socket, disconnect] = useSocket('10002');
@@ -22,30 +23,26 @@ export default function ChannelList() {
     setmyChannelOption(true);
   };
   useEffect(() => {
-    axios.get('/api/me/channels').then((data) => {
-      if (data.data.resStatus.code === '0000') setMyChannels(data.data.data);
+    axiosInstance.get('/channels/mine').then((data) => {
+      setMyChannels(data.data.data);
     });
-    axios.get('/api/channels').then((data) => {
-      if (data.data.resStatus.code === '0000') setAllChannels(data.data.data);
+    axiosInstance.get('/channels').then((data) => {
+      setAllChannels(data.data.data);
     });
   }, []);
 
   useEffect(() => {
     socket?.on('addAllChannel', ({ data }: { data: IAllChannel }) => {
       setAllChannels((cur) => [...cur, data]);
-      console.log(data);
     });
     socket?.on('deleteAllChannel', ({ data }: { data: IAllChannel }) => {
       setAllChannels((cur) => cur.filter((e) => e.id !== data.id));
-      console.log(data);
     });
     socket?.on('addMyChannel', ({ data }: { data: IMyChannel }) => {
       setMyChannels((cur) => [...cur, data]);
-      console.log(data);
     });
     socket?.on('deleteMyChannel', ({ data }: { data: IMyChannel }) => {
       setMyChannels((cur) => cur.filter((e) => e.id !== data.id));
-      console.log(data);
     });
     socket?.on('updateMyChannel', ({ data }: { data: IMyChannel }) => {
       setRecentMessage(data);
@@ -55,7 +52,6 @@ export default function ChannelList() {
         });
         return [...cur];
       });
-      console.log(data);
     });
   }, [socket]);
 
@@ -70,7 +66,7 @@ export default function ChannelList() {
         </OptionButton>
       </ChannelOptions>
       {myChannelOption
-        ? myChannels.map((e) => (
+        ? myChannels?.map((e) => (
             <ChannelItem
               key={e.id}
               channelId={e.id}
@@ -78,7 +74,7 @@ export default function ChannelList() {
               recentMessage={e.recentMessage}
             />
           ))
-        : allChannels.map((e) => (
+        : allChannels?.map((e) => (
             <ChannelItem key={e.id} channelId={e.id} channelName={e.name} />
           ))}
     </Container>

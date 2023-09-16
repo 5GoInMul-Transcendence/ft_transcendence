@@ -7,9 +7,10 @@ import FriendList from '@/component/FriendList';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
 import useSocket from '@/hooks/useSocket';
 import { useSetRecoilState } from 'recoil';
-import { modalState } from '@/utils/recoil/atom';
+import { modalState, userState } from '@/utils/recoil/atom';
 import { IUser } from '@/types/IUser';
 import styled from 'styled-components';
+import { useEffect } from 'react';
 
 export default function MainLayout({
   children,
@@ -19,7 +20,11 @@ export default function MainLayout({
   const [socket] = useSocket('10001/main');
   const data = useSwrFetcher<IUser>('/me');
   const setModal = useSetRecoilState(modalState);
-
+  const setUserState = useSetRecoilState(userState);
+  useEffect(() => {
+    if (!data) return ;
+    setUserState(data.nickname);
+  }, [data]);
   const onClickAddFriend = () => {
     setModal({ type: 'ADD-Friend' });
   };

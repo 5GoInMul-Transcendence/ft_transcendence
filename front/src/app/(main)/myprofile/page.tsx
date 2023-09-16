@@ -8,9 +8,13 @@ import ProfileImage from '@/component/ProfileImage';
 import styled from 'styled-components';
 import { IUser } from '@/types/IUser';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
+import Buttons from '@/component/Buttons';
+import { useRouter } from 'next/navigation';
+import { axiosInstance } from '@/utils/axios';
 
 export default function Profile() {
   const data = useSwrFetcher<IUser>('/me');
+  const router = useRouter();
   const { id, nickname, avatar, gameRecord } = data
     ? data
     : {
@@ -19,7 +23,11 @@ export default function Profile() {
         avatar: '',
         gameRecord: { win: 0, lose: 0, ladderLevel: 0, achievement: [] },
       };
-
+  const onClickPrivate = () => {
+    axiosInstance.post(`/channel/private`).then((data) => {
+      router.push(`/chats/${data.data.data.id}`);
+    });
+  }
   return (
     <Container>
       <TopWrapper>
@@ -37,7 +45,19 @@ export default function Profile() {
             title='ACHIEVMENT'
             content={gameRecord.achievement || []}
           />
-          <EditLink href='/myprofile/edit'>EDIT</EditLink>
+        
+        <Buttons
+        leftButton={{
+          text: 'private dm',
+          color: 'white',
+          onClick: onClickPrivate,
+        }}
+        rightButton={{
+          text: 'edit',
+          color: 'green',
+          onClick: () => {router.push("/myprofile/edit");},
+        }}
+        />
         </Wrapper>
       </TopWrapper>
     </Container>
@@ -77,3 +97,7 @@ const EditLink = styled(Link)`
   color: ${({ theme }) => theme.colors.black};
   background-color: ${({ theme }) => theme.colors.green};
 `;
+function setModal(arg0: null) {
+  throw new Error('Function not implemented.');
+}
+

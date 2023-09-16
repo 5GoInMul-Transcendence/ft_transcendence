@@ -20,3 +20,8 @@ export const recentMessageState = atom<IMyChannel | null>({
   key: 'recentMessageState',
   default: null,
 });
+
+export const userState = atom <string | null> ({
+  key: 'userState',
+  default: null,
+})
