@@ -25,7 +25,11 @@ export default function Profile() {
         method: 'PUT',
         body: formData,
         credentials: 'include',
-      });
+      })
+        .then((res) => {})
+        .catch(() => {
+          // 400일 때 에러처리 얘만 fetch 라 넣어야함
+        });
     },
     []
   );

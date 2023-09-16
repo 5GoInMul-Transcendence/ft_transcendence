@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 import useInput from '@/hooks/useInput';
 import { Form, FormWrapper } from '../styles';
 import { axiosInstance } from '@/utils/axios';
+import { useRouter } from 'next/navigation';
 
 export default function SignUp() {
+  const route = useRouter();
   const [id, , onChangeId] = useInput('');
   const [password, setPassword] = useInput('');
   const [passwordCheck, setPasswordCheck] = useInput('');
@@ -16,29 +18,33 @@ export default function SignUp() {
   const onChangePasswordCheck = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setPasswordCheck(e.target.value);
-      setMismatchError(e.target.value === password);
     },
     [passwordCheck]
   );
   const onChangePassword = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setPassword(e.target.value);
-      setMismatchError(e.target.value === passwordCheck);
     },
     [password]
   );
+
+  useEffect(() => {
+    console.log(password, passwordCheck, password.trim());
+    setMismatchError(password !== passwordCheck);
+  }, [password, passwordCheck]);
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
+      if (mismatchError) return;
       axiosInstance
-        .post('http://localhost:8080/signup', {
+        .post('/signup', {
           id: id,
           password: password,
         })
-        .then();
-      if (mismatchError) {
-      }
+        .then((res) => {
+          route.push(res.data.data);
+        });
     },
     [id, password, passwordCheck, mismatchError]
   );

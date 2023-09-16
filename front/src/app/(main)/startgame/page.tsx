@@ -1,9 +1,9 @@
 'use client';
 import useSocket from '@/hooks/useSocket';
-import { modalState } from '@/utils/recoil/atom';
+import { gameModeState, gameQueueState, modalState } from '@/utils/recoil/atom';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import Loading from './loading/page';
 import { GameMode } from './GameMode';
 import styled from 'styled-components';
@@ -13,8 +13,8 @@ export default function StartGame() {
   const setModal = useSetRecoilState(modalState);
   const router = useRouter();
   const [socket] = useSocket('10001/main');
-  const [gameMode, setGameMode] = useState<string>('');
-  const [gameQueue, setGameQueue] = useState<boolean>(false);
+  const [gameMode, setGameMode] = useRecoilState(gameModeState);
+  const [gameQueue, setGameQueue] = useRecoilState(gameQueueState);
 
   const onClickMatchCancel = useCallback(() => {
     setGameQueue(false);

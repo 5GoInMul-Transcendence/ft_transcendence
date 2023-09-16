@@ -4,9 +4,7 @@ import styled from 'styled-components';
 export default function GameEnd() {
   return (
     <Container>
-      <div>Game End</div>
-      <div>message</div>
-      <div>go TO HOME !!!</div>
+      <div>Game End !!!</div>
     </Container>
   );
 }

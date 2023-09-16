@@ -19,7 +19,12 @@ export default function FriendList() {
       setFriends((cur) => {
         cur.forEach((element) => {
           if (element.id === res.data.id) {
-            element.status = res.data.status;
+            element.nickname =
+              res.data.nickname === undefined
+                ? element.nickname
+                : res.data.nickname;
+            element.status =
+              res.data.status === undefined ? element.status : res.data.status;
           }
         });
         return [...cur];
@@ -60,7 +65,6 @@ const FriendItem = styled.div`
   }
 `;
 
-// todo : ingame
 const StatusDiv = styled.div<{ $status: string }>`
   width: 10px;
   height: 10px;

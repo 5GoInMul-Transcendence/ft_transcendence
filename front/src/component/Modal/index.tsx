@@ -11,12 +11,14 @@ import EnterChannel from './EnterChannel';
 import CreateChannel from './CreateChannel';
 import SetChannel from './SetChannel';
 import { useRecoilState } from 'recoil';
-import { modalState } from '@/utils/recoil/atom';
+import { invalidMsgState, modalState } from '@/utils/recoil/atom';
 import Error from './Error';
 import MatchAccept from './MatchAccept';
 
 export default function Modal() {
   const [modal, setModal] = useRecoilState(modalState);
+  const [, setInvalidMsg] = useRecoilState(invalidMsgState);
+
   const modalStorage: Record<string, Record<string, string | JSX.Element>> = {
     'ADD-Friend': { title: 'Add Friend', child: <AddFriend /> },
     'INV-Match': { title: '', child: <InvMatch /> },
@@ -42,9 +44,11 @@ export default function Modal() {
   };
 
   const closeModal = (e: React.MouseEvent) => {
+    setInvalidMsg('');
     setModal(() => null);
   };
 
+  console.log(modal);
   return (
     modal && (
       <BackDrop>
