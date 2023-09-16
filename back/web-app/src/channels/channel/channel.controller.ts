@@ -23,6 +23,7 @@ import { CreateDmChannelReqDto } from './dto/create-dm-channel-req.dto';
 import { MemoryUserService } from 'src/users/memoryuser/memory-user.service';
 import { FindUserDto } from 'src/users/memoryuser/dto/find-user.dto';
 import { CheckChannelResDto } from './dto/check-channel-res.dto';
+import { UpdateRoleAtLeaveOwnerReqDto } from './dto/update-role-at-leave-owner-req.dto';
 
 @Controller('channel')
 export class ChannelController {
@@ -339,6 +340,23 @@ export class ChannelController {
 		);
 	}
 
+	private async updateRoleAtLeaveOwner(dto: UpdateRoleAtLeaveOwnerReqDto) {
+		const {channel} = dto;
+		const adminUser: LinkChannelToUser | null = await this.channelService.getLinkRoleIsAdmin(channel.id)
+		let generalUser: LinkChannelToUser | null;
+
+		if (!adminUser) {
+			generalUser = await this.channelService.getFirstLinkByChannelId(channel.id);
+			if(!generalUser) { // It is imposible. But I'm afraid.
+				this.exceptionService.notEnterUserInChannel();
+			}
+			// Update User to Owner
+		}
+		else {
+			// Update Admin to Owner
+		}
+	}
+
 	@Delete(':channelid')
 	async leaveChannel(
 		@Param('channelid') channelId: number,
@@ -369,12 +387,19 @@ export class ChannelController {
 		// delete channel cycle
 		if (countUserInChannel === 0 || channel.mode === ChannelMode.DM) {
 			if (channel.mode === ChannelMode.DM) {
-				anotherUser = await this.channelService.getLinkAtDeleteDmChannel(channel.id);
+				anotherUser = await this.channelService.getFirstLinkByChannelId(channel.id);
 				await this.channelService.deleteLink(anotherUser);
 			}
 			await this.messageService.deleteAllMessages(channel.id);
 			await this.channelService.deleteBanList(channel.id);
 			await this.channelService.deleteChannel(channel);
+			return;
 		}
+
+		this.updateRoleAtLeaveOwner(
+			Builder(UpdateRoleAtLeaveOwnerReqDto)
+			.channel(channel)
+			.build()
+		);
 	}
 }
