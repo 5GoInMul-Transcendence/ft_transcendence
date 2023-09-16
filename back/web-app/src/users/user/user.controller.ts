@@ -3,7 +3,7 @@ import {
   Get,
   HttpStatus,
   Param,
-  Res,
+  HttpException,
   Session,
 } from '@nestjs/common';
 import { GetUserProfileByNicknameReqDto } from './dto/get-user-profile-by-nickname-req.dto';
@@ -15,9 +15,6 @@ import { Builder } from 'builder-pattern';
 import { MemoryUserService } from '../memoryuser/memory-user.service';
 import { AchievementService } from '../../achievement/achievement.service';
 import { LadderService } from '../../ladder/ladder.service';
-import { ApiResponseForm } from '../../common/response/api-response-form';
-import { RedirectResource } from '../../common/response/redirect-resource.enum';
-import { Response } from 'express';
 import { FindLadderDto } from '../../ladder/dto/find-ladder.dto';
 import { FindAchievementDto } from '../../achievement/dto/find-achievement.dto';
 @Controller('user')
@@ -31,7 +28,6 @@ export class UserController {
   @Get(':nickname')
   async getUserProfileByNickname(
     @Session() session: Record<string, any>,
-    @Res() res: Response,
     @Param() dto: GetUserProfileByNicknameReqDto,
   ) {
     const me = this.memoryUserService.findUserByUserId(
@@ -39,8 +35,7 @@ export class UserController {
     );
 
     if (me.nickname === dto.nickname) {
-      res.status(HttpStatus.FOUND);
-      return ApiResponseForm.redirect(RedirectResource.MYPROFILE);
+      throw new HttpException('자신을 상대방으로 조회할 수 없습니다.', HttpStatus.OK);
     }
 
     const findUser = this.memoryUserService.findUserByNickname(
