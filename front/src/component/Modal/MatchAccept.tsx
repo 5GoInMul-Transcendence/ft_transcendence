@@ -36,7 +36,6 @@ export default function MatchAccept() {
   }, []);
 
   useEffect(() => {
-    // 프로그레스 바 업데이트 로직
     const interval = setInterval(() => {
       if (progress > 0) {
         setProgress((prevProgress) => prevProgress - 1);

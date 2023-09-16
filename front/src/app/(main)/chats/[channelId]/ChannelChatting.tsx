@@ -60,7 +60,7 @@ export default function ChannelChatting({
         </button>
       </ChannelNameDiv>
       <ChatZone ref={scrollRef}>
-        {recentMessage.map((msg) => (
+        {recentMessage?.map((msg) => (
           <ChatItem
             key={msg.id}
             nickname={msg.nickname}

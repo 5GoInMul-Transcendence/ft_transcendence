@@ -23,7 +23,6 @@ const Spinner = styled.div`
   animation: ${spin} 1s linear infinite;
 `;
 
-// 로딩 컴포넌트
 export default function Loading() {
   return (
     <LoadingWrapper>

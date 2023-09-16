@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 import { modalState } from '@/utils/recoil/atom';
 import { axiosInstance } from '@/utils/axios';
+import { useRouter } from 'next/navigation';
 
 export default function CreateChannel() {
   const [channelName, , onChangeChannelName] = useInput('');
@@ -15,6 +16,7 @@ export default function CreateChannel() {
   const [mode, setMode] = useState('public');
   const [invalidMsg, setInvalidMsg] = useState<string>('');
   const setModal = useSetRecoilState(modalState);
+  const router = useRouter();
 
   const onChangeMode = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMode(e.target.value);
@@ -38,13 +40,19 @@ export default function CreateChannel() {
         return;
       }
       axiosInstance
-        .post('/channel', { name: channelName, mode, password })
-        .then((data) => {});
+        .post(`/channel/${mode}`, { name: channelName, password })
+        .then((data) => {
+          router.push(`/chats/${data.data.data.id}`);
+          setModal(null);
+        });
       return;
     }
     axiosInstance
-      .post('/channel', { name: channelName, mode, password: null })
-      .then((data) => {});
+      .post(`/channel/${mode}`, { name: channelName })
+      .then((data) => {
+        router.push(`/chats/${data.data.data.id}`);
+        setModal(null);
+      });
   };
   return (
     <Wrapper>
@@ -72,14 +80,6 @@ export default function CreateChannel() {
           checked={mode === 'protected'}
         />
         protected
-        <RadioInput
-          type='radio'
-          name='mode'
-          value='private'
-          onChange={onChangeMode}
-          checked={mode === 'private'}
-        />
-        private
       </RadioWrapper>
       {mode === 'protected' && (
         <>

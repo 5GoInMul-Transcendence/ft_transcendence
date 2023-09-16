@@ -27,7 +27,7 @@ export default function EnterChannel({
       setInvalidMsg(() => 'password is empty');
       return;
     }
-    axiosInstance.post(`/channel/${channelId}/password`).then((data) => {
+    axiosInstance.post(`/channel/${channelId}/password`, {password: keyword}).then((data) => {
       router.push(`/chats/${channelId}`);
       setModal(null);
     });

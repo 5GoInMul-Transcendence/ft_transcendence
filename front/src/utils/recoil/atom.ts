@@ -30,3 +30,7 @@ export const gameQueueState = atom<boolean>({
   key: 'gameQueueState',
   default: false,
 });
+export const userState = atom<string | null>({
+  key: 'userState',
+  default: null,
+});

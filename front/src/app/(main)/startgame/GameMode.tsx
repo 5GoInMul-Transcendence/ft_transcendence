@@ -55,7 +55,6 @@ export function GameMode({
       gameMode: 'GOLDEN PONG !!',
       gameApi: 'goldenpong',
     },
-    // Add more gameModes here
   ];
 
   return (

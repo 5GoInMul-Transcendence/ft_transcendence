@@ -12,7 +12,6 @@ export default function DotLoading() {
   );
 }
 
-// 키프레임 애니메이션을 생성합니다.
 const moveDot = keyframes`
 0% {
   transform: translateY(0);
