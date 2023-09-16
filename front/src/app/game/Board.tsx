@@ -9,6 +9,7 @@ import GameEnd from './GameEnd';
 import styled from 'styled-components';
 import { useRouter } from 'next/navigation';
 import { useSWRConfig } from 'swr';
+import useGameSocket from '@/hooks/useGameSocket';
 
 interface Props {
   game: IGame;
@@ -18,21 +19,13 @@ export default function Board({ game }: Props) {
   const { mutate } = useSWRConfig();
   const [p1Score, setP1Score] = useState<number>(0);
   const [p2Score, setP2Score] = useState<number>(0);
-  const [socket, setSocket] = useState<Socket<any, any> | undefined>(undefined);
   const [readGame, setReadyGame] = useState<boolean>(false);
   const [standbyGame, setStandbyGame] = useState<boolean>(false);
   const [endGame, setEndGame] = useState<boolean>(false);
   const router = useRouter();
+  const [socket] = useGameSocket('10003/game', game.gameKey);
 
   useEffect(() => {
-    setSocket(
-      io(`ws://localhost:10003/game`, {
-        transports: ['websocket'],
-        auth: {
-          gameKey: game.gameKey,
-        },
-      })
-    );
     setReadyGame(true);
   }, []);
 
@@ -51,12 +44,6 @@ export default function Board({ game }: Props) {
           setStandbyGame(false);
         }, 3000);
       } else if (res.status === 'end') {
-        setEndGame(true);
-        setTimeout(() => {
-          socket?.disconnect();
-          mutate('/friend/list');
-          router.push('/main');
-        }, 2000);
       }
     });
 
@@ -66,7 +53,12 @@ export default function Board({ game }: Props) {
     });
 
     socket?.on('disconnect', (res) => {
-      console.log('game socket disconnect', res);
+      setEndGame(true);
+      setTimeout(() => {
+        socket?.disconnect();
+        mutate('/friend/list');
+        router.push('/main');
+      }, 2000);
     });
   }, [socket]);
 
