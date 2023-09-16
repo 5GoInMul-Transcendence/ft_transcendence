@@ -47,7 +47,7 @@ export class LadderService {
       ladder.lose += 1;
 
       const updatedPoint = ladder.win - ladder.lose;
-      const prevLevel = Math.max(0, ladder.level - 1);
+      const prevLevel = Math.max(1, ladder.level - 1);
 
       if (updatedPoint < LadderLevelTable[prevLevel].nextLevelPoint) {
         ladder.level = prevLevel;
