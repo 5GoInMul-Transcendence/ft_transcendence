@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Session } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Session } from '@nestjs/common';
 import { Builder } from 'builder-pattern';
 import { ChannelService } from './channel.service';
 import { CreateChannelReqDto } from './dto/create-channel-req.dto';
@@ -337,5 +337,43 @@ export class ChannelController {
 			.timestamp(new Date())
 			.build()
 		);
+	}
+
+	@Delete(':channelid')
+	async leaveChannel(
+		@Param('channelid') channelId: number,
+		@Session() session: Record<string, any>,
+	): Promise<void> {
+		const channel: Channel | null = await this.channelService.getChannel(channelId)
+		const userId: number = session.userId;
+		let link: LinkChannelToUser | null;
+		let user: User | null;
+		let countUserInChannel: number;
+		let anotherUser: LinkChannelToUser;
+
+		if (!channel) {
+			this.exceptionService.notExistChannel();
+		}
+
+		user = await this.userService.getUserByUserId(userId);
+		link = await this.channelService.getLinkByChannelAndUser(channel, user);
+		if (!link) {
+			this.exceptionService.notEnterUserInChannel();
+		}
+
+		// delete a link in channel
+		await this.channelService.deleteLink(link);
+
+		// delete channel cycle
+		countUserInChannel = await this.channelService.getCountUserInChannel(channel.id);
+		if (countUserInChannel === 0 || channel.mode === ChannelMode.DM) {
+			if (channel.mode === ChannelMode.DM) {
+				anotherUser = await this.channelService.getLinkAtDeleteDmChannel(channel.id);
+				await this.channelService.deleteLink(anotherUser);
+			}
+			await this.messageService.deleteAllMessages(channel.id);
+			// delete ban list
+			await this.channelService.deleteChannel(channel);
+		}
 	}
 }

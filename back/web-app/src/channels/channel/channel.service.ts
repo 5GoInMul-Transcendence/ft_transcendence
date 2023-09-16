@@ -22,7 +22,6 @@ export class ChannelService {
 		@InjectRepository(LinkChannelToUser)
 		private linkChannelToUserRepository: Repository<LinkChannelToUser>,
 		private messageService: MessageService,
-		private userService: UserService,
 	) {}
 
 	async getChannel(id: number): Promise<Channel | null> {
@@ -31,6 +30,13 @@ export class ChannelService {
 				id,
 			}
 		});
+	}
+
+	async getLinkAtDeleteDmChannel(channelId: number): Promise<LinkChannelToUser | null> {
+		return await this.linkChannelToUserRepository
+		.createQueryBuilder('link')
+		.where('link.channel = :channelId', {channelId})
+		.getOne();
 	}
 
 	async getAllChannels(): Promise<Channel[]> {
@@ -62,6 +68,13 @@ export class ChannelService {
 			);
     }
 		return myChannelList;
+	}
+
+	async getCountUserInChannel(channelId: number): Promise<number> {
+		return this.linkChannelToUserRepository
+		.createQueryBuilder('link')
+		.where('link.channel = :channelId', {channelId})
+		.getCount();
 	}
 
 	async getLinkRelatedChannelByChannelAndUser(channel: Channel, user: User): Promise<LinkChannelToUser | null> {
@@ -138,5 +151,17 @@ export class ChannelService {
 		});
 
 		return await this.linkChannelToUserRepository.save(link);
+	}
+
+	/**
+	 * 
+	 * @param link: Goal to delete a user
+	 */
+	async deleteLink(link: LinkChannelToUser): Promise<void> {
+		await this.linkChannelToUserRepository.remove(link);
+	}
+
+	async deleteChannel(channel: Channel): Promise<void> {
+		await this.channelRepository.remove(channel);
 	}
 }
