@@ -6,13 +6,13 @@ import { CreateChannelReqDto } from './dto/create-channel-req.dto';
 import { LinkChannelToUser } from './entities/link-channel-to-user.entity';
 import { User } from 'src/users/user/entities/user.entity';
 import { CreateLinkChannelToUserReqDto } from './dto/create-link-channel-to-user-req.dto';
-import { UserService } from 'src/users/user/user.service';
 import { MyChannels } from './dto/my-channels.dto';
 import { RecentMessage } from './dto/recent-message.dto';
 import { Builder } from 'builder-pattern';
 import { Message } from 'src/message/entities/message.entity';
 import { MessageService } from 'src/message/message.service';
 import { ChannelMode } from './enum/channel-mode.enum';
+import { Ban } from './entities/ban.entity';
 
 @Injectable()
 export class ChannelService {
@@ -21,6 +21,8 @@ export class ChannelService {
 		private channelRepository: Repository<Channel>,
 		@InjectRepository(LinkChannelToUser)
 		private linkChannelToUserRepository: Repository<LinkChannelToUser>,
+		@InjectRepository(Ban)
+		private banRepository: Repository<Ban>,
 		private messageService: MessageService,
 	) {}
 
@@ -130,6 +132,12 @@ export class ChannelService {
 		return links;
 	}
 
+	async getBanList(channelId: number): Promise<Ban> {
+		return await this.banRepository.createQueryBuilder('ban')
+		.where('ban.channel = :channelId', {channelId})
+		.getOne();
+	}
+
 	async createChannel(dto: CreateChannelReqDto): Promise<Channel> {
 		const {name, mode, password} = dto;
 		const createdChannel = this.channelRepository.create({
@@ -163,5 +171,13 @@ export class ChannelService {
 
 	async deleteChannel(channel: Channel): Promise<void> {
 		await this.channelRepository.remove(channel);
+	}
+
+	async deleteBanList(channelId: number): Promise<void> {
+		const ban: Ban | null = await this.getBanList(channelId);
+
+		if (!ban)
+			return;
+		await this.banRepository.remove(ban);
 	}
 }

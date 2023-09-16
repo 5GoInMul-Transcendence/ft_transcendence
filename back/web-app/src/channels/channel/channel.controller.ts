@@ -364,15 +364,16 @@ export class ChannelController {
 		// delete a link in channel
 		await this.channelService.deleteLink(link);
 
-		// delete channel cycle
 		countUserInChannel = await this.channelService.getCountUserInChannel(channel.id);
+
+		// delete channel cycle
 		if (countUserInChannel === 0 || channel.mode === ChannelMode.DM) {
 			if (channel.mode === ChannelMode.DM) {
 				anotherUser = await this.channelService.getLinkAtDeleteDmChannel(channel.id);
 				await this.channelService.deleteLink(anotherUser);
 			}
 			await this.messageService.deleteAllMessages(channel.id);
-			// delete ban list
+			await this.channelService.deleteBanList(channel.id);
 			await this.channelService.deleteChannel(channel);
 		}
 	}
