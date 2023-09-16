@@ -24,6 +24,7 @@ import { MemoryUserService } from 'src/users/memoryuser/memory-user.service';
 import { FindUserDto } from 'src/users/memoryuser/dto/find-user.dto';
 import { CheckChannelResDto } from './dto/check-channel-res.dto';
 import { UpdateRoleAtLeaveOwnerReqDto } from './dto/update-role-at-leave-owner-req.dto';
+import { UpdateRoleInLinkDto } from './dto/update-role-in-link.dto';
 
 @Controller('channel')
 export class ChannelController {
@@ -350,10 +351,12 @@ export class ChannelController {
 			if(!generalUser) { // It is imposible. But I'm afraid.
 				this.exceptionService.notEnterUserInChannel();
 			}
-			// Update User to Owner
+			this.channelService.updateRoleInLink(generalUser,
+				Builder(UpdateRoleInLinkDto).role(ChannelRole.OWNER).build());
 		}
 		else {
-			// Update Admin to Owner
+			this.channelService.updateRoleInLink(adminUser,
+				Builder(UpdateRoleInLinkDto).role(ChannelRole.OWNER).build());
 		}
 	}
 

@@ -14,6 +14,7 @@ import { MessageService } from 'src/message/message.service';
 import { ChannelMode } from './enum/channel-mode.enum';
 import { Ban } from './entities/ban.entity';
 import { ChannelRole } from './enum/channel-role.enum';
+import { UpdateRoleInLinkDto } from './dto/update-role-in-link.dto';
 
 @Injectable()
 export class ChannelService {
@@ -170,9 +171,9 @@ export class ChannelService {
 		.getOne();
 	}
 
-	// async updateRoleInLink() {
-
-	// }
+	updateRoleInLink(link: LinkChannelToUser, dto: Partial<UpdateRoleInLinkDto>): void {
+		this.linkChannelToUserRepository.update(link.id, {...dto});
+	}
 
 	/**
 	 * 
