@@ -1,0 +1,17 @@
+{ 
+  "data":{
+    "id":1,
+    "nickname": "donghyuk",
+    "avatar": "",
+    "gameRecord": {
+      "win":10,
+      "lose":10,
+      "ladderLevel":10,
+      "achievement": ["10연승"]
+    }
+  },
+  "resStatus" : {
+    "code"   : "0000",
+    "message": ""
+  }
+}

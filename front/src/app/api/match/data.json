@@ -1,0 +1,92 @@
+[
+  {
+    "gameid": 1,
+    "user1": "Alice",
+    "user1Image": "default",
+    "score1": 10,
+    "user2": "Bob",
+    "user2Image": "default",
+    "score2": 8
+  },
+  {
+    "gameid": 2,
+    "user1": "Charlie",
+    "user1Image": "default",
+    "score1": 5,
+    "user2": "David",
+    "user2Image": "default",
+    "score2": 5
+  },
+  {
+    "gameid": 3,
+    "user1": "Eve",
+    "user1Image": "default",
+    "score1": 15,
+    "user2": "Frank",
+    "user2Image": "default",
+    "score2": 12
+  },
+  {
+    "gameid": 4,
+    "user1": "Grace",
+    "user1Image": "default",
+    "score1": 20,
+    "user2": "Helen",
+    "user2Image": "default",
+    "score2": 18
+  },
+  {
+    "gameid": 5,
+    "user1": "Ivan",
+    "user1Image": "default",
+    "score1": 7,
+    "user2": "Jack",
+    "user2Image": "default",
+    "score2": 9
+  },
+  {
+    "gameid": 6,
+    "user1": "Kelly",
+    "user1Image": "default",
+    "score1": 14,
+    "user2": "Liam",
+    "user2Image": "default",
+    "score2": 14
+  },
+  {
+    "gameid": 7,
+    "user1": "Mia",
+    "user1Image": "default",
+    "score1": 3,
+    "user2": "Nathan",
+    "user2Image": "default",
+    "score2": 1
+  },
+  {
+    "gameid": 8,
+    "user1": "Olivia",
+    "user1Image": "default",
+    "score1": 9,
+    "user2": "Patrick",
+    "user2Image": "default",
+    "score2": 9
+  },
+  {
+    "gameid": 9,
+    "user1": "Quinn",
+    "user1Image": "default",
+    "score1": 18,
+    "user2": "Rachel",
+    "user2Image": "default",
+    "score2": 20
+  },
+  {
+    "gameid": 10,
+    "user1": "Samuel",
+    "user1Image": "default",
+    "score1": 11,
+    "user2": "Tina",
+    "user2Image": "default",
+    "score2": 13
+  }
+]
