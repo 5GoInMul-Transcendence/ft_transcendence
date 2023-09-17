@@ -1,0 +1,92 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Channel } from './entities/channel.entity';
+import { Repository } from 'typeorm';
+import { CreateChannelReqDto } from './dto/create-channel-req.dto';
+import { LinkChannelToUser } from './entities/link-channel-to-user.entity';
+import { MyChannels } from './dto/my-channels.dto';
+import { RecentMessage } from './dto/recent-message.dto';
+import { Builder } from 'builder-pattern';
+import { Message } from 'src/message/entities/message.entity';
+import { MessageService } from 'src/message/message.service';
+import { ChannelMode } from './enum/channel-mode.enum';
+import { Ban } from './entities/ban.entity';
+
+@Injectable()
+export class ChannelService {
+	constructor(
+		@InjectRepository(Channel)
+		private channelRepository: Repository<Channel>,
+		@InjectRepository(Ban)
+		private banRepository: Repository<Ban>,
+		private messageService: MessageService,
+	) {}
+
+	async createChannel(dto: CreateChannelReqDto): Promise<Channel> {
+		const {name, mode, password} = dto;
+		const createdChannel = this.channelRepository.create({
+			name,
+			mode,
+			password,
+		});
+
+		return await this.channelRepository.save(createdChannel);
+	}
+
+	async getChannel(id: number): Promise<Channel | null> {
+		return await this.channelRepository.findOne({
+			where: {
+				id,
+			}
+		});
+	}
+
+	async getAllChannels(): Promise<Channel[]> {
+		return await this.channelRepository
+		.createQueryBuilder('channel')
+		.select(['channel.id', 'channel.name'])
+		.where('channel.mode = :modeA', {modeA: ChannelMode.PUBLIC})
+		.orWhere('channel.mode = :modeB', {modeB: ChannelMode.PROTECTED})
+		.getMany();
+	}
+
+	async getMyChannels(reqUserLinks: LinkChannelToUser[]): Promise<MyChannels[]> {
+		let myChannelList: MyChannels[] = [];
+
+		for (const link of reqUserLinks) {
+      const channel = link.channel;
+			const message: Message = await this.messageService.getRecentMessageRelatedUserByChannelId(channel);
+			const nicknameSendingMessage: string = message?.user.nickname;
+			const recentMessage: RecentMessage = Builder(RecentMessage)
+			.message(message?.content ?? null)
+			.nickname(nicknameSendingMessage)
+			.build();
+
+			myChannelList.push(Builder(MyChannels)
+			.id(channel.id)
+			.name(channel.name)
+			.recentMessage(recentMessage)
+			.build()
+			);
+    }
+		return myChannelList;
+	}
+
+	async getBanList(channelId: number): Promise<Ban | null> {
+		return await this.banRepository.createQueryBuilder('ban')
+		.where('ban.channel = :channelId', {channelId})
+		.getOne();
+	}
+
+	async deleteChannel(channel: Channel): Promise<void> {
+		await this.channelRepository.remove(channel);
+	}
+
+	async deleteBanList(channelId: number): Promise<void> {
+		const ban: Ban | null = await this.getBanList(channelId);
+
+		if (!ban)
+			return;
+		await this.banRepository.remove(ban);
+	}
+}

@@ -1,12 +1,19 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, HttpStatus } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  // test
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  throwException(): void {
+    this.appService.throwException('현재 페이지가 존재하지 않습니다!', HttpStatus.OK);
+  }
+
+  // test
+  @Get('main') 
+  returnMainContents(): string {
+    return this.appService.returnMainContents();
   }
 }
