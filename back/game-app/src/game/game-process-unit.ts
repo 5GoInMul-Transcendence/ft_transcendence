@@ -38,6 +38,8 @@ export class GameProcessUnit {
     }
 
     if (playResult == GamePlayResult.GAME_END) {
+      this.game.status = GameStatus.END;
+      
       for (let i = 0; i < this.players.length; i++) {
         this.players[i].status = PlayerStatus.GAME_END;
         this.players[i].client.emit('updateScore', this.game.score);

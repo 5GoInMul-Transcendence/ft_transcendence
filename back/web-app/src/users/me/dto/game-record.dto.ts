@@ -1,6 +1,6 @@
 export class GameRecordDto {
   win: number;
   lose: number;
-  ladderLevel: number;
+  ladderLevel: string;
   achievement: string[];
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Session } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Session } from '@nestjs/common';
 import { Builder } from 'builder-pattern';
 import { ChannelService } from './channel.service';
 import { CreateChannelReqDto } from './dto/create-channel-req.dto';
@@ -23,6 +23,9 @@ import { CreateDmChannelReqDto } from './dto/create-dm-channel-req.dto';
 import { MemoryUserService } from 'src/users/memoryuser/memory-user.service';
 import { FindUserDto } from 'src/users/memoryuser/dto/find-user.dto';
 import { CheckChannelResDto } from './dto/check-channel-res.dto';
+import { UpdateRoleAtLeaveOwnerReqDto } from './dto/update-role-at-leave-owner-req.dto';
+import { UpdateRoleInLinkDto } from './dto/update-role-in-link.dto';
+import { LinkChannelToUserService } from './link-channel-to-user.service';
 
 @Controller('channel')
 export class ChannelController {
@@ -35,6 +38,7 @@ export class ChannelController {
 		private userService: UserService,
 		private exceptionService: ChannelExceptionService,
 		private memoryUserService: MemoryUserService,
+		private linkService: LinkChannelToUserService,
 	) {}
 
 	@Post('public')
@@ -53,7 +57,7 @@ export class ChannelController {
 			.build()
 		);
 		
-		this.channelService.createLinkChannelToUser(
+		this.linkService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.channel(channel)
 			.role(ChannelRole.OWNER)
@@ -87,7 +91,7 @@ export class ChannelController {
 			.password(await this.hashService.hashPassword(password))
 			.build()
 		);
-		this.channelService.createLinkChannelToUser(
+		this.linkService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.channel(channel)
 			.role(ChannelRole.OWNER)
@@ -106,7 +110,7 @@ export class ChannelController {
 	) {
 		const userId: number = session.userId;
 		const user: User = await this.userService.getUserByUserId(userId);
-		const link: LinkChannelToUser = await this.channelService.getLinkByUserIdAtPrivate(userId);
+		const link: LinkChannelToUser = await this.linkService.getLinkByUserIdAtPrivate(userId);
 		let channel: Channel;
 
 		if (link) {
@@ -122,7 +126,7 @@ export class ChannelController {
 			.password(null)
 			.build()
 		);
-		this.channelService.createLinkChannelToUser(
+		this.linkService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.channel(channel)
 			.role(ChannelRole.OWNER)
@@ -152,7 +156,7 @@ export class ChannelController {
 		if (invitedUserId === userId) {
 			this.exceptionService.itIsInvalidRequest();
 		}
-		links = await this.channelService.getCreateDmChannelRes(userId, invitedUserId);
+		links = await this.linkService.getCreateDmChannelRes(userId, invitedUserId);
 		if (links.length < 1) {
 			const user: User = await this.userService.getUserByUserId(userId);
 			const invitedUser: User = await this.userService.getUserByUserId(invitedUserId)
@@ -166,14 +170,14 @@ export class ChannelController {
 				.build()
 			);
 
-			this.channelService.createLinkChannelToUser(
+			this.linkService.createLinkChannelToUser(
 				Builder(CreateLinkChannelToUserReqDto)
 				.channel(channel)
 				.user(user)
 				.role(ChannelRole.OWNER)
 				.build()
 			);
-			this.channelService.createLinkChannelToUser(
+			this.linkService.createLinkChannelToUser(
 				Builder(CreateLinkChannelToUserReqDto)
 				.channel(channel)
 				.user(invitedUser)
@@ -222,7 +226,7 @@ export class ChannelController {
 			) {
 			this.exceptionService.itIsInvalidRequest();
 		}
-		link = await this.channelService.getLinkRelatedChannelByChannelAndUser(channel, user);
+		link = await this.linkService.getLinkRelatedChannelByChannelAndUser(channel, user);
 		if (link) {
 			return Builder(CreateChannelResDto)
 			.id(channel.id)
@@ -233,7 +237,7 @@ export class ChannelController {
 		if (await this.hashService.hashCompare(password, channel.password) === false) {
 			this.exceptionService.passwordIsNotValid();
 		}
-		this.channelService.createLinkChannelToUser(
+		this.linkService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.channel(channel)
 			.user(user)
@@ -251,7 +255,7 @@ export class ChannelController {
 	 */
 	private async enterPublic(link: LinkChannelToUser, channel: Channel, user: User): Promise<LinkChannelToUser> {
 		if (!link) {
-			link = await this.channelService.createLinkChannelToUser(
+			link = await this.linkService.createLinkChannelToUser(
 				Builder(CreateLinkChannelToUserReqDto)
 				.user(user)
 				.channel(channel)
@@ -284,7 +288,7 @@ export class ChannelController {
 		// this.exceptionService.youAreBanUser();
 		userId = session.userId;
 		user = await this.userService.getUserByUserId(userId);
-		link = await this.channelService.getLinkByChannelAndUser(channel, user);
+		link = await this.linkService.getLinkByChannelAndUser(channel, user);
 		switch(channel.mode) {
 			case ChannelMode.PUBLIC:
 				link = await this.enterPublic(link, channel, user);
@@ -325,7 +329,7 @@ export class ChannelController {
 			this.exceptionService.notExistChannel();
 		}
 		user = await this.userService.getUserByUserId(userId);
-		link = await this.channelService.getLinkByChannelAndUser(channel, user);
+		link = await this.linkService.getLinkByChannelAndUser(channel, user);
 		if (!link) {
 			this.exceptionService.notEnterUserInChannel();
 		}
@@ -335,6 +339,71 @@ export class ChannelController {
 			.content(message)
 			.user(user)
 			.timestamp(new Date())
+			.build()
+		);
+	}
+
+	private async updateRoleAtLeaveOwner(dto: UpdateRoleAtLeaveOwnerReqDto) {
+		const {channel} = dto;
+		const adminUser: LinkChannelToUser | null = await this.linkService.getLinkRoleIsAdmin(channel.id)
+		let generalUser: LinkChannelToUser | null;
+
+		if (!adminUser) {
+			generalUser = await this.linkService.getFirstLinkByChannelId(channel.id);
+			if(!generalUser) { // It is imposible. But I'm afraid.
+				this.exceptionService.notEnterUserInChannel();
+			}
+			this.linkService.updateRoleInLink(generalUser,
+				Builder(UpdateRoleInLinkDto).role(ChannelRole.OWNER).build());
+		}
+		else {
+			this.linkService.updateRoleInLink(adminUser,
+				Builder(UpdateRoleInLinkDto).role(ChannelRole.OWNER).build());
+		}
+	}
+
+	@Delete(':channelid')
+	async leaveChannel(
+		@Param('channelid') channelId: number,
+		@Session() session: Record<string, any>,
+	): Promise<void> {
+		const channel: Channel | null = await this.channelService.getChannel(channelId)
+		const userId: number = session.userId;
+		let link: LinkChannelToUser | null;
+		let user: User | null;
+		let countUserInChannel: number;
+		let anotherUser: LinkChannelToUser;
+
+		if (!channel) {
+			this.exceptionService.notExistChannel();
+		}
+
+		user = await this.userService.getUserByUserId(userId);
+		link = await this.linkService.getLinkByChannelAndUser(channel, user);
+		if (!link) {
+			this.exceptionService.notEnterUserInChannel();
+		}
+
+		// delete a link in channel
+		await this.linkService.deleteLink(link);
+
+		countUserInChannel = await this.linkService.getCountLinkInChannel(channel.id);
+
+		// delete channel cycle
+		if (countUserInChannel === 0 || channel.mode === ChannelMode.DM) {
+			if (channel.mode === ChannelMode.DM) {
+				anotherUser = await this.linkService.getFirstLinkByChannelId(channel.id);
+				await this.linkService.deleteLink(anotherUser);
+			}
+			await this.messageService.deleteAllMessages(channel.id);
+			await this.channelService.deleteBanList(channel.id);
+			await this.channelService.deleteChannel(channel);
+			return;
+		}
+
+		this.updateRoleAtLeaveOwner(
+			Builder(UpdateRoleAtLeaveOwnerReqDto)
+			.channel(channel)
 			.build()
 		);
 	}
