@@ -1,5 +1,4 @@
 import ProfileImage from '@/component/ProfileImage';
-import { IMatch } from '@/types/IMatch';
 import styled from 'styled-components';
 
 export function ScoreBoard({
@@ -9,7 +8,7 @@ export function ScoreBoard({
   user2,
   user2Image,
   score2,
-}: IMatch) {
+}) {
   return (
     <Container>
       <Wrapper>

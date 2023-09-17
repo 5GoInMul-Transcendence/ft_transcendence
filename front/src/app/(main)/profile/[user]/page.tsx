@@ -13,7 +13,8 @@ import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
 
 export default function Profile({ params }: { params: { user: string } }) {
-  const data = useSwrFetcher<IUserFriedns>(`user/${params.user}`);
+  const user = params.user;
+  const data = useSwrFetcher<IUserFriedns>(`user/${user}`);
   const router = useRouter();
 
   const onClickTogle = () => {};
@@ -56,6 +57,7 @@ export default function Profile({ params }: { params: { user: string } }) {
           <MatchItem
             title='WIN/LOSE'
             content={`${data?.gameRecord.win}/${data?.gameRecord.lose}`}
+            nickname={user}
           />
           <AchievementItem
             title='ACHIEVMENT'
