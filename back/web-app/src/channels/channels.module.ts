@@ -14,6 +14,8 @@ import { ChannelExceptionService } from './channel/exception/channel-exception.s
 import { Ban } from './channel/entities/ban.entity';
 import { LinkChannelToUserService } from './channel/link-channel-to-user.service';
 import { ChannelSettingService } from './channel/channel-setting.service';
+import { MuteProvider } from './channel/mute/mute.provider';
+import { MuteService } from './channel/mute/mute.service';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { ChannelSettingService } from './channel/channel-setting.service';
     ChannelExceptionService,
     LinkChannelToUserService,
     ChannelSettingService,
+    MuteProvider,
+    MuteService,
   ]
 })
 export class ChannelsModule {}

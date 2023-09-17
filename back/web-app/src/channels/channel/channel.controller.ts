@@ -29,6 +29,8 @@ import { LinkChannelToUserService } from './link-channel-to-user.service';
 import { GetChannelInformationResDto } from './dto/get-channel-information-res.dto';
 import { ChannelSettingService } from './channel-setting.service';
 import { UpdateChannelSettingReqDto } from './dto/update-channel-setting-req.dto';
+import { GetUserSettingInChannelResDto } from './dto/get-user-setting-in-channel-res.dto';
+import { MuteService } from './mute/mute.service';
 
 @Controller('channel')
 export class ChannelController {
@@ -43,6 +45,7 @@ export class ChannelController {
 		private memoryUserService: MemoryUserService,
 		private linkService: LinkChannelToUserService,
 		private settingService: ChannelSettingService,
+		private muteService: MuteService,
 	) {}
 
 	@Post('public')
@@ -429,6 +432,11 @@ export class ChannelController {
 		if (!channel) {
 			this.exceptionService.notExistChannel();
 		}
+		// private, dm is impossible to change and get info;
+		if (channel.mode !== ChannelMode.PUBLIC && channel.mode !== ChannelMode.PROTECTED) {
+			this.exceptionService.itIsInvalidRequest();
+		}
+		
 		link = await this.linkService.getLinkByChannelAndUser(channel, user);
 		if (!link) {
 			this.exceptionService.notEnterUserInChannel();
@@ -456,6 +464,10 @@ export class ChannelController {
 		if (!channel) {
 			this.exceptionService.notExistChannel();
 		}
+		if (channel.mode !== ChannelMode.PUBLIC && channel.mode !== ChannelMode.PROTECTED) {
+			this.exceptionService.itIsInvalidRequest();
+		}
+
 		linkOfOwner = await this.linkService.getLinkByChannelAndUser(channel, user);
 		if (!linkOfOwner) {
 			this.exceptionService.notEnterUserInChannel();
@@ -464,5 +476,55 @@ export class ChannelController {
 			this.exceptionService.itIsNotOwner();
 		}
 		this.channelService.updateChannelSetting(channelId, mode, password);
+	}
+
+	@Get('setting/:channelid/:userid')
+	async getUserSettingInChannel(
+		@Param('channelid') channelId: number,
+		@Param('userid') responseUserId: number,
+		@Session() session: Record<string, any>,
+	) {
+		// mute, admin
+		// kick, ban
+		const userId: number = session.userId;
+		const channel: Channel = await this.channelService.getChannel(channelId);
+		let user: User;
+		let link: LinkChannelToUser;
+		let role: string;
+		let responseUser: User;
+		let responseLink: LinkChannelToUser;
+		let responseRole: string;
+
+		if (!channel) {
+			this.exceptionService.notExistChannel();
+		}
+		if (channel.mode !== ChannelMode.PUBLIC && channel.mode !== ChannelMode.PROTECTED) {
+			this.exceptionService.itIsInvalidRequest();
+		}
+
+		user = await this.userService.getUserByUserId(userId);
+		link = await this.linkService.getLinkByChannelAndUser(channel, user);
+		if (!link) {
+			this.exceptionService.notEnterUserInChannel();
+		}
+		// Check request user's role
+		role = link.role;
+		if (role === ChannelRole.USER) {
+			this.exceptionService.itIsNotAdmin();
+		}
+
+		responseUser = await this.userService.getUserByUserId(responseUserId);
+		if (!responseUser) {
+			this.exceptionService.itIsInvalidRequest();
+		}
+		responseLink = await this.linkService.getLinkByChannelAndUser(channel, responseUser);
+		if (!responseLink) {
+			this.exceptionService.itIsInvalidRequest();
+		}
+		responseRole = responseLink.role;
+		return Builder(GetUserSettingInChannelResDto)
+		.admin(responseRole === ChannelRole.USER ? false : true)
+		.mute(this.muteService.isMutedUser(channelId, responseUserId))
+		.build();
 	}
 }

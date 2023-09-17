@@ -29,4 +29,8 @@ export class ChannelExceptionService {
 	itIsNotOwner() {
 		throw new HttpException('채널 Owner가 아닙니다.', HttpStatus.BAD_REQUEST);
 	}
+
+	itIsNotAdmin() {
+		throw new HttpException('채널 관리자 권한이 없습니다.', HttpStatus.BAD_REQUEST)
+	}
 }
