@@ -65,10 +65,10 @@ export class MessageService {
 	}
 
 	async deleteAllMessages(channelId: number): Promise<void> {
-		const messages: Message[] = await this.messageRepository
-		.createQueryBuilder('message')
-		.where('message.channel = :channelId', {channelId})
-		.getMany();
-		await this.messageRepository.remove(messages);
+		await this.messageRepository
+		.createQueryBuilder()
+		.delete()
+		.where('channel = :channelId', {channelId})
+		.execute();
 	}
 }
