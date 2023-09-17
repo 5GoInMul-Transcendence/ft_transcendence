@@ -1,30 +1,30 @@
 'use client';
 
-import useSwr from 'swr';
 import { MatchResult } from './MatchResult';
-import { IMatch } from '@/types/IMatch';
 import styled from 'styled-components';
-import mockFetcher from '@/utils/mockFetcher';
+import useSwrFetcher from '@/hooks/useSwrFetcher';
+import { IHistory } from '@/types/IHistory';
 
 export default function History({ params }: { params: { user: string } }) {
-  const { data: match, error } = useSwr(`/api/match/`, mockFetcher);
+  const user = params.user;
+  const matches = useSwrFetcher<IHistory[]>(`/game/history/${user}`);
 
-  if (!match) return null;
+  if (!matches) return null;
 
   return (
     <Container>
-      <Title>player's Game History</Title>
+      <Title>{user}'s Game History</Title>
       <Wrapper>
-        {match.map((match: IMatch) => (
+        {matches.map((match: IHistory) => (
           <MatchResult
-            key={match.gameid}
-            gameid={match.gameid}
-            user1={match.user1}
-            user1Image={match.user1Image}
-            score1={match.score1}
-            user2={match.user2}
-            user2Image={match.user2Image}
-            score2={match.score2}
+            key={match.gameId}
+            createdTime={match.createdTime}
+            player1Nickname={match.player1.nickname}
+            player1Avatar={match.player1.avatar}
+            player1Score={match.player1.score}
+            player2Nickname={match.player2.nickname}
+            player2Avatar={match.player2.avatar}
+            player2Score={match.player2.score}
           />
         ))}
       </Wrapper>

@@ -27,7 +27,7 @@ export default function Profile() {
     axiosInstance.post(`/channel/private`).then((data) => {
       router.push(`/chats/${data.data.data.id}`);
     });
-  }
+  };
   return (
     <Container>
       <TopWrapper>
@@ -40,24 +40,27 @@ export default function Profile() {
           <MatchItem
             title='WIN/LOSE'
             content={`${gameRecord.win}/${gameRecord.lose}`}
+            nickname={data?.nickname}
           />
           <AchievementItem
             title='ACHIEVMENT'
             content={gameRecord.achievement || []}
           />
-        
-        <Buttons
-        leftButton={{
-          text: 'private dm',
-          color: 'white',
-          onClick: onClickPrivate,
-        }}
-        rightButton={{
-          text: 'edit',
-          color: 'green',
-          onClick: () => {router.push("/myprofile/edit");},
-        }}
-        />
+
+          <Buttons
+            leftButton={{
+              text: 'private dm',
+              color: 'white',
+              onClick: onClickPrivate,
+            }}
+            rightButton={{
+              text: 'edit',
+              color: 'green',
+              onClick: () => {
+                router.push('/myprofile/edit');
+              },
+            }}
+          />
         </Wrapper>
       </TopWrapper>
     </Container>
@@ -100,4 +103,3 @@ const EditLink = styled(Link)`
 function setModal(arg0: null) {
   throw new Error('Function not implemented.');
 }
-

@@ -22,7 +22,7 @@ export default function MainLayout({
   const setModal = useSetRecoilState(modalState);
   const setUserState = useSetRecoilState(userState);
   useEffect(() => {
-    if (!data) return ;
+    if (!data) return;
     setUserState(data.nickname);
   }, [data]);
   const onClickAddFriend = () => {
