@@ -1,8 +1,7 @@
 import ProfileImage from '@/component/ProfileImage';
-import { IMatch } from '@/types/IMatch';
 import styled from 'styled-components';
 interface Props {
-  createdTime: string;
+  createdDate: string;
   player1Nickname: string;
   player1Avatar: string;
   player1Score: number;
@@ -11,7 +10,7 @@ interface Props {
   player2Score: number;
 }
 export function MatchResult({
-  createdTime,
+  createdDate,
   player1Nickname,
   player1Avatar,
   player1Score,
@@ -21,7 +20,7 @@ export function MatchResult({
 }: Props) {
   return (
     <Container>
-      <Date>{createdTime}</Date>
+      <Date>{createdDate}</Date>
       <Wrapper>
         <LeftImage>
           <ProfileImage url={player1Avatar} size='60px' />

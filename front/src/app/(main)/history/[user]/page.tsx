@@ -13,12 +13,12 @@ export default function History({ params }: { params: { user: string } }) {
 
   return (
     <Container>
-      <Title>{user}'s Game History</Title>
+      <Title>{user} Game History</Title>
       <Wrapper>
         {matches.map((match: IHistory) => (
           <MatchResult
             key={match.gameId}
-            createdTime={match.createdTime}
+            createdDate={match.createdDate}
             player1Nickname={match.player1.nickname}
             player1Avatar={match.player1.avatar}
             player1Score={match.player1.score}

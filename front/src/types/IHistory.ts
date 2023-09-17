@@ -1,6 +1,6 @@
 export interface IHistory {
   gameId: number;
-  createdTime: string;
+  createdDate: string;
   player1: {
     nickname: string;
     score: number;
