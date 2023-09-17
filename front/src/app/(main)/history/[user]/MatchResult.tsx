@@ -1,29 +1,37 @@
 import ProfileImage from '@/component/ProfileImage';
-import { IMatch } from '@/types/IMatch';
 import styled from 'styled-components';
-
+interface Props {
+  createdDate: string;
+  player1Nickname: string;
+  player1Avatar: string;
+  player1Score: number;
+  player2Nickname: string;
+  player2Avatar: string;
+  player2Score: number;
+}
 export function MatchResult({
-  user1,
-  user1Image,
-  score1,
-  user2,
-  user2Image,
-  score2,
-}: IMatch) {
+  createdDate,
+  player1Nickname,
+  player1Avatar,
+  player1Score,
+  player2Nickname,
+  player2Avatar,
+  player2Score,
+}: Props) {
   return (
     <Container>
-      <Date>2023.06.21 14:56</Date>
+      <Date>{createdDate}</Date>
       <Wrapper>
         <LeftImage>
-          <ProfileImage url={user1Image} size='60px' />
-          <span>{user1}</span>
+          <ProfileImage url={player1Avatar} size='60px' />
+          <span>{player1Nickname}</span>
         </LeftImage>
         <div>
-          <span>{score1}</span> vs <span>{score2}</span>
+          <span>{player1Score}</span> vs <span>{player2Score}</span>
         </div>
         <RightImage>
-          <span>{user2}</span>
-          <ProfileImage url={user2Image} size='60px' />
+          <span>{player2Nickname}</span>
+          <ProfileImage url={player2Avatar} size='60px' />
         </RightImage>
       </Wrapper>
     </Container>

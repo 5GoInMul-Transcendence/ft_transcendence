@@ -1,21 +1,19 @@
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import styled from 'styled-components';
 
 interface Props {
   title: string;
   content: string;
+  nickname: string;
 }
 
-export default function MatchItem({ title, content }: Props) {
-  const path = usePathname();
-
+export default function MatchItem({ title, content, nickname }: Props) {
   return (
     <MatchContainer>
       <div>{title}</div>
       <MatchWrapper>
         <Match>{content}</Match>
-        <MatchHistory href={`${path}/history`}>{`HISTORY >`}</MatchHistory>
+        <MatchHistory href={`/history/${nickname}`}>{`HISTORY >`}</MatchHistory>
       </MatchWrapper>
     </MatchContainer>
   );

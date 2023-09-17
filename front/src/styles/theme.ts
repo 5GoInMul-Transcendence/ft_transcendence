@@ -2,25 +2,31 @@ import { DefaultTheme } from 'styled-components';
 
 const flex = {
   center: `
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: -webkit-flex;
+    -webkit-justify-content: center;
+    -webkit-align-items: center;
+    display: -webkit-flex;
+    -webkit-justify-content: center;
+    -webkit-align-items: center;
   `,
   right: `
     display: flex;
     justify-content: right;
     align-items: center;
+    display: -webkit-flex;
+    -webkit-justify-content: right;
+    -webkit-align-items: center;
   `,
   centerColumn: `
-    display: flex;
+    display:-webkit-flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    -webkit-justify-content: center;
+    -webkit-align-items: center;
   `,
   spaceBetween: `
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: -webkit-flex;
+    -webkit-justify-content: space-between;
+    -webkit-align-items: center;
   `,
 };
 
