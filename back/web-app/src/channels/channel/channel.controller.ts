@@ -26,6 +26,8 @@ import { CheckChannelResDto } from './dto/check-channel-res.dto';
 import { UpdateRoleAtLeaveOwnerReqDto } from './dto/update-role-at-leave-owner-req.dto';
 import { UpdateRoleInLinkDto } from './dto/update-role-in-link.dto';
 import { LinkChannelToUserService } from './link-channel-to-user.service';
+import { GetChannelInformationResDto } from './dto/get-channel-information-res.dto';
+import { ChannelSettingService } from './channel-setting.service';
 
 @Controller('channel')
 export class ChannelController {
@@ -39,6 +41,7 @@ export class ChannelController {
 		private exceptionService: ChannelExceptionService,
 		private memoryUserService: MemoryUserService,
 		private linkService: LinkChannelToUserService,
+		private settingService: ChannelSettingService,
 	) {}
 
 	@Post('public')
@@ -406,5 +409,31 @@ export class ChannelController {
 			.channel(channel)
 			.build()
 		);
+	}
+
+	/**
+	 * Channel setting
+	 */
+	@Get('setting/:channelid/')
+	async getChannelInformation(
+		@Param('channelid') channelId: number,
+		@Session() session: Record<string, any>,
+	) {
+		const userId: number = session.userId;
+		const user: User = await this.userService.getUserByUserId(userId);
+		const channel: Channel = await this.channelService.getChannel(channelId);
+		let link: LinkChannelToUser | null;
+		let linksInChannel: LinkChannelToUser[];
+
+		if (!channel) {
+			this.exceptionService.notExistChannel();
+		}
+		link = await this.linkService.getLinkByChannelAndUser(channel, user);
+		if (!link) {
+			this.exceptionService.notEnterUserInChannel();
+		}
+
+		linksInChannel = await this.linkService.getLinksRelatedUserByChannelId(channelId);
+		return this.settingService.getChannelInformation(linksInChannel);
 	}
 }
