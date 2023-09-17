@@ -49,7 +49,7 @@ export class UserController {
     );
 
     const gameRecodeDto = Builder(GameRecordDto)
-      .ladderLevel(ladder.level)
+      .ladderLevel(ladder.displayLevel)
       .win(ladder.win)
       .lose(ladder.lose)
       .achievement(achievement.achievements)
