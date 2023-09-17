@@ -78,7 +78,7 @@ export class GameService {
       const gameProcessUnit = this.gameProcessUnits.get(game.id);
       this.gameCore.pop(gameProcessUnit);
     }
-    if (game.status <= GameStatus.START) {
+    if (game.status !== GameStatus.END) {
       game.winner = player.number === PlayerNumber.P1 ? PlayerNumber.P2 : PlayerNumber.P1;
     }
 
