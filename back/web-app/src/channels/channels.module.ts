@@ -11,6 +11,11 @@ import { Message } from '../message/entities/message.entity';
 import { MessageModule } from '../message/message.module';
 import { HashModule } from 'src/common/hash/hash.module';
 import { ChannelExceptionService } from './channel/exception/channel-exception.service';
+import { Ban } from './channel/entities/ban.entity';
+import { LinkChannelToUserService } from './channel/link-channel-to-user.service';
+import { ChannelSettingService } from './channel/channel-setting.service';
+import { MuteProvider } from './channel/mute/mute.provider';
+import { MuteService } from './channel/mute/mute.service';
 
 @Module({
   imports: [
@@ -28,6 +33,10 @@ import { ChannelExceptionService } from './channel/exception/channel-exception.s
   providers: [
     ChannelService,
     ChannelExceptionService,
+    LinkChannelToUserService,
+    ChannelSettingService,
+    MuteProvider,
+    MuteService,
   ]
 })
 export class ChannelsModule {}
