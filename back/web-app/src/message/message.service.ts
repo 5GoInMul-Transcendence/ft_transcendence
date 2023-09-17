@@ -63,4 +63,12 @@ export class MessageService {
 		.orderBy('message.timestamp', 'DESC')
 		.getOne();
 	}
+
+	async deleteAllMessages(channelId: number): Promise<void> {
+		await this.messageRepository
+		.createQueryBuilder()
+		.delete()
+		.where('channel = :channelId', {channelId})
+		.execute();
+	}
 }
