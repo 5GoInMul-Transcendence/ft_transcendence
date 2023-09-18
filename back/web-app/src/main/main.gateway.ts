@@ -23,6 +23,7 @@ import { AcceptMatchDto } from './match/dto/accept-match.dto';
 import { MatchService } from './match/match.service';
 import { DisconnectMatchDto } from './match/dto/disconnect-match.dto';
 import { GameMode } from '../game/enums/game-mode.enum';
+import { InviteMatchDto } from './match/dto/invite-match.dto';
 
 @WebSocketGateway(10001, { namespace: 'main', cors: { origin: '*' } })
 export class MainGateway
@@ -113,6 +114,21 @@ export class MainGateway
 
     this.matchService.acceptMatch(
       Builder(AcceptMatchDto).userId(session.userId).accepted(accepted).build(),
+    );
+  }
+
+  @SubscribeMessage('inviteMatch')
+  inviteMatch(
+    @ConnectedSocket() client: any,
+    @MessageBody('inviteUserId') inviteUserId: number,
+  ) {
+    const session = client.handshake.session;
+
+    this.matchService.inviteMatch(
+      Builder(InviteMatchDto)
+        .userId(session.userId)
+        .inviteUserId(inviteUserId)
+        .build(),
     );
   }
 }
