@@ -150,11 +150,6 @@ export class ChatService {
 
   sendMessage(dto: SendChatMessageDto) {
     const { user, channel, content } = dto;
-    const client = this.chatUsers.get(user.id);
-
-    if (!client) {
-      return;
-    }
 
     const resDto = Builder(UpdateMyChannelResDto)
       .id(channel.id)
