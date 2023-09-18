@@ -19,14 +19,32 @@ export class ChatGateway
 {
   constructor(
     @Inject('SESSION_MIDDLEWARE') private sessionMiddleware: any,
+    private chatService: ChatService,
   ) {}
 
   afterInit(server: Server) {
     server.use(sharedSession(this.sessionMiddleware));
+    this.chatService.init(server);
   }
 
   handleConnection(client: any) {
+    const session = client.handshake.session;
+    try {
+      this.chatService.checkSession(
+        Builder(CheckSessionDto).session(session).client(client).build(),
+      );
 
+      this.chatService.checkReconnection(
+        Builder(CheckReconnectionDto)
+          .userId(session.userId)
+          .client(client)
+          .build(),
+      );
+    } catch (err) {
+      return;
+    }
+
+    this.chatService.connectChat(session.userId, client);
   }
 
   handleDisconnect(client: any): any {
