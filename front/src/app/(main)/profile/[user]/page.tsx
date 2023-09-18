@@ -6,6 +6,7 @@ import Buttons from '@/component/Buttons';
 import MatchItem from '@/component/MatchItem';
 import ProfileImage from '@/component/ProfileImage';
 import Toggle from '@/component/Toggle';
+import useSocket from '@/hooks/useSocket';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
 import { IUserFriedns } from '@/types/IUser';
 import { axiosInstance } from '@/utils/axios';
@@ -13,11 +14,18 @@ import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
 
 export default function Profile({ params }: { params: { user: string } }) {
+  const [socket] = useSocket('10001/main');
   const user = params.user;
   const data = useSwrFetcher<IUserFriedns>(`user/${user}`);
   const router = useRouter();
 
   const onClickTogle = () => {};
+  const onMatch = () => {
+    socket?.emit('inviteMatch', {
+      inviteUserId: data.id,
+    });
+  };
+
   const onClickDM = () => {
     axiosInstance
       .post('/channel/dm', { invitedUserId: data.id })
@@ -26,13 +34,11 @@ export default function Profile({ params }: { params: { user: string } }) {
       });
   };
 
-  if (!data) return;
-
   return (
     <Container>
       <TopWrapper>
         <Wrapper $width={3}>
-          <ProfileImage url={data.avatar} size='250px' />
+          <ProfileImage url={data?.avatar} size='250px' />
           <TogglesWrapper>
             <Toggle
               text='follow'
@@ -72,7 +78,7 @@ export default function Profile({ params }: { params: { user: string } }) {
           color: 'white',
           onClick: onClickDM,
         }}
-        rightButton={{ text: 'match game', color: 'green' }}
+        rightButton={{ text: 'match game', color: 'green', onClick: onMatch }}
       />
     </Container>
   );

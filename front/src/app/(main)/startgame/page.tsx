@@ -10,8 +10,6 @@ import styled from 'styled-components';
 import DotLoading from './DotLoading';
 
 export default function StartGame() {
-  const setModal = useSetRecoilState(modalState);
-  const router = useRouter();
   const [socket] = useSocket('10001/main');
   const [gameMode, setGameMode] = useRecoilState(gameModeState);
   const [gameQueue, setGameQueue] = useRecoilState(gameQueueState);
@@ -20,26 +18,6 @@ export default function StartGame() {
     setGameQueue(false);
     setGameMode('');
     socket?.emit('cancelMatch');
-  }, [socket]);
-
-  useEffect(() => {
-    socket?.on('waitMatch', () => {
-      setGameQueue(false);
-      setGameMode('');
-      setModal({ type: 'MATCH-Accept' });
-    });
-
-    socket?.on('successMatch', (res) => {
-      if (res.status === true) {
-        setModal(null);
-        setGameMode('');
-        router.push('/game');
-      } else if (res.status === false) {
-        setModal(null);
-        setGameMode('');
-        setGameQueue(true);
-      }
-    });
   }, [socket]);
 
   return (
