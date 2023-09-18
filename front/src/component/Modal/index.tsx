@@ -48,7 +48,6 @@ export default function Modal() {
     setModal(() => null);
   };
 
-  console.log(modal);
   return (
     modal && (
       <BackDrop>
