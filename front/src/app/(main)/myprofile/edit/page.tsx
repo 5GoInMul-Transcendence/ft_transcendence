@@ -7,13 +7,15 @@ import styled from 'styled-components';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
 import { IUserDetail } from '@/types/IUser';
 import { useSetRecoilState } from 'recoil';
-import { modalState } from '@/utils/recoil/atom';
+import { invalidMsgState, modalState } from '@/utils/recoil/atom';
 import { useCallback, useRef } from 'react';
+import InvalidMsg from '@/component/Modal/InvalidMsg';
 
 export default function Profile() {
   const data = useSwrFetcher<IUserDetail>('/me/details');
   const inputRef = useRef<HTMLInputElement | null>(null);
   const setModal = useSetRecoilState(modalState);
+  const setInvalidMsg = useSetRecoilState(invalidMsgState);
   const onUploadImage = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       if (!e.target.files) {
@@ -28,6 +30,8 @@ export default function Profile() {
       })
         .then((res) => {})
         .catch(() => {
+          setInvalidMsg('파일 업로드에 실패 하였습니다');
+          setModal({ type: 'API-Error' });
           // 400일 때 에러처리 얘만 fetch 라 넣어야함
         });
     },

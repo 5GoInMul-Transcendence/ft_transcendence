@@ -9,7 +9,7 @@ import useSocket from '@/hooks/useSocket';
 import { useEffect, useState } from 'react';
 
 export default function FriendList() {
-  const [friends, setFriends] = useState<IFriends[]>([]);
+  const [friends, setFriends] = useState<IFriends[]>();
   const friendsData = useSwrFetcher<IFriends[]>('/friend/list');
 
   const [socket] = useSocket('10001/main');
@@ -37,11 +37,9 @@ export default function FriendList() {
     console.log(friendsData, 'friendsData updatae');
   }, [friendsData]);
 
-  if (!friends) return null;
-
   return (
     <div>
-      {friends.map((friend: IFriends) => (
+      {friends?.map((friend: IFriends) => (
         <Link key={friend.id} href={`/profile/${friend.nickname}`}>
           <FriendItem>
             <div>

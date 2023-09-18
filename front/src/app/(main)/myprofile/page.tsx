@@ -15,14 +15,15 @@ import { axiosInstance } from '@/utils/axios';
 export default function Profile() {
   const data = useSwrFetcher<IUser>('/me');
   const router = useRouter();
-  const { id, nickname, avatar, gameRecord } = data
+
+  const { nickname, avatar, gameRecord } = data
     ? data
     : {
-        id: 0,
         nickname: '',
         avatar: '',
         gameRecord: { win: 0, lose: 0, ladderLevel: 0, achievement: [] },
       };
+
   const onClickPrivate = () => {
     axiosInstance.post(`/channel/private`).then((data) => {
       router.push(`/chats/${data.data.data.id}`);
