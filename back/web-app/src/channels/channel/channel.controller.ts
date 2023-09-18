@@ -39,6 +39,7 @@ export class ChannelController {
 		private exceptionService: ChannelExceptionService,
 		private memoryUserService: MemoryUserService,
 		private linkService: LinkChannelToUserService,
+		private chatService: ChatService,
 	) {}
 
 	@Post('public')
@@ -57,13 +58,16 @@ export class ChannelController {
 			.build()
 		);
 		
-		this.linkService.createLinkChannelToUser(
+		await this.linkService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.channel(channel)
 			.role(ChannelRole.OWNER)
 			.user(user)
 			.build()
 		);
+		
+		this.chatService.enterChannel(userId, channel);
+		
 		return Builder(CreateChannelResDto)
 		.id(channel.id)
 		.name(channel.name)
@@ -91,13 +95,16 @@ export class ChannelController {
 			.password(await this.hashService.hashPassword(password))
 			.build()
 		);
-		this.linkService.createLinkChannelToUser(
+		await this.linkService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.channel(channel)
 			.role(ChannelRole.OWNER)
 			.user(user)
 			.build()
 		);
+		
+		this.chatService.enterChannel(userId, channel);
+		
 		return Builder(CreateChannelResDto)
 		.id(channel.id)
 		.name(channel.name)
@@ -126,13 +133,16 @@ export class ChannelController {
 			.password(null)
 			.build()
 		);
-		this.linkService.createLinkChannelToUser(
+		await this.linkService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.channel(channel)
 			.role(ChannelRole.OWNER)
 			.user(user)
 			.build()
 		);
+		
+		this.chatService.enterChannel(userId, channel);
+	
 		return Builder(CreateChannelResDto)
 		.id(channel.id)
 		.name(channel.name)
@@ -184,6 +194,9 @@ export class ChannelController {
 				.role(ChannelRole.USER)
 				.build()
 			);
+			
+			this.chatService.enterChannel(userId, channel);
+			
 			return Builder(CreateChannelResDto)
 			.id(channel.id)
 			.name(channel.name)
@@ -244,6 +257,9 @@ export class ChannelController {
 			.role(ChannelRole.USER)
 			.build()
 		);
+		
+		this.chatService.enterChannel(userId, channel);
+		
 		return Builder(CreateChannelResDto)
 		.id(channel.id)
 		.name(channel.name)
@@ -262,6 +278,8 @@ export class ChannelController {
 				.role(ChannelRole.USER)
 				.build()
 			);
+			
+			this.chatService.enterChannel(user.id, channel);
 		}
 		return link;
 	}
