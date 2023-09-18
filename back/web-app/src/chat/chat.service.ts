@@ -147,6 +147,30 @@ export class ChatService {
     }
   }
 
+  sendMessage(dto: SendChatMessageDto) {
+    const { user, channel, content } = dto;
+    const client = this.chatUsers.get(user.id);
+
+    if (!client) {
+      return;
+    }
+
+    const resDto = Builder(UpdateMyChannelResDto)
+      .id(channel.id)
+      .recentMessage(
+        Builder(ChatRecentMessage)
+          .id(user.id)
+          .nickname(user.nickname)
+          .content(content)
+          .build(),
+      )
+      .build();
+
+    client
+      .to(channel.id.toString())
+      .emit(ChatEvent.UpdateMyChannel, ApiResponseForm.ok(resDto));
+  }
+
   updateAllChannel(dto: UpdateAllChannelDto) {
     const { event, channel } = dto;
 

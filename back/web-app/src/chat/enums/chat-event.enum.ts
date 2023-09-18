@@ -3,4 +3,5 @@ export enum ChatEvent {
   DeleteAllChannel = 'deleteAllChannel',
   AddMyChannel = 'addMyChannel',
   DeleteMyChannel = 'deleteMyChannel',
+  UpdateMyChannel = 'updateMyChannel',
 }
