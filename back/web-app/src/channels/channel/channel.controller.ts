@@ -404,7 +404,9 @@ export class ChannelController {
 
 		// delete a link in channel
 		await this.linkService.deleteLink(link);
-
+		
+		this.chatService.leaveChannel(userId, channel);
+		
 		countUserInChannel = await this.linkService.getCountLinkInChannel(channel.id);
 
 		// delete channel cycle
@@ -412,6 +414,7 @@ export class ChannelController {
 			if (channel.mode === ChannelMode.DM) {
 				anotherUser = await this.linkService.getFirstLinkByChannelId(channel.id);
 				await this.linkService.deleteLink(anotherUser);
+				this.chatService.leaveChannel(anotherUser.id, channel);
 			}
 			await this.messageService.deleteAllMessages(channel.id);
 			await this.channelService.deleteBanList(channel.id);
