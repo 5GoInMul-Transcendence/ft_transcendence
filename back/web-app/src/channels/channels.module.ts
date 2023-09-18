@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ChannelsController } from './channels.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Channel } from './channel/entities/channel.entity';
@@ -13,6 +13,7 @@ import { HashModule } from 'src/common/hash/hash.module';
 import { ChannelExceptionService } from './channel/exception/channel-exception.service';
 import { Ban } from './channel/entities/ban.entity';
 import { LinkChannelToUserService } from './channel/link-channel-to-user.service';
+import { ChatModule } from '../chat/chat.module';
 
 @Module({
   imports: [
@@ -26,12 +27,14 @@ import { LinkChannelToUserService } from './channel/link-channel-to-user.service
     UserModule,
     MessageModule,
     HashModule,
+    forwardRef(() => ChatModule),
   ],
   controllers: [ChannelsController, ChannelController],
   providers: [
     ChannelService,
     ChannelExceptionService,
     LinkChannelToUserService,
-  ]
+  ],
+  exports: [LinkChannelToUserService],
 })
 export class ChannelsModule {}
