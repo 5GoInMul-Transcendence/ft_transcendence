@@ -167,7 +167,7 @@ export class ChatService {
       )
       .build();
 
-    client
+    this.chatServerSocket
       .to(channel.id.toString())
       .emit(ChatEvent.UpdateMyChannel, ApiResponseForm.ok(resDto));
   }

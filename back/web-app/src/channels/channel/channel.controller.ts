@@ -365,6 +365,13 @@ export class ChannelController {
 			.timestamp(new Date())
 			.build()
 		);
+    this.chatService.sendMessage(
+      Builder(SendChatMessageDto)
+			.user(user)
+			.channel(channel)
+			.content(message)
+			.build(),
+    );
 	}
 
 	private async updateRoleAtLeaveOwner(dto: UpdateRoleAtLeaveOwnerReqDto) {
