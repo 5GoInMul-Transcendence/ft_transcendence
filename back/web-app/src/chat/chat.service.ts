@@ -19,6 +19,7 @@ import { AddAllChannelResDto } from './dto/add-all-channel-res.dto';
 import { UpdateMyChannelDto } from './dto/update-my-channel.dto';
 import { AddMyChannelResDto } from './dto/add-my-channel-res.dto';
 import { ChannelMode } from '../channels/channel/enum/channel-mode.enum';
+import { DeleteChannelResDto } from './dto/delete-channel-res.dto';
 
 @Injectable()
 export class ChatService {
@@ -187,7 +188,12 @@ export class ChatService {
         );
         break;
       case ChatEvent.DeleteAllChannel:
-        this.chatServerSocket.emit(event, ApiResponseForm.ok(channel.id));
+        this.chatServerSocket.emit(
+          event,
+          ApiResponseForm.ok(
+            Builder(DeleteChannelResDto).id(channel.id).build(),
+          ),
+        );
         break;
     }
   }
@@ -214,7 +220,12 @@ export class ChatService {
         );
         break;
       case ChatEvent.DeleteMyChannel:
-        client.emit(event, ApiResponseForm.ok(channel.id));
+        client.emit(
+          event,
+          ApiResponseForm.ok(
+            Builder(DeleteChannelResDto).id(channel.id).build(),
+          ),
+        );
     }
   }
 }
