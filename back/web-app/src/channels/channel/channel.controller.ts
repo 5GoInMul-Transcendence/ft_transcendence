@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Session } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Put, HttpException, HttpStatus, Param, Post, Session } from '@nestjs/common';
 import { Builder } from 'builder-pattern';
 import { ChannelService } from './channel.service';
 import { CreateChannelReqDto } from './dto/create-channel-req.dto';
@@ -28,6 +28,9 @@ import { UpdateRoleInLinkDto } from './dto/update-role-in-link.dto';
 import { LinkChannelToUserService } from './link-channel-to-user.service';
 import { ChatService } from '../../chat/chat.service';
 import { SendChatMessageDto } from '../../chat/dto/send-chat-message.dto';
+import { GetChannelInformationResDto } from './dto/get-channel-information-res.dto';
+import { ChannelSettingService } from './channel-setting.service';
+import { UpdateChannelSettingReqDto } from './dto/update-channel-setting-req.dto';
 
 @Controller('channel')
 export class ChannelController {
@@ -42,6 +45,7 @@ export class ChannelController {
 		private memoryUserService: MemoryUserService,
 		private linkService: LinkChannelToUserService,
 		private chatService: ChatService,
+		private settingService: ChannelSettingService,
 	) {}
 
 	@Post('public')
@@ -429,5 +433,59 @@ export class ChannelController {
 			.channel(channel)
 			.build()
 		);
+	}
+
+	/**
+	 * Channel setting
+	 */
+	@Get('setting/:channelid/')
+	async getChannelInformation(
+		@Param('channelid') channelId: number,
+		@Session() session: Record<string, any>,
+	) {
+		const userId: number = session.userId;
+		const user: User = await this.userService.getUserByUserId(userId);
+		const channel: Channel = await this.channelService.getChannel(channelId);
+		let link: LinkChannelToUser | null;
+		let linksInChannel: LinkChannelToUser[];
+
+		if (!channel) {
+			this.exceptionService.notExistChannel();
+		}
+		link = await this.linkService.getLinkByChannelAndUser(channel, user);
+		if (!link) {
+			this.exceptionService.notEnterUserInChannel();
+		}
+
+		linksInChannel = await this.linkService.getLinksRelatedUserByChannelId(channelId);
+		return this.settingService.getChannelInformation(linksInChannel);
+	}
+
+	@Put('setting/:channelid')
+	async updateChannelSetting(
+		@Param('channelid') channelId: number,
+		@Session() session: Record<string, any>,
+		@Body() dto: UpdateChannelSettingReqDto, // pipe
+	) {
+		let {mode, password} = dto;
+		const userId: number = session.userId;
+		const user: User = await this.userService.getUserByUserId(userId);
+		const channel: Channel = await this.channelService.getChannel(channelId);
+		let linkOfOwner: LinkChannelToUser | null;
+
+		if (mode !== ChannelMode.PUBLIC && mode !== ChannelMode.PROTECTED) {
+			this.exceptionService.itIsInvalidRequest();
+		}
+		if (!channel) {
+			this.exceptionService.notExistChannel();
+		}
+		linkOfOwner = await this.linkService.getLinkByChannelAndUser(channel, user);
+		if (!linkOfOwner) {
+			this.exceptionService.notEnterUserInChannel();
+		}
+		if (linkOfOwner.role !== ChannelRole.OWNER) {
+			this.exceptionService.itIsNotOwner();
+		}
+		this.channelService.updateChannelSetting(channelId, mode, password);
 	}
 }

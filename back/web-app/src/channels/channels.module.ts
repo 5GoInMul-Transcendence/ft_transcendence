@@ -14,6 +14,7 @@ import { ChannelExceptionService } from './channel/exception/channel-exception.s
 import { Ban } from './channel/entities/ban.entity';
 import { LinkChannelToUserService } from './channel/link-channel-to-user.service';
 import { ChatModule } from '../chat/chat.module';
+import { ChannelSettingService } from './channel/channel-setting.service';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ChatModule } from '../chat/chat.module';
     ChannelService,
     ChannelExceptionService,
     LinkChannelToUserService,
+    ChannelSettingService,
   ],
   exports: [LinkChannelToUserService],
 })

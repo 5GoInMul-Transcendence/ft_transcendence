@@ -67,6 +67,13 @@ export class LinkChannelToUserService {
 		.getMany();
 	}
 
+	async getLinksRelatedUserByChannelId(channelId: number): Promise<LinkChannelToUser[]> {
+		return await this.linkChannelToUserRepository
+		.createQueryBuilder('link')
+		.innerJoinAndSelect('link.user', 'user', 'link.channel = :channelId', {channelId})
+		.getMany();
+	}
+
 	async getLinkByUserIdAtPrivate(userId: number): Promise<LinkChannelToUser | null> {
 		return await this.linkChannelToUserRepository
 		.createQueryBuilder('link_channel_to_user')

@@ -87,6 +87,14 @@ export class GameService {
     );
 
     /* Update GameRecord*/
+    this.addGameHistory(
+      Builder(AddGameHistoryDto)
+        .player1Id(p1.id)
+        .player2Id(p2.id)
+        .player1Score(dto.gameScore.p1.score)
+        .player2Score(dto.gameScore.p2.score)
+        .build(),
+    );
 
     /* Update MemoryUserStatus */
     this.memoryUserService.updateUser(
