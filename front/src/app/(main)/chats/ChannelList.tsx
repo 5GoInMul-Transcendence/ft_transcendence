@@ -11,7 +11,7 @@ import { recentMessageState } from '@/utils/recoil/atom';
 import { axiosInstance } from '@/utils/axios';
 
 export default function ChannelList() {
-  const [socket, disconnect] = useSocket('10002');
+  const [socket, disconnect] = useSocket('10002/chat');
   const setRecentMessage = useSetRecoilState(recentMessageState);
   const [myChannelOption, setmyChannelOption] = useState(true);
   const [myChannels, setMyChannels] = useState<IMyChannel[]>([]);
