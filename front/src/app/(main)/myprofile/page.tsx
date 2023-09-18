@@ -47,21 +47,24 @@ export default function Profile() {
             title='ACHIEVMENT'
             content={gameRecord.achievement || []}
           />
-
-          <Buttons
-            leftButton={{
-              text: 'private dm',
-              color: 'white',
-              onClick: onClickPrivate,
-            }}
-            rightButton={{
-              text: 'edit',
-              color: 'green',
-              onClick: () => {
-                router.push('/myprofile/edit');
-              },
-            }}
-          />
+          <ButtonDiv>
+            <Buttons
+              windowWidth='100%'
+              button={{ width: '10rem' }}
+              leftButton={{
+                text: 'private dm',
+                color: 'white',
+                onClick: onClickPrivate,
+              }}
+              rightButton={{
+                text: 'edit',
+                color: 'green',
+                onClick: () => {
+                  router.push('/myprofile/edit');
+                },
+              }}
+            />
+          </ButtonDiv>
         </Wrapper>
       </TopWrapper>
     </Container>
@@ -85,7 +88,6 @@ const TopWrapper = styled.div`
 const Wrapper = styled.div<{ $width: number }>`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   flex: ${({ $width }) => $width};
   margin: 0 2rem;
   height: 100%;
@@ -94,13 +96,6 @@ const Wrapper = styled.div<{ $width: number }>`
   }
 `;
 
-const EditLink = styled(Link)`
-  padding: 1rem;
-  text-align: center;
-  border-radius: 0.8rem;
-  color: ${({ theme }) => theme.colors.black};
-  background-color: ${({ theme }) => theme.colors.green};
+const ButtonDiv = styled.div`
+  ${({ theme }) => theme.flex.center};
 `;
-function setModal(arg0: null) {
-  throw new Error('Function not implemented.');
-}

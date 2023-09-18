@@ -9,7 +9,6 @@ import { IUserDetail } from '@/types/IUser';
 import { useSetRecoilState } from 'recoil';
 import { invalidMsgState, modalState } from '@/utils/recoil/atom';
 import { useCallback, useRef } from 'react';
-import InvalidMsg from '@/component/Modal/InvalidMsg';
 
 export default function Profile() {
   const data = useSwrFetcher<IUserDetail>('/me/details');

@@ -26,7 +26,8 @@ const WrapperButton = styled.button<{ $color: string; $width?: string }>`
   padding: 0 0.2rem;
   height: 3.5rem;
   text-align: center;
-  width: ${({ $width }) => $width || '10rem'};
+  width: ${({ $width }) => $width};
   color: ${({ theme }) => theme.colors.black};
+
   background: ${({ $color, theme }) => theme.colors[$color]};
 `;
