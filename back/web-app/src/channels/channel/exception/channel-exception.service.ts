@@ -4,7 +4,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 export class ChannelExceptionService {
 	/** public */
 	notExistChannel() {
-		throw new HttpException('채널이 존재하지 않습니다!', HttpStatus.OK);
+		throw new HttpException('채널이 존재하지 않습니다!', HttpStatus.BAD_REQUEST);
 	}
 
 	notEnterUserInChannel() {
@@ -12,17 +12,22 @@ export class ChannelExceptionService {
 	}
 
 	itIsInvalidRequest() {
-		throw new HttpException('올바르지 않은 요청입니다.', HttpStatus.OK);
+		throw new HttpException('올바르지 않은 요청입니다.', HttpStatus.BAD_REQUEST);
 	}
 
 	/** Add channel */
 	passwordIsNotValid() {
-		throw new HttpException('비밀번호가 일치하지 않습니다.', HttpStatus.OK);
+		throw new HttpException('비밀번호가 일치하지 않습니다.', HttpStatus.BAD_REQUEST);
 	}
 
 	/** Enter channel */
 	youAreBanUser() {
-		throw new HttpException('채널에 차단(ban)되었습니다.', HttpStatus.OK);
+		throw new HttpException('채널에 차단(ban)되었습니다.', HttpStatus.BAD_REQUEST);
+	}
+
+	/** Channel setting */
+	itIsNotOwner() {
+		throw new HttpException('채널 Owner가 아닙니다.', HttpStatus.BAD_REQUEST);
 	}
 
 	itIsNotAdmin() {

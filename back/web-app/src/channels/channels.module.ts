@@ -24,6 +24,7 @@ import { MuteService } from './channel/mute/mute.service';
       LinkChannelToUser,
       Message,
       User,
+      Ban,
     ]),
     UserModule,
     MessageModule,

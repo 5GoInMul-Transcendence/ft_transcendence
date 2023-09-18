@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, Post, Session } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Session } from '@nestjs/common';
 import { Builder } from 'builder-pattern';
 import { ChannelService } from './channel.service';
 import { CreateChannelReqDto } from './dto/create-channel-req.dto';
@@ -64,7 +64,7 @@ export class ChannelController {
 			.build()
 		);
 		
-		this.channelService.createLinkChannelToUser(
+		this.linkService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.channel(channel)
 			.role(ChannelRole.OWNER)
@@ -98,7 +98,7 @@ export class ChannelController {
 			.password(await this.hashService.hashPassword(password))
 			.build()
 		);
-		this.channelService.createLinkChannelToUser(
+		this.linkService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.channel(channel)
 			.role(ChannelRole.OWNER)
@@ -117,7 +117,7 @@ export class ChannelController {
 	) {
 		const userId: number = session.userId;
 		const user: User = await this.userService.getUserByUserId(userId);
-		const link: LinkChannelToUser = await this.channelService.getLinkByUserIdAtPrivate(userId);
+		const link: LinkChannelToUser = await this.linkService.getLinkByUserIdAtPrivate(userId);
 		let channel: Channel;
 
 		if (link) {
@@ -133,7 +133,7 @@ export class ChannelController {
 			.password(null)
 			.build()
 		);
-		this.channelService.createLinkChannelToUser(
+		this.linkService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.channel(channel)
 			.role(ChannelRole.OWNER)
@@ -163,7 +163,7 @@ export class ChannelController {
 		if (invitedUserId === userId) {
 			this.exceptionService.itIsInvalidRequest();
 		}
-		links = await this.channelService.getCreateDmChannelRes(userId, invitedUserId);
+		links = await this.linkService.getCreateDmChannelRes(userId, invitedUserId);
 		if (links.length < 1) {
 			const user: User = await this.userService.getUserByUserId(userId);
 			const invitedUser: User = await this.userService.getUserByUserId(invitedUserId)
@@ -177,14 +177,14 @@ export class ChannelController {
 				.build()
 			);
 
-			this.channelService.createLinkChannelToUser(
+			this.linkService.createLinkChannelToUser(
 				Builder(CreateLinkChannelToUserReqDto)
 				.channel(channel)
 				.user(user)
 				.role(ChannelRole.OWNER)
 				.build()
 			);
-			this.channelService.createLinkChannelToUser(
+			this.linkService.createLinkChannelToUser(
 				Builder(CreateLinkChannelToUserReqDto)
 				.channel(channel)
 				.user(invitedUser)
@@ -233,7 +233,7 @@ export class ChannelController {
 			) {
 			this.exceptionService.itIsInvalidRequest();
 		}
-		link = await this.channelService.getLinkRelatedChannelByChannelAndUser(channel, user);
+		link = await this.linkService.getLinkRelatedChannelByChannelAndUser(channel, user);
 		if (link) {
 			return Builder(CreateChannelResDto)
 			.id(channel.id)
@@ -244,7 +244,7 @@ export class ChannelController {
 		if (await this.hashService.hashCompare(password, channel.password) === false) {
 			this.exceptionService.passwordIsNotValid();
 		}
-		this.channelService.createLinkChannelToUser(
+		this.linkService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.channel(channel)
 			.user(user)
@@ -262,7 +262,7 @@ export class ChannelController {
 	 */
 	private async enterPublic(link: LinkChannelToUser, channel: Channel, user: User): Promise<LinkChannelToUser> {
 		if (!link) {
-			link = await this.channelService.createLinkChannelToUser(
+			link = await this.linkService.createLinkChannelToUser(
 				Builder(CreateLinkChannelToUserReqDto)
 				.user(user)
 				.channel(channel)
@@ -295,7 +295,7 @@ export class ChannelController {
 		// this.exceptionService.youAreBanUser();
 		userId = session.userId;
 		user = await this.userService.getUserByUserId(userId);
-		link = await this.channelService.getLinkByChannelAndUser(channel, user);
+		link = await this.linkService.getLinkByChannelAndUser(channel, user);
 		switch(channel.mode) {
 			case ChannelMode.PUBLIC:
 				link = await this.enterPublic(link, channel, user);
@@ -336,7 +336,7 @@ export class ChannelController {
 			this.exceptionService.notExistChannel();
 		}
 		user = await this.userService.getUserByUserId(userId);
-		link = await this.channelService.getLinkByChannelAndUser(channel, user);
+		link = await this.linkService.getLinkByChannelAndUser(channel, user);
 		if (!link) {
 			this.exceptionService.notEnterUserInChannel();
 		}

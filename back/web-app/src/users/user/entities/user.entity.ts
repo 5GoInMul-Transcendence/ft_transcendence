@@ -1,7 +1,8 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
 import { TwoFactorStatus } from "../../enums/twoFactor-status.enum";
 import { LinkChannelToUser } from "src/channels/channel/entities/link-channel-to-user.entity";
 import { Message } from "src/message/entities/message.entity";
+import { GameHistory } from '../../../game/entities/game-history.entity';
 
 @Entity('user')
 export class User {
@@ -41,4 +42,7 @@ export class User {
 
   @OneToMany(() => Message, (message) => message.user)
   messages: Message[];
-};
+
+  @ManyToMany(() => GameHistory, (gameHistory) => gameHistory.users)
+  gameHistories: GameHistory[];
+}
