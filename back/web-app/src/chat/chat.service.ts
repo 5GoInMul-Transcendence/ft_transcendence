@@ -77,6 +77,76 @@ export class ChatService {
     this.chatUsers.delete(userId);
   }
 
+  async enterChannel(userId: number, channel: Channel) {
+    const client = this.chatUsers.get(userId);
+
+    if (client) {
+      client.join(channel.id.toString());
+
+      this.updateMyChannel(
+        Builder(UpdateMyChannelDto)
+          .event(ChatEvent.AddMyChannel)
+          .userId(userId)
+          .channel(channel)
+          .build(),
+      );
+    }
+
+    if (
+      channel.mode !== ChannelMode.PUBLIC &&
+      channel.mode !== ChannelMode.PROTECTED
+    ) {
+      return;
+    }
+
+    const countUserInChannel =
+      await this.linkChannelToUserService.getCountLinkInChannel(channel.id);
+
+    if (countUserInChannel == 1) {
+      this.updateAllChannel(
+        Builder(UpdateAllChannelDto)
+          .event(ChatEvent.AddAllChannel)
+          .channel(channel)
+          .build(),
+      );
+    }
+  }
+
+  async leaveChannel(userId: number, channel: Channel) {
+    const client = this.chatUsers.get(userId);
+
+    if (client) {
+      client.leave(channel.id.toString());
+
+      this.updateMyChannel(
+        Builder(UpdateMyChannelDto)
+          .event(ChatEvent.DeleteMyChannel)
+          .userId(userId)
+          .channel(channel)
+          .build(),
+      );
+    }
+
+    if (
+      channel.mode !== ChannelMode.PUBLIC &&
+      channel.mode !== ChannelMode.PROTECTED
+    ) {
+      return;
+    }
+
+    const countUserInChannel =
+      await this.linkChannelToUserService.getCountLinkInChannel(channel.id);
+
+    if (countUserInChannel == 0) {
+      this.updateAllChannel(
+        Builder(UpdateAllChannelDto)
+          .event(ChatEvent.DeleteAllChannel)
+          .channel(channel)
+          .build(),
+      );
+    }
+  }
+
   updateAllChannel(dto: UpdateAllChannelDto) {
     const { event, channel } = dto;
 
