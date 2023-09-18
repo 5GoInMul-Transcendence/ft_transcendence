@@ -19,6 +19,8 @@ import { MatchGroup } from './match-group';
 import { FriendService } from '../../friend/friend.service';
 import { BroadcastFriendUpdateDto } from '../../friend/dto/broadcast-friend-update.dto';
 import { FriendInfo } from '../../friend/friend-info';
+import { InviteMatchDto } from './dto/invite-match.dto';
+import { GameMode } from '../../game/enums/game-mode.enum';
 
 @Injectable()
 export class MatchService {
@@ -141,7 +143,9 @@ export class MatchService {
       return;
     }
 
-    const { rivalUserId, gameMode } = this.matchGroup.get(dto.userId);
+    const { rivalUserId, gameMode, isInviteMatch } = this.matchGroup.get(
+      dto.userId,
+    );
 
     const rivalUser = this.mainUserService.findUserByUserId(
       Builder(FindUserDto).userId(rivalUserId).build(),
@@ -164,16 +168,26 @@ export class MatchService {
           .status(MainUserStatus.DEFAULT)
           .build(),
       );
-      this.mainUserService.sendMessage(
-        Builder(SendMessageDto)
-          .userId(rivalUserId)
-          .event('successMatch')
-          .data({ status: false })
-          .build(),
-      );
-      this.enterMatch(
-        Builder(EnterMatchDto).userId(rivalUserId).gameMode(gameMode).build(),
-      );
+      if (isInviteMatch) {
+        this.mainUserService.sendMessage(
+          Builder(SendMessageDto)
+            .userId(rivalUserId)
+            .event('successMatch')
+            .data({ status: false, isInvite: true })
+            .build(),
+        );
+      } else {
+        this.mainUserService.sendMessage(
+          Builder(SendMessageDto)
+            .userId(rivalUserId)
+            .event('successMatch')
+            .data({ status: false, isInvite: false })
+            .build(),
+        );
+        this.enterMatch(
+          Builder(EnterMatchDto).userId(rivalUserId).gameMode(gameMode).build(),
+        );
+      }
     }
 
     // 유저 매치 수락 + 상대방 매치 수락 대기
