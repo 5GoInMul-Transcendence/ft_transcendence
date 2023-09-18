@@ -76,4 +76,51 @@ export class ChatService {
   disconnectChat(userId: number) {
     this.chatUsers.delete(userId);
   }
+
+  updateAllChannel(dto: UpdateAllChannelDto) {
+    const { event, channel } = dto;
+
+    switch (event) {
+      case ChatEvent.AddAllChannel:
+        this.chatServerSocket.emit(
+          event,
+          ApiResponseForm.ok(
+            Builder(AddAllChannelResDto)
+              .id(channel.id)
+              .name(channel.name)
+              .build(),
+          ),
+        );
+        break;
+      case ChatEvent.DeleteAllChannel:
+        this.chatServerSocket.emit(event, ApiResponseForm.ok(channel.id));
+        break;
+    }
+  }
+
+  updateMyChannel(dto: UpdateMyChannelDto) {
+    const { userId, event, channel } = dto;
+
+    const client = this.chatUsers.get(userId);
+
+    if (!client) {
+      return;
+    }
+
+    switch (event) {
+      case ChatEvent.AddMyChannel:
+        client.emit(
+          event,
+          ApiResponseForm.ok(
+            Builder(AddMyChannelResDto)
+              .id(channel.id)
+              .name(channel.name)
+              .build(),
+          ),
+        );
+        break;
+      case ChatEvent.DeleteMyChannel:
+        client.emit(event, ApiResponseForm.ok(channel.id));
+    }
+  }
 }
