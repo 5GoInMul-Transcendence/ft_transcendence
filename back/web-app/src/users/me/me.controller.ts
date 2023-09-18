@@ -53,7 +53,7 @@ export class MeController {
     const gameRecordDto = Builder(GameRecordDto)
       .win(ladder.win)
       .lose(ladder.lose)
-      .ladderLevel(ladder.level)
+      .ladderLevel(ladder.displayLevel)
       .achievement(achievement.achievements)
       .build();
     return Builder(GetUserProfileResDto)

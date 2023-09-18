@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import {forwardRef, Module} from '@nestjs/common';
 import { UserService } from './user.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
@@ -12,6 +12,8 @@ import { Friend } from '../../friend/entities/friend.entity';
 import { UserController } from './user.controller';
 import { Achievement } from '../../achievement/entities/achievement.entity';
 import { Ladder } from '../../ladder/entities/ladder.entity';
+import { LadderModule } from '../../ladder/ladder.module';
+import { AchievementModule } from '../../achievement/achievement.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { Ladder } from '../../ladder/entities/ladder.entity';
       Achievement,
       Ladder,
     ]),
+    forwardRef(() => LadderModule),
+    forwardRef(() => AchievementModule),
   ],
   controllers: [UserController],
   providers: [UserService, MemoryUserService, MemoryUserProvider],
