@@ -54,6 +54,12 @@ export class ChatService {
     }
   }
 
+  checkDisconnectionByReconnection(dto: CheckDisconnectionByReconnectionDto) {
+    if (dto.client[this.reconnection]) {
+      throw new WsException('');
+    }
+  }
+
   async connectChat(userId: number, client: Socket) {
     const links =
       await this.linkChannelToUserService.getLinksRelatedChannelByUserId(
@@ -65,5 +71,9 @@ export class ChatService {
     }
 
     this.chatUsers.set(userId, client);
+  }
+
+  disconnectChat(userId: number) {
+    this.chatUsers.delete(userId);
   }
 }
