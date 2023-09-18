@@ -48,6 +48,16 @@ export class ChatGateway
   }
 
   handleDisconnect(client: any): any {
+    const session = client.handshake.session;
 
+    try {
+      this.chatService.checkDisconnectionByReconnection(
+        Builder(CheckDisconnectionByReconnectionDto).client(client).build(),
+      );
+    } catch (err) {
+      return;
+    }
+
+    this.chatService.disconnectChat(session.userId);
   }
 }
