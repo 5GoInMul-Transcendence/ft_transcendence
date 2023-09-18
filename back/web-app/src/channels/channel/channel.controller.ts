@@ -26,6 +26,8 @@ import { CheckChannelResDto } from './dto/check-channel-res.dto';
 import { UpdateRoleAtLeaveOwnerReqDto } from './dto/update-role-at-leave-owner-req.dto';
 import { UpdateRoleInLinkDto } from './dto/update-role-in-link.dto';
 import { LinkChannelToUserService } from './link-channel-to-user.service';
+import { ChatService } from '../../chat/chat.service';
+import { SendChatMessageDto } from '../../chat/dto/send-chat-message.dto';
 
 @Controller('channel')
 export class ChannelController {
