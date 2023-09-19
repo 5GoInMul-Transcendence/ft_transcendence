@@ -30,7 +30,6 @@ export default function ChannelItem({
       return;
     }
     axiosInstance.get(`/channel/${channelId}/check`).then((data) => {
-      console.log(data.data);
       if (data.data.data.mode === 'protected') {
         setModal({
           type: 'ENTER-Channel',

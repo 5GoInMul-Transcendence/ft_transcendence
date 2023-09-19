@@ -34,7 +34,6 @@ export default function FriendList() {
 
   useEffect(() => {
     setFriends(friendsData || []);
-    console.log(friendsData, 'friendsData updatae');
   }, [friendsData]);
 
   return (
@@ -70,9 +69,9 @@ const StatusDiv = styled.div<{ $status: string }>`
   background-color: ${({ $status, theme }) =>
     $status === 'ingame'
       ? theme.colors.yellow
-      : 'online'
+      : $status === 'online'
       ? theme.colors.green
-      : 'offline'
+      : $status === 'offline'
       ? theme.colors.pink
       : theme.colors.pink};
 `;

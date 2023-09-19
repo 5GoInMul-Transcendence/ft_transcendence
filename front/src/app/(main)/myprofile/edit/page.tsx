@@ -39,7 +39,6 @@ export default function Profile() {
 
   if (!data) return;
 
-  console.log(data);
   return (
     <Container>
       <TopWrapper>
