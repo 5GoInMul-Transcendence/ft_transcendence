@@ -559,7 +559,7 @@ export class ChannelController {
 		.build();
 	}
 
-	private async updateAdminInUserSetting(
+	private async updateRoleInUserSetting(
 			link: LinkChannelToUser,
 			targetLink: LinkChannelToUser,
 	): Promise<void> {
@@ -643,7 +643,7 @@ export class ChannelController {
 
 		switch (status) {
 			case "admin": // only possible owner
-				await this.updateAdminInUserSetting(link, targetLink);
+				await this.updateRoleInUserSetting(link, targetLink);
 				break;
 			case "mute":
 				// mute
