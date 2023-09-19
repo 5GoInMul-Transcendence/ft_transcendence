@@ -19,6 +19,8 @@ import { MatchGroup } from './match-group';
 import { FriendService } from '../../friend/friend.service';
 import { BroadcastFriendUpdateDto } from '../../friend/dto/broadcast-friend-update.dto';
 import { FriendInfo } from '../../friend/friend-info';
+import { InviteMatchDto } from './dto/invite-match.dto';
+import { GameMode } from '../../game/enums/game-mode.enum';
 
 @Injectable()
 export class MatchService {
@@ -141,7 +143,9 @@ export class MatchService {
       return;
     }
 
-    const { rivalUserId, gameMode } = this.matchGroup.get(dto.userId);
+    const { rivalUserId, gameMode, isInviteMatch } = this.matchGroup.get(
+      dto.userId,
+    );
 
     const rivalUser = this.mainUserService.findUserByUserId(
       Builder(FindUserDto).userId(rivalUserId).build(),
@@ -164,16 +168,26 @@ export class MatchService {
           .status(MainUserStatus.DEFAULT)
           .build(),
       );
-      this.mainUserService.sendMessage(
-        Builder(SendMessageDto)
-          .userId(rivalUserId)
-          .event('successMatch')
-          .data({ status: false })
-          .build(),
-      );
-      this.enterMatch(
-        Builder(EnterMatchDto).userId(rivalUserId).gameMode(gameMode).build(),
-      );
+      if (isInviteMatch) {
+        this.mainUserService.sendMessage(
+          Builder(SendMessageDto)
+            .userId(rivalUserId)
+            .event('successMatch')
+            .data({ status: false, isInvite: true })
+            .build(),
+        );
+      } else {
+        this.mainUserService.sendMessage(
+          Builder(SendMessageDto)
+            .userId(rivalUserId)
+            .event('successMatch')
+            .data({ status: false, isInvite: false })
+            .build(),
+        );
+        this.enterMatch(
+          Builder(EnterMatchDto).userId(rivalUserId).gameMode(gameMode).build(),
+        );
+      }
     }
 
     // 유저 매치 수락 + 상대방 매치 수락 대기
@@ -258,6 +272,72 @@ export class MatchService {
           .build(),
       );
     }
+  }
+
+  inviteMatch(dto: InviteMatchDto) {
+    const { userId, inviteUserId } = dto;
+
+    const user = this.mainUserService.findUserByUserId(
+      Builder(FindUserDto).userId(userId).build(),
+    );
+    const inviteUser = this.mainUserService.findUserByUserId(
+      Builder(FindUserDto).userId(inviteUserId).build(),
+    );
+
+    /* 매치큐, 게임중이 아닐 경우만 초대를 받는다. */
+    if (
+      user?.status !== MainUserStatus.DEFAULT ||
+      inviteUser?.status !== MainUserStatus.DEFAULT
+    ) {
+      return;
+    }
+
+    this.matchGroup.set(
+      inviteUserId,
+      Builder(MatchGroup)
+        .rivalUserId(userId)
+        .gameMode(GameMode.GOLDENPONG)
+        .isInviteMatch(true)
+        .build(),
+    );
+    this.matchGroup.set(
+      dto.userId,
+      Builder(MatchGroup)
+        .rivalUserId(inviteUserId)
+        .gameMode(GameMode.GOLDENPONG)
+        .isInviteMatch(true)
+        .build(),
+    );
+
+    // 유저 상태 변경하기
+    this.mainUserService.updateUser(
+      Builder(UpdateMainUserDto)
+        .userId(userId)
+        .status(MainUserStatus.MATCH_WAIT_ACCEPT)
+        .build(),
+    );
+    this.mainUserService.updateUser(
+      Builder(UpdateMainUserDto)
+        .userId(inviteUserId)
+        .status(MainUserStatus.MATCH_WAIT_ACCEPT)
+        .build(),
+    );
+
+    // 유저에게 수락응답요청 보내기
+    this.mainUserService.sendMessage(
+      Builder(SendMessageDto)
+        .userId(userId)
+        .event('waitMatch')
+        .data('')
+        .build(),
+    );
+    this.mainUserService.sendMessage(
+      Builder(SendMessageDto)
+        .userId(inviteUserId)
+        .event('waitMatch')
+        .data('')
+        .build(),
+    );
   }
 
   disconnectMatch(dto: DisconnectMatchDto) {
