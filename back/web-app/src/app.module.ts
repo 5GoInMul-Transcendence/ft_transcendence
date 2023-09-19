@@ -21,6 +21,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { MeModule } from './users/me/me.module';
 import { MessageModule } from './message/message.module';
 import { AchievementModule } from './achievement/achievement.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { AchievementModule } from './achievement/achievement.module';
     MeModule,
     MessageModule,
     AchievementModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
