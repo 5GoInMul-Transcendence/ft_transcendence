@@ -48,7 +48,7 @@ export default function Profile() {
           />
           <Buttons
             windowWidth='100%'
-            button={{ width: '20rem' }}
+            button={{ width: '10rem' }}
             leftButton={{
               text: 'private dm',
               color: 'white',
