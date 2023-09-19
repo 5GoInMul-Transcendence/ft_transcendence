@@ -13,16 +13,16 @@ export const multerOptions = {
         new HttpException('지원하지 않는 이미지 형식입니다.', HttpStatus.OK),
         false,
       );
+    } else {
+      callback(null, true);
     }
-
-    callback(null, true);
   },
-  
+
   limits: {
     fileSize: IMAGE_MAX_SIZE, // 10 MB
     files: 1,
   },
-  
+
   storage: diskStorage({
     // 이미지 저장 경로를 설정합니다.
     destination: (request, file, callback) => {
