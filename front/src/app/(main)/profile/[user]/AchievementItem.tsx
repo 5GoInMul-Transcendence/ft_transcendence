@@ -12,9 +12,11 @@ export default function AchievementItem({ title, content }: Props) {
       <div>
         {content.map((data, index) => (
           <Achievement
-            src={`http://localhost:8080/avatar/${data}`}
+            src={`http://localhost:8080/achievement/${data}`}
             key={index}
-            style={{ borderRadius: '0.8rem' }}
+            alt={'url'}
+            width={50}
+            height={50}
           />
         ))}
       </div>
