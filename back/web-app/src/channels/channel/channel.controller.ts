@@ -173,10 +173,18 @@ export class ChannelController {
 			.build()
 		); // invited User 없으면 예외
 		const userId: number = session.userId;
+		const user = this.memoryUserService.findUserByUserId(Builder(FindUserDto).userId(userId).build());
+		const inviteUser = this.memoryUserService.findUserByUserId(Builder(FindUserDto).userId(invitedUserId).build());
 		let links: any[]
 		
 		if (invitedUserId === userId) {
 			this.exceptionService.itIsInvalidRequest();
+		}
+		if (inviteUser.blocks.has(userId)) {
+			this.exceptionService.iWasBlocked();
+		}
+		if (user.blocks.has(invitedUserId)) {
+			this.exceptionService.iBlockedHim();
 		}
 		links = await this.linkService.getCreateDmChannelRes(userId, invitedUserId);
 		if (links.length < 1) {

@@ -33,4 +33,12 @@ export class ChannelExceptionService {
 	itIsNotAdmin() {
 		throw new HttpException('채널 관리자 권한이 없습니다.', HttpStatus.BAD_REQUEST)
 	}
+	
+	iWasBlocked() {
+		throw new HttpException('당신은 상대방으로부터 Block 되었습니다. 참회하세요!', HttpStatus.BAD_REQUEST);
+	}
+	
+	iBlockedHim() {
+		throw new HttpException('Block했던 유저입니다.', HttpStatus.BAD_REQUEST);
+	}
 }
