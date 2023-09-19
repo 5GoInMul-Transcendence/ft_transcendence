@@ -11,10 +11,10 @@ export default function AchievementItem({ title, content }: Props) {
     <Wrapper>
       <div>{title}</div>
       <div>
-        {content?.map((data) => (
+        {content.map((data) => (
           <Achievement
             key={data}
-            src={`http://localhost:8080/achievement/${data}`}
+            src={`http://${process.env.NEXT_PUBLIC_BAKC_SERVER}:${process.env.NEXT_PUBLIC_BACK_MAIN_PORT}/achievement/${data}`}
             alt={'url'}
             width={50}
             height={50}

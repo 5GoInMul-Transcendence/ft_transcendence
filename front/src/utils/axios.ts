@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-// const baseURL = `${process.env.NEXT_PUBLIC_SERVER_ENDPOINT}` ;
-const baseURL = `http://localhost:8080/`;
+const baseURL = `http://${process.env.NEXT_PUBLIC_BAKC_SERVER}:${process.env.NEXT_PUBLIC_BACK_MAIN_PORT}/`;
 
 export const axiosInstance = axios.create({ baseURL });
 

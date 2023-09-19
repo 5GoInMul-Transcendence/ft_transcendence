@@ -29,7 +29,7 @@ export default function Login() {
   );
 
   const onClickOAuth = () => {
-    location.href = 'http://localhost:8080/login/oauth/42';
+    location.href = `http://${process.env.NEXT_PUBLIC_BAKC_SERVER}:8080/login/oauth/42`;
   };
 
   return (

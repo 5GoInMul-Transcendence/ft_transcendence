@@ -22,11 +22,14 @@ export default function Profile() {
       }
       const formData = new FormData();
       formData.append('file', e.target.files[0]);
-      fetch('http://localhost:8080/me/avatar', {
-        method: 'PUT',
-        body: formData,
-        credentials: 'include',
-      })
+      fetch(
+        `http://${process.env.NEXT_PUBLIC_BAKC_SERVER}:${process.env.NEXT_PUBLIC_MAIN_PORT}/me/avatar`,
+        {
+          method: 'PUT',
+          body: formData,
+          credentials: 'include',
+        }
+      )
         .then((res) => {})
         .catch(() => {
           setInvalidMsg('파일 업로드에 실패 하였습니다');

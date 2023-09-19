@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import ProfileItem from '../profile/[user]/ProfileItem';
 import AchievementItem from './AchievementItem';
 import MatchItem from '@/component/MatchItem';
@@ -47,24 +46,22 @@ export default function Profile() {
             title='ACHIEVMENT'
             content={gameRecord.achievement || []}
           />
-          <ButtonDiv>
-            <Buttons
-              windowWidth='100%'
-              button={{ width: '10rem' }}
-              leftButton={{
-                text: 'private dm',
-                color: 'white',
-                onClick: onClickPrivate,
-              }}
-              rightButton={{
-                text: 'edit',
-                color: 'green',
-                onClick: () => {
-                  router.push('/myprofile/edit');
-                },
-              }}
-            />
-          </ButtonDiv>
+          <Buttons
+            windowWidth='100%'
+            button={{ width: '20rem' }}
+            leftButton={{
+              text: 'private dm',
+              color: 'white',
+              onClick: onClickPrivate,
+            }}
+            rightButton={{
+              text: 'edit',
+              color: 'green',
+              onClick: () => {
+                router.push('/myprofile/edit');
+              },
+            }}
+          />
         </Wrapper>
       </TopWrapper>
     </Container>
@@ -94,8 +91,4 @@ const Wrapper = styled.div<{ $width: number }>`
   div {
     margin-bottom: 0.5rem;
   }
-`;
-
-const ButtonDiv = styled.div`
-  ${({ theme }) => theme.flex.center};
 `;
