@@ -33,6 +33,8 @@ import { ChannelSettingService } from './channel-setting.service';
 import { UpdateChannelSettingReqDto } from './dto/update-channel-setting-req.dto';
 import { GetUserSettingInChannelResDto } from './dto/get-user-setting-in-channel-res.dto';
 import { MuteService } from './mute/mute.service';
+import {BlockDto} from '../../block/dto/block.dto';
+import {BlockService} from '../../block/block.service';
 
 @Controller('channel')
 export class ChannelController {
@@ -49,6 +51,7 @@ export class ChannelController {
 		private chatService: ChatService,
 		private settingService: ChannelSettingService,
 		private muteService: MuteService,
+		private blockService: BlockService,
 	) {}
 
 	@Post('public')
@@ -556,5 +559,40 @@ export class ChannelController {
 		.admin(responseRole === ChannelRole.USER ? false : true)
 		.mute(this.muteService.isMutedUser(channelId, responseUserId))
 		.build();
+	}
+	
+	@Post('block')
+	async block(@Session() session, @Body('blockUserId') blockUserId) {
+		const userId = session.userId;
+		
+		const isBlocked = this.blockService.block(
+				Builder(BlockDto).userId(userId).blockUserId(blockUserId).build(),
+		);
+		
+		if (isBlocked) {
+			const dmChannelLinks = await this.linkService.getCreateDmChannelRes(
+					userId,
+					blockUserId,
+			);
+			
+			if (dmChannelLinks.length > 1) {
+				const channel = dmChannelLinks[0].channel;
+				
+				// broadcast
+				this.chatService.leaveChannel(userId, channel);
+				this.chatService.leaveChannel(blockUserId, channel);
+				
+				// delete link
+				this.linkService.deleteLink(dmChannelLinks[0]);
+				this.linkService.deleteLink(dmChannelLinks[1]);
+				
+				// delete message
+				await this.messageService.deleteAllMessages(channel.id);
+				// 밴리스트 삭제 추가 예정
+				// 뮤트 삭제 추가 예정
+				await this.channelService.deleteChannel(channel);
+				return;
+			}
+		}
 	}
 }
