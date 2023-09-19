@@ -17,6 +17,7 @@ import { ChatModule } from '../chat/chat.module';
 import { ChannelSettingService } from './channel/channel-setting.service';
 import { MuteProvider } from './channel/mute/mute.provider';
 import { MuteService } from './channel/mute/mute.service';
+import { BlockModule } from '../block/block.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { MuteService } from './channel/mute/mute.service';
     UserModule,
     MessageModule,
     HashModule,
+    BlockModule,
     forwardRef(() => ChatModule),
   ],
   controllers: [ChannelsController, ChannelController],
