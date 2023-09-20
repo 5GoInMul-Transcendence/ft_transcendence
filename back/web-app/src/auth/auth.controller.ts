@@ -61,6 +61,6 @@ export class AuthController {
     this.sessionService.setSession(session, session.tempUserId);
     delete session.tempUserId;
 
-    return RedirectResource.MAIN;
+    return RedirectResource.PROFILE_EDIT;
   }
 }
