@@ -17,7 +17,7 @@ export default function ProfileToggle({ data }: Props) {
   const onToggleBlock = () => {
     axiosInstance
       .post('/channel/block', { blockUserId: data.id })
-      .then((res) => onChangeBlock());
+      .then(() => onChangeBlock());
   };
   return (
     <>
