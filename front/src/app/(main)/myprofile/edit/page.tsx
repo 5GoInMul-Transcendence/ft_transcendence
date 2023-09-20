@@ -9,8 +9,10 @@ import { IUserDetail } from '@/types/IUser';
 import { useSetRecoilState } from 'recoil';
 import { invalidMsgState, modalState } from '@/utils/recoil/atom';
 import { useCallback, useRef } from 'react';
+import { useSWRConfig } from 'swr';
 
 export default function Profile() {
+  const { mutate } = useSWRConfig();
   const data = useSwrFetcher<IUserDetail>('/me/details');
   const inputRef = useRef<HTMLInputElement | null>(null);
   const setModal = useSetRecoilState(modalState);
@@ -22,15 +24,20 @@ export default function Profile() {
       }
       const formData = new FormData();
       formData.append('file', e.target.files[0]);
+
       fetch(
-        `http://${process.env.NEXT_PUBLIC_BAKC_SERVER}:${process.env.NEXT_PUBLIC_MAIN_PORT}/me/avatar`,
+        `http://${process.env.NEXT_PUBLIC_BACK_SERVER}:${process.env.NEXT_PUBLIC_BACK_MAIN_PORT}/me/avatar`,
         {
           method: 'PUT',
           body: formData,
           credentials: 'include',
         }
       )
-        .then((res) => {})
+        .then((res) => {
+          console.log(res);
+          mutate('/me');
+          mutate('/me/details');
+        })
         .catch(() => {
           setInvalidMsg('파일 업로드에 실패 하였습니다');
           setModal({ type: 'API-Error' });

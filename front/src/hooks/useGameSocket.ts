@@ -16,7 +16,7 @@ const useGameSocket = (
     return [undefined, disconnect];
   }
   if (!sockets[port]) {
-    sockets[port] = io(`ws://${process.env.NEXT_PUBLIC_BAKC_SERVER}:${port}`, {
+    sockets[port] = io(`ws://${process.env.NEXT_PUBLIC_BACK_SERVER}:${port}`, {
       transports: ['websocket'],
       auth: {
         gameKey: gameKey,

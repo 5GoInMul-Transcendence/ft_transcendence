@@ -13,7 +13,7 @@ export default function AchievementItem({ title, content }: Props) {
         {content.map((data) => (
           <Achievement
             key={data}
-            src={`http://${process.env.NEXT_PUBLIC_BAKC_SERVER}:${process.env.NEXT_PUBLIC_BACK_MAIN_PORT}/achievement/${data}`}
+            src={`http://${process.env.NEXT_PUBLIC_BACK_SERVER}:${process.env.NEXT_PUBLIC_BACK_MAIN_PORT}/achievement/${data}`}
             alt={'url'}
             width={50}
             height={50}
