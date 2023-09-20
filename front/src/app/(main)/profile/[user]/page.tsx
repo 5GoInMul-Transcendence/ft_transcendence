@@ -5,13 +5,13 @@ import ProfileItem from './ProfileItem';
 import Buttons from '@/component/Buttons';
 import MatchItem from '@/component/MatchItem';
 import ProfileImage from '@/component/ProfileImage';
-import Toggle from '@/component/Toggle';
 import useSocket from '@/hooks/useSocket';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
 import { IUserFriedns } from '@/types/IUser';
 import { axiosInstance } from '@/utils/axios';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
+import ProfileToggle from './ProfileToggle';
 
 export default function Profile({ params }: { params: { user: string } }) {
   const [socket] = useSocket('10001/main');
@@ -19,7 +19,6 @@ export default function Profile({ params }: { params: { user: string } }) {
   const data = useSwrFetcher<IUserFriedns>(`user/${user}`);
   const router = useRouter();
 
-  const onClickTogle = () => {};
   const onMatch = () => {
     socket?.emit('inviteMatch', {
       inviteUserId: data.id,
@@ -40,18 +39,7 @@ export default function Profile({ params }: { params: { user: string } }) {
         <Wrapper $width={3}>
           <ProfileImage url={data?.avatar} size='250px' />
           <TogglesWrapper>
-            <Toggle
-              text='follow'
-              color='green'
-              checked={data?.isFriend}
-              onToggle={onClickTogle}
-            />
-            <Toggle
-              text='block'
-              color='pink'
-              checked={data?.isBlock}
-              onToggle={onClickTogle}
-            />
+            <ProfileToggle data={data} />
           </TogglesWrapper>
         </Wrapper>
         <Wrapper $width={7}>
