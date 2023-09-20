@@ -1,5 +1,3 @@
-import gravatar from 'gravatar';
-
 interface Props {
   url: string;
   size: string;

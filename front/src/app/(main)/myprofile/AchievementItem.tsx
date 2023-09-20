@@ -1,4 +1,3 @@
-import gravatar from 'gravatar';
 import styled from 'styled-components';
 
 interface Props {
