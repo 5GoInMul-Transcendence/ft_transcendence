@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
 import { IUserSetting } from '@/types/IUser';
+import Button from '../Buttons/Button';
 
 interface SetUserProps {
   userid: string;
@@ -17,14 +18,20 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
   const data = useSwrFetcher<IUserSetting>(
     `/channel/setting/${channelid}/${userid}`
   );
+
   const [admin, onChangeAdmin] = useToggle(data?.admin ?? false);
   const [mute, onChangeMute] = useToggle(data?.mute ?? false);
+  const [ban, onChangeBan] = useToggle(data?.mute ?? false);
 
   const banUserHandler = async () => {
-    axios.put(`/channel/setting/${channelid}/user`, {
-      id: userid,
-      status: 'ban',
-    });
+    axios
+      .put(`/channel/setting/${channelid}/user`, {
+        id: userid,
+        status: 'ban',
+      })
+      .then(() => {
+        onChangeBan();
+      });
   };
   const kickUserHandler = async () => {
     axios.put(`/channel/setting/${channelid}/user`, {
@@ -42,6 +49,7 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
         if (data.data.resStatus.code === '0000') onChangeAdmin();
       });
   };
+
   const muteUserHandler = async () => {
     axios
       .put(`/channel/setting/${channelid}/user`, {
@@ -52,6 +60,7 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
         if (data.data.resStatus.code === '0000') onChangeMute();
       });
   };
+
   return (
     <Wrapper>
       <WrapperSection>
@@ -72,20 +81,15 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
             checked={mute}
             onToggle={muteUserHandler}
           />
+          <Toggle
+            text='ban'
+            color='green'
+            checked={ban}
+            onToggle={muteUserHandler}
+          />
         </div>
       </WrapperSection>
-      <Buttons
-        leftButton={{
-          text: 'ban',
-          color: 'pink',
-          onClick: banUserHandler,
-        }}
-        rightButton={{
-          text: 'kick',
-          color: 'grey',
-          onClick: kickUserHandler,
-        }}
-      />
+      <Button text={'kick'} color='grey' onClick={kickUserHandler} />
     </Wrapper>
   );
 }
