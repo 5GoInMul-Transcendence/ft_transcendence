@@ -4,15 +4,17 @@ import { IFriends } from '@/types/IFriends';
 import ProfileImage from '../ProfileImage';
 import styled from 'styled-components';
 import Link from 'next/link';
-import useSwrFetcher from '@/hooks/useSwrFetcher';
 import useSocket from '@/hooks/useSocket';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { axiosInstance } from '@/utils/axios';
+import { useRecoilState } from 'recoil';
+import { friendListState } from '@/utils/recoil/atom';
 
 export default function FriendList() {
-  const [friends, setFriends] = useState<IFriends[] | undefined>(undefined);
+  const [friends, setFriends] = useRecoilState(friendListState);
 
   const [socket] = useSocket('10001/main');
+
   useEffect(() => {
     socket?.on('friend_update', (res: any) => {
       console.log(res, 'friends_update');
