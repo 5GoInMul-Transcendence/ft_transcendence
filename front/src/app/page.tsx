@@ -7,7 +7,7 @@ import styled from 'styled-components';
 export default function Home() {
   const router = useRouter();
   useEffect(() => {
-    router.push('/main');
+    router.push('/login');
   }, []);
   return <TestDiv>secret page.. </TestDiv>;
 }

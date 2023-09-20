@@ -1,10 +1,8 @@
 'use client';
 import useSocket from '@/hooks/useSocket';
-import { gameModeState, gameQueueState, modalState } from '@/utils/recoil/atom';
-import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import Loading from './loading/page';
+import { gameModeState, gameQueueState } from '@/utils/recoil/atom';
+import { useCallback } from 'react';
+import { useRecoilState } from 'recoil';
 import { GameMode } from './GameMode';
 import styled from 'styled-components';
 import DotLoading from './DotLoading';

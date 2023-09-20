@@ -7,10 +7,10 @@ import Link from 'next/link';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
 import useSocket from '@/hooks/useSocket';
 import { useEffect, useState } from 'react';
+import { axiosInstance } from '@/utils/axios';
 
 export default function FriendList() {
-  const [friends, setFriends] = useState<IFriends[]>();
-  const friendsData = useSwrFetcher<IFriends[]>('/friend/list');
+  const [friends, setFriends] = useState<IFriends[] | undefined>(undefined);
 
   const [socket] = useSocket('10001/main');
   useEffect(() => {
@@ -33,8 +33,10 @@ export default function FriendList() {
   }, [socket]);
 
   useEffect(() => {
-    setFriends(friendsData || []);
-  }, [friendsData]);
+    axiosInstance.get('/friend/list').then((res) => {
+      setFriends(res.data.data);
+    });
+  }, []);
 
   return (
     <div>
