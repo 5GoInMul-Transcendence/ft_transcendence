@@ -67,9 +67,6 @@ export function GameMode({
           key={game.gameMode}
           onClick={() => onClickGameMode(game.gameMode, game.gameApi)}
         >
-          <>
-            {console.log(game.gameMode, gameMode, gameMode === game.gameMode)}
-          </>
           {game.text}
         </GameModeButton>
       ))}

@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import ProfileItem from '../profile/[user]/ProfileItem';
 import AchievementItem from './AchievementItem';
 import MatchItem from '@/component/MatchItem';
@@ -15,14 +14,15 @@ import { axiosInstance } from '@/utils/axios';
 export default function Profile() {
   const data = useSwrFetcher<IUser>('/me');
   const router = useRouter();
-  const { id, nickname, avatar, gameRecord } = data
+
+  const { nickname, avatar, gameRecord } = data
     ? data
     : {
-        id: 0,
         nickname: '',
         avatar: '',
         gameRecord: { win: 0, lose: 0, ladderLevel: 0, achievement: [] },
       };
+
   const onClickPrivate = () => {
     axiosInstance.post(`/channel/private`).then((data) => {
       router.push(`/chats/${data.data.data.id}`);
@@ -46,8 +46,9 @@ export default function Profile() {
             title='ACHIEVMENT'
             content={gameRecord.achievement || []}
           />
-
           <Buttons
+            windowWidth='100%'
+            button={{ width: '10rem' }}
             leftButton={{
               text: 'private dm',
               color: 'white',
@@ -84,7 +85,6 @@ const TopWrapper = styled.div`
 const Wrapper = styled.div<{ $width: number }>`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   flex: ${({ $width }) => $width};
   margin: 0 2rem;
   height: 100%;
@@ -92,14 +92,3 @@ const Wrapper = styled.div<{ $width: number }>`
     margin-bottom: 0.5rem;
   }
 `;
-
-const EditLink = styled(Link)`
-  padding: 1rem;
-  text-align: center;
-  border-radius: 0.8rem;
-  color: ${({ theme }) => theme.colors.black};
-  background-color: ${({ theme }) => theme.colors.green};
-`;
-function setModal(arg0: null) {
-  throw new Error('Function not implemented.');
-}

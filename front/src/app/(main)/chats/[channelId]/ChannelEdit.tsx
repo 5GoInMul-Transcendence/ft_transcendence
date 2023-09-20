@@ -5,9 +5,9 @@ import UserItem from './UserItem';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import { useSetRecoilState } from 'recoil';
 import { modalState } from '@/utils/recoil/atom';
+import { axiosInstance } from '@/utils/axios';
 
 interface ChannelEditProps {
   channelid: number;
@@ -33,7 +33,7 @@ export default function ChannelEdit({
   };
 
   const onClickSetUser = (userid: number, nickname: string) => {
-    if (role === 'owner' || role === 'admin')
+    if (role !== 'dm')
       setModal({
         type: 'SET-User',
         modalProps: { userid, nickname, channelid },
@@ -41,7 +41,7 @@ export default function ChannelEdit({
   };
 
   useEffect(() => {
-    axios.get(`/api/channel/setting/${channelid}`).then((data) => {
+    axiosInstance.get(`/channel/setting/${channelid}`).then((data) => {
       setUserList([...data.data.data]);
     });
   }, []);

@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { Socket, io } from 'socket.io-client';
-const backUrl = 'ws://localhost';
 
 const sockets: { [key: string]: Socket } = {};
 const useSocket = (port?: string): [Socket | undefined, () => void] => {
@@ -14,7 +13,7 @@ const useSocket = (port?: string): [Socket | undefined, () => void] => {
     return [undefined, disconnect];
   }
   if (!sockets[port]) {
-    sockets[port] = io(`${backUrl}:${port}`, {
+    sockets[port] = io(`ws://${process.env.NEXT_PUBLIC_BACK_SERVER}:${port}`, {
       transports: ['websocket'],
     });
   }

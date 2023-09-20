@@ -29,7 +29,6 @@ export default function SignUp() {
   );
 
   useEffect(() => {
-    console.log(password, passwordCheck, password.trim());
     setMismatchError(password !== passwordCheck);
   }, [password, passwordCheck]);
   const onSubmit = useCallback(

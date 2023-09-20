@@ -5,32 +5,34 @@ import Pong from '@/component/Pong';
 import ProfileImage from '@/component/ProfileImage';
 import FriendList from '@/component/FriendList';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
-import useSocket from '@/hooks/useSocket';
 import { useSetRecoilState } from 'recoil';
 import { modalState, userState } from '@/utils/recoil/atom';
 import { IUser } from '@/types/IUser';
 import styled from 'styled-components';
 import { useEffect } from 'react';
+import Socket from '@/component/Socket';
 
 export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [socket] = useSocket('10001/main');
   const data = useSwrFetcher<IUser>('/me');
   const setModal = useSetRecoilState(modalState);
   const setUserState = useSetRecoilState(userState);
+
   useEffect(() => {
     if (!data) return;
     setUserState(data.nickname);
   }, [data]);
+
   const onClickAddFriend = () => {
     setModal({ type: 'ADD-Friend' });
   };
 
   return (
     <Container>
+      <Socket />
       <MainContainer>
         <Pong />
         <Menubar>

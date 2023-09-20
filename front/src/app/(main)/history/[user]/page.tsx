@@ -9,13 +9,11 @@ export default function History({ params }: { params: { user: string } }) {
   const user = params.user;
   const matches = useSwrFetcher<IHistory[]>(`/game/history/${user}`);
 
-  if (!matches) return null;
-
   return (
     <Container>
       <Title>{user} Game History</Title>
       <Wrapper>
-        {matches.map((match: IHistory) => (
+        {matches?.map((match: IHistory) => (
           <MatchResult
             key={match.gameId}
             createdDate={match.createdDate}
