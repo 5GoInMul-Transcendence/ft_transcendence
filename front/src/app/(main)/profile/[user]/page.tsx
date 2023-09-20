@@ -33,29 +33,31 @@ export default function Profile({ params }: { params: { user: string } }) {
       });
   };
 
+  if (!data) return;
+
   return (
     <Container>
       <TopWrapper>
         <Wrapper $width={3}>
-          <ProfileImage url={data?.avatar} size='250px' />
+          <ProfileImage url={data.avatar} size='250px' />
           <TogglesWrapper>
             <ProfileToggle data={data} />
           </TogglesWrapper>
         </Wrapper>
         <Wrapper $width={7}>
-          <ProfileItem title='NICNAME' content={`${data?.nickname}`} />
+          <ProfileItem title='NICNAME' content={`${data.nickname}`} />
           <ProfileItem
             title='LADDER LEVEL'
-            content={`${data?.gameRecord.ladderLevel}`}
+            content={`${data.gameRecord.ladderLevel}`}
           />
           <MatchItem
             title='WIN/LOSE'
-            content={`${data?.gameRecord.win}/${data?.gameRecord.lose}`}
+            content={`${data.gameRecord.win}/${data.gameRecord.lose}`}
             nickname={user}
           />
           <AchievementItem
             title='ACHIEVMENT'
-            content={data?.gameRecord.achievement || []}
+            content={data.gameRecord.achievement || []}
           />
         </Wrapper>
       </TopWrapper>

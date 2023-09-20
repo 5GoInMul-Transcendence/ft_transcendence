@@ -7,8 +7,6 @@ interface Props {
   data: IUserFriedns;
 }
 export default function ProfileToggle({ data }: Props) {
-  if (!data) return;
-
   const [friends] = useToggle(data.isFriend);
   const [block, onChangeBlock] = useToggle(data.isBlock);
 
@@ -19,6 +17,7 @@ export default function ProfileToggle({ data }: Props) {
       .post('/channel/block', { blockUserId: data.id })
       .then(() => onChangeBlock());
   };
+
   return (
     <>
       <Toggle
