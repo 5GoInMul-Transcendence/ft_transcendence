@@ -11,12 +11,12 @@ import { Message } from '../message/entities/message.entity';
 import { MessageModule } from '../message/message.module';
 import { HashModule } from 'src/common/hash/hash.module';
 import { ChannelExceptionService } from './channel/exception/channel-exception.service';
-import { Ban } from './channel/entities/ban.entity';
 import { LinkChannelToUserService } from './channel/link-channel-to-user.service';
 import { ChatModule } from '../chat/chat.module';
 import { ChannelSettingService } from './channel/channel-setting.service';
-import { MuteProvider } from './channel/mute/mute.provider';
-import { MuteService } from './channel/mute/mute.service';
+import { MuteProvider } from './channel/user-setting/mute.provider';
+import { UserSettingService } from './channel/user-setting/user-setting.service';
+import { BanProvider } from './channel/user-setting/ban.provider';
 
 @Module({
   imports: [
@@ -25,7 +25,6 @@ import { MuteService } from './channel/mute/mute.service';
       LinkChannelToUser,
       Message,
       User,
-      Ban,
     ]),
     UserModule,
     MessageModule,
@@ -39,7 +38,8 @@ import { MuteService } from './channel/mute/mute.service';
     LinkChannelToUserService,
     ChannelSettingService,
     MuteProvider,
-    MuteService,
+    BanProvider,
+    UserSettingService,
   ],
   exports: [LinkChannelToUserService],
 })
