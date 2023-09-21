@@ -7,17 +7,18 @@ import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
 interface ChatItemProps {
+  avatar: string;
   nickname: string;
   content: string;
 }
 
-export default function ChatItem({ nickname, content }: ChatItemProps) {
+export default function ChatItem({ avatar, nickname, content }: ChatItemProps) {
   const mynick = useRecoilValue(userState);
   //TODO: 내 정보 저장해두기
   return (
     <Container $me={mynick === nickname}>
       <Link href={`/profile/${nickname}`}>
-        <ProfileImage url='' size='30px' />
+        <ProfileImage url={avatar} size='30px' />
       </Link>
       <div>
         <NicknameDiv $me={mynick === nickname}>{nickname}</NicknameDiv>

@@ -63,6 +63,7 @@ export default function ChannelChatting({
         {recentMessage?.map((msg, index) => (
           <ChatItem
             key={`${channelId}${index}`}
+            avatar={msg.avatar}
             nickname={msg.nickname}
             content={msg.content}
           />
