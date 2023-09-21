@@ -44,13 +44,17 @@ export default function ChannelItem({
   useEffect(() => {
     if (newMessage?.id === channelId) setMsg(newMessage.recentMessage);
   }, [newMessage]);
+
+  console.log(msg, recentMessage, 'recnet');
   return (
     <Container onClick={onClickChannel}>
       <ProfileImage url='' size='50px' />
       <ChannelDiv>
         <ChannelNameDiv>{channelName}</ChannelNameDiv>
         <LastChatDiv>
-          {recentMessage && msg && msg.nickname + ':' + msg.content}
+          {recentMessage && msg && msg.nickname === ''
+            ? ''
+            : msg.nickname + ':' + msg.content}
         </LastChatDiv>
       </ChannelDiv>
     </Container>
