@@ -51,5 +51,5 @@ const RightImage = styled.div`
   span {
     padding-right: 1rem;
   }
-  justify-content: right;
+  justify-content: flex-end;
 `;
