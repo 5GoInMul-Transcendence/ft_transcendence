@@ -156,8 +156,9 @@ export class ChatService {
       .recentMessage(
         Builder(ChatRecentMessage)
           .id(id)
-          .nickname(user.nickname)
           .content(content)
+          .nickname(user.nickname)
+          .avatar(user.avatar)
           .build(),
       )
       .build();
