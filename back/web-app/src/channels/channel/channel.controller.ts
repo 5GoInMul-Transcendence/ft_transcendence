@@ -205,6 +205,7 @@ export class ChannelController {
 				.build()
 			);
 			
+			this.chatService.enterChannel(invitedUserId, channel);
 			this.chatService.enterChannel(userId, channel);
 			
 			return Builder(CreateChannelResDto)
