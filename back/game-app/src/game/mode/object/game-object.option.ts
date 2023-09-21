@@ -21,7 +21,7 @@ export class BallOption {
   
   constructor() {
     this.radius = 12.5;
-    this.speed = 8;
+    this.speed = 6;
     this.speedUp = 0.05;
     this.xDirection = 1;
     this.yDirection = 1;
