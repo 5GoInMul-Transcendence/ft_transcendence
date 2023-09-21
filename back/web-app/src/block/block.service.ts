@@ -6,6 +6,8 @@ import { BlockDto } from './dto/block.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Block } from './block.entity';
+import { DeleteUserBlockDto } from '../users/memoryuser/dto/delete-user-block.dto';
+import { AddUserBlockDto } from '../users/memoryuser/dto/add-user-block.dto';
 
 @Injectable()
 export class BlockService {
@@ -28,10 +30,20 @@ export class BlockService {
 
     let isBlocked;
     if (user.blocks.has(blockUserId)) {
-      user.blocks.delete(blockUserId);
+      this.memoryUserService.deleteUserBlock(
+        Builder(DeleteUserBlockDto)
+          .userId(userId)
+          .blockUserId(blockUserId)
+          .build(),
+      );
       isBlocked = false;
     } else {
-      user.blocks.add(blockUserId);
+      this.memoryUserService.addUserBlock(
+        Builder(AddUserBlockDto)
+          .userId(userId)
+          .blockUserId(blockUserId)
+          .build(),
+      );
       isBlocked = true;
     }
 
