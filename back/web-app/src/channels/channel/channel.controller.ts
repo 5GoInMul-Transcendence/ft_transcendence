@@ -180,6 +180,13 @@ export class ChannelController {
 		if (invitedUserId === userId) {
 			this.exceptionService.itIsInvalidRequest();
 		}
+		if (this.blockService.isBlockedUser(userId, invitedUserId)) {
+			this.exceptionService.iBlockedHim();
+		}
+		if (this.blockService.isBlockedUser(invitedUserId, userId)) {
+			this.exceptionService.youAreBlock();
+		}
+		
 		links = await this.linkService.getCreateDmChannelRes(userId, invitedUserId);
 		if (links.length < 1) {
 			const user: User = await this.userService.getUserByUserId(userId);
@@ -727,7 +734,7 @@ export class ChannelController {
 		);
 		
 		if (isBlocked) {
-			const dmChannelLinks = await this.linkService.getCreateDmChannelRes(
+			const dmChannelLinks: any[] = await this.linkService.getCreateDmChannelRes(
 					userId,
 					blockUserId,
 			);
@@ -736,15 +743,17 @@ export class ChannelController {
 				return;
 			}
 			
-			const channel = dmChannelLinks[0].channel;
+			const channel = await this.channelService.getChannel(dmChannelLinks[0].channel_id);
 			
 			// broadcast
 			this.chatService.leaveChannel(userId, channel);
 			this.chatService.leaveChannel(blockUserId, channel);
 			
 			// delete link
-			this.linkService.deleteLink(dmChannelLinks[0]);
-			this.linkService.deleteLink(dmChannelLinks[1]);
+			const links =  await this.linkService.getLinksRelatedUserByChannelId(dmChannelLinks[0].channel_id);
+			for (const link of links) {
+				this.linkService.deleteLink(link);
+			}
 			
 			// delete message
 			await this.messageService.deleteAllMessages(channel.id);

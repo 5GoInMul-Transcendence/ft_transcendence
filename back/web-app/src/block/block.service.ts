@@ -17,6 +17,14 @@ export class BlockService {
     private memoryUserService: MemoryUserService,
   ) {}
 
+  isBlockedUser(userId: number, targetUserId: number) {
+    const user = this.memoryUserService.findUserByUserId(
+      Builder(FindUserDto).userId(userId).build(),
+    );
+
+    return user.blocks.has(targetUserId);
+  }
+
   block(dto: BlockDto): boolean {
     const { userId, blockUserId } = dto;
 
