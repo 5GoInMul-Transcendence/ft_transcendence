@@ -74,13 +74,13 @@ const ChannelDiv = styled.div`
 
 const ChannelNameDiv = styled.div`
   width: 100%;
-  font-size: ${({ theme }) => theme.fontSize.small};
+  font-size: ${({ theme }) => theme.fontSize.normal};
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0.2rem 0.4rem;
 `;
 
 const LastChatDiv = styled.div`
-  font-size: ${({ theme }) => theme.fontSize.xxsmall};
+  font-size: ${({ theme }) => theme.fontSize.xsmall};
   margin: 0.2rem 0.4rem;
 `;

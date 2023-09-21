@@ -30,7 +30,7 @@ export default function ChatItem({ nickname, content }: ChatItemProps) {
 const Container = styled.div<{ $me: boolean }>`
   display: flex;
   flex-direction: ${({ $me }) => ($me ? 'row-reverse' : 'row')};
-  font-size: ${({ theme }) => theme.fontSize.xxsmall};
+  font-size: ${({ theme }) => theme.fontSize.xsmall};
   margin: 0.1rem;
   * {
     margin: 0.1rem;
