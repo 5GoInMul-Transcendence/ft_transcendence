@@ -9,9 +9,12 @@ import useSocket from '@/hooks/useSocket';
 import { useSetRecoilState } from 'recoil';
 import { recentMessageState } from '@/utils/recoil/atom';
 import { axiosInstance } from '@/utils/axios';
+import { usePathname, useRouter } from 'next/navigation';
 
 export default function ChannelList() {
   const [socket, disconnect] = useSocket('10002/chat');
+  const route = useRouter();
+  const currentPath = usePathname();
   const setRecentMessage = useSetRecoilState(recentMessageState);
   const [myChannelOption, setmyChannelOption] = useState(true);
   const [myChannels, setMyChannels] = useState<IMyChannel[]>([]);
@@ -44,6 +47,9 @@ export default function ChannelList() {
     });
     socket?.on('deleteMyChannel', ({ data }: { data: IMyChannel }) => {
       setMyChannels((cur) => cur.filter((e) => e.id !== data.id));
+      if (currentPath === `/chats/${data.id}`) {
+        route.push('/chats');
+      }
     });
     socket?.on('updateMyChannel', ({ data }: { data: IMyChannel }) => {
       console.log(data);
