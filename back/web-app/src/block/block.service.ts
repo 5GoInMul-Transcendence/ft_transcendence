@@ -36,7 +36,7 @@ export class BlockService {
     }
 
     this.blockRepository.update(
-      { userId: userId },
+      { userId },
       { blocks: Array.from(user.blocks) },
     );
 

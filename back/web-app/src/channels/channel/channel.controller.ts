@@ -732,24 +732,26 @@ export class ChannelController {
 					blockUserId,
 			);
 			
-			if (dmChannelLinks.length > 1) {
-				const channel = dmChannelLinks[0].channel;
-				
-				// broadcast
-				this.chatService.leaveChannel(userId, channel);
-				this.chatService.leaveChannel(blockUserId, channel);
-				
-				// delete link
-				this.linkService.deleteLink(dmChannelLinks[0]);
-				this.linkService.deleteLink(dmChannelLinks[1]);
-				
-				// delete message
-				await this.messageService.deleteAllMessages(channel.id);
-				// 밴리스트 삭제 추가 예정
-				// 뮤트 삭제 추가 예정
-				await this.channelService.deleteChannel(channel);
+			if (dmChannelLinks.length == 0) {
 				return;
 			}
+			
+			const channel = dmChannelLinks[0].channel;
+			
+			// broadcast
+			this.chatService.leaveChannel(userId, channel);
+			this.chatService.leaveChannel(blockUserId, channel);
+			
+			// delete link
+			this.linkService.deleteLink(dmChannelLinks[0]);
+			this.linkService.deleteLink(dmChannelLinks[1]);
+			
+			// delete message
+			await this.messageService.deleteAllMessages(channel.id);
+			// 밴리스트 삭제 추가 예정
+			// 뮤트 삭제 추가 예정
+			await this.channelService.deleteChannel(channel);
+			return;
 		}
 	}
 }
