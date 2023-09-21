@@ -1,6 +1,8 @@
 'use client';
 
 import ProfileImage from '@/component/ProfileImage';
+import GameInvite from '@/component/Socket/GameInvite';
+import useSocket from '@/hooks/useSocket';
 import Link from 'next/link';
 import styled from 'styled-components';
 
@@ -30,7 +32,9 @@ export default function UserItem({
       </ProfileContainer>
       <StatusContainer>
         <ProfileLink href={`/profile/${nickname}`}>profile</ProfileLink>
-        <GameMatchButton>game</GameMatchButton>
+        <GameMatchButton>
+          <GameInvite content='game' userId={id} />
+        </GameMatchButton>
         <button onClick={() => onClickSetUser(id, nickname)}>{'>'}</button>
       </StatusContainer>
     </Container>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ChannelItem from './ChannelItem';
-import axios from 'axios';
+
 import { IAllChannel, IMyChannel } from '@/types/IChannel';
 import useSocket from '@/hooks/useSocket';
 import { useSetRecoilState } from 'recoil';

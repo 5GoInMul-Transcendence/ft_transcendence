@@ -1,11 +1,11 @@
-import { useState } from 'react';
 import useInput from '@/hooks/useInput';
 import Input from '@/component/Input';
 import Buttons from '@/component/Buttons';
 import InvalidMsg from './InvalidMsg';
 import styled from 'styled-components';
-import { useSetRecoilState } from 'recoil';
-import { modalState } from '@/utils/recoil/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { invalidMsgState, modalState } from '@/utils/recoil/atom';
+
 import { axiosInstance } from '@/utils/axios';
 
 interface SetChannelProps {
@@ -19,7 +19,7 @@ export default function SetChannel({
   const setModal = useSetRecoilState(modalState);
   const [password, , onChangePassword] = useInput('');
   const [passwordCheck, , onChangePasswordCheck] = useInput('');
-  const [invalidMsg, setInvalidMsg] = useState<string>('');
+  const [invalidMsg, setInvalidMsg] = useRecoilState(invalidMsgState);
 
   const cancelSetChannelHandler = () => {
     setModal(null);

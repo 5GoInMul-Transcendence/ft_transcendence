@@ -40,6 +40,7 @@ export default function ChannelItem({
       }
     });
   };
+
   useEffect(() => {
     if (newMessage?.id === channelId) setMsg(newMessage.recentMessage);
   }, [newMessage]);
@@ -50,7 +51,7 @@ export default function ChannelItem({
         <ChannelNameDiv>{channelName}</ChannelNameDiv>
         <LastChatDiv>
           {recentMessage && msg && msg.nickname + ':'}
-          {msg.content ?? ''}
+          {msg?.content ?? ''}
         </LastChatDiv>
       </ChannelDiv>
     </Container>

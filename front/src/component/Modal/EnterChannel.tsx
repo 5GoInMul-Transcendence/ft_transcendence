@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import useInput from '@/hooks/useInput';
 import Input from '@/component/Input';
 import Button from '@/component/Buttons/Button';
@@ -6,8 +5,8 @@ import InvalidMsg from './InvalidMsg';
 import { styled } from 'styled-components';
 import { axiosInstance } from '@/utils/axios';
 import { useRouter } from 'next/navigation';
-import { useSetRecoilState } from 'recoil';
-import { modalState } from '@/utils/recoil/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { invalidMsgState, modalState } from '@/utils/recoil/atom';
 
 interface EnterChannelProps {
   channelName: string;
@@ -18,7 +17,7 @@ export default function EnterChannel({
   channelId,
 }: EnterChannelProps) {
   const [keyword, , onChangeKeyword] = useInput('');
-  const [invalidMsg, setInvalidMsg] = useState<string>('');
+  const [invalidMsg, setInvalidMsg] = useRecoilState(invalidMsgState);
   const setModal = useSetRecoilState(modalState);
   const router = useRouter();
 
@@ -27,10 +26,12 @@ export default function EnterChannel({
       setInvalidMsg(() => 'password is empty');
       return;
     }
-    axiosInstance.post(`/channel/${channelId}/password`, {password: keyword}).then((data) => {
-      router.push(`/chats/${channelId}`);
-      setModal(null);
-    });
+    axiosInstance
+      .post(`/channel/${channelId}/password`, { password: keyword })
+      .then((data) => {
+        router.push(`/chats/${channelId}`);
+        setModal(null);
+      });
   };
 
   return (

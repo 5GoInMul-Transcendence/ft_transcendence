@@ -4,8 +4,8 @@ import Input from '@/component/Input';
 import Buttons from '@/component/Buttons';
 import InvalidMsg from './InvalidMsg';
 import styled from 'styled-components';
-import { useSetRecoilState } from 'recoil';
-import { modalState } from '@/utils/recoil/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { invalidMsgState, modalState } from '@/utils/recoil/atom';
 import { axiosInstance } from '@/utils/axios';
 import { useRouter } from 'next/navigation';
 
@@ -14,7 +14,8 @@ export default function CreateChannel() {
   const [password, , onChangePassword] = useInput('');
   const [passwordCheck, , onChangePasswordCheck] = useInput('');
   const [mode, setMode] = useState('public');
-  const [invalidMsg, setInvalidMsg] = useState<string>('');
+  const [invalidMsg, setInvalidMsg] = useRecoilState(invalidMsgState);
+
   const setModal = useSetRecoilState(modalState);
   const router = useRouter();
 
