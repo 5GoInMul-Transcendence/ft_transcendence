@@ -110,8 +110,8 @@ export class LinkChannelToUserService {
 		return links;
 	}
 
-	updateRoleInLink(link: LinkChannelToUser, dto: Partial<UpdateRoleInLinkDto>): void {
-		this.linkChannelToUserRepository.update(link.id, {...dto});
+	async updateRoleInLink(link: LinkChannelToUser, dto: Partial<UpdateRoleInLinkDto>): Promise<void> {
+		await this.linkChannelToUserRepository.update(link.id, {...dto});
 	}
 
 	/**

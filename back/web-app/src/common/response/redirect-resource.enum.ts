@@ -1,5 +1,5 @@
 export enum RedirectResource {
-  MAIN = '/main',
+  PROFILE_EDIT = '/myprofile/edit',
   LOGIN = '/login',
   TWOFACTOR = '/2fa',
 }
