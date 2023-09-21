@@ -439,7 +439,7 @@ export class ChannelController {
 			if (channel.mode === ChannelMode.DM) {
 				anotherUser = await this.linkService.getFirstLinkByChannelId(channel.id);
 				await this.linkService.deleteLink(anotherUser);
-				this.chatService.leaveChannel(anotherUser.id, channel);
+				this.chatService.leaveChannel(anotherUser.user.id, channel);
 			}
 			// ban, mute memory map
 			await this.messageService.deleteAllMessages(channel.id);
