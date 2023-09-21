@@ -16,6 +16,7 @@ export default function ChannelList() {
   const [myChannelOption, setmyChannelOption] = useState(true);
   const [myChannels, setMyChannels] = useState<IMyChannel[]>([]);
   const [allChannels, setAllChannels] = useState<IAllChannel[]>([]);
+
   const showAllChannels = () => {
     setmyChannelOption(false);
   };
@@ -54,6 +55,8 @@ export default function ChannelList() {
       });
     });
   }, [socket]);
+
+  console.log(recentMessageState);
 
   return (
     <Container>

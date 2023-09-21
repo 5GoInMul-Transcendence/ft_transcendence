@@ -6,7 +6,7 @@ import InvalidMsg from './InvalidMsg';
 import styled from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 import { modalState } from '@/utils/recoil/atom';
-import axios from 'axios';
+import { axiosInstance } from '@/utils/axios';
 
 interface SetChannelProps {
   channelName: string;
@@ -26,7 +26,7 @@ export default function SetChannel({
   };
   const saveSetChannelHandler = async () => {
     if (password === '') {
-      axios.post(`/channel/setting/${channelId}`, {
+      axiosInstance.post(`/channel/setting/${channelId}`, {
         mode: 'public',
       });
       return;
@@ -35,7 +35,7 @@ export default function SetChannel({
       setInvalidMsg(() => 'password mismatch');
       return;
     }
-    axios
+    axiosInstance
       .put(`/channel/setting/${channelId}`, {
         mode: 'protected',
         password,

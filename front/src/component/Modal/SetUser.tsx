@@ -1,12 +1,11 @@
 import ProfileImage from '@/component/ProfileImage';
-import Buttons from '@/component/Buttons';
 import Toggle from '@/component/Toggle';
 import useToggle from '@/hooks/useToggle';
 import styled from 'styled-components';
-import axios from 'axios';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
-import { IUserSetting } from '@/types/IUser';
 import Button from '../Buttons/Button';
+import { IUserSetting } from '@/types/IUser';
+import { axiosInstance } from '@/utils/axios';
 
 interface SetUserProps {
   userid: string;
@@ -24,7 +23,7 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
   const [ban, onChangeBan] = useToggle(data?.mute ?? false);
 
   const banUserHandler = async () => {
-    axios
+    axiosInstance
       .put(`/channel/setting/${channelid}/user`, {
         id: userid,
         status: 'ban',
@@ -34,13 +33,13 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
       });
   };
   const kickUserHandler = async () => {
-    axios.put(`/channel/setting/${channelid}/user`, {
+    axiosInstance.put(`/channel/setting/${channelid}/user`, {
       id: userid,
       status: 'kick',
     });
   };
   const adminUserHandler = async () => {
-    axios
+    axiosInstance
       .put(`/channel/setting/${channelid}/user`, {
         id: userid,
         status: 'admin',
@@ -51,7 +50,7 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
   };
 
   const muteUserHandler = async () => {
-    axios
+    axiosInstance
       .put(`/channel/setting/${channelid}/user`, {
         id: userid,
         status: 'mute',
@@ -85,7 +84,7 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
             text='ban'
             color='green'
             checked={ban}
-            onToggle={muteUserHandler}
+            onToggle={banUserHandler}
           />
         </div>
       </WrapperSection>
