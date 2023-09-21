@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 export default function Socket() {
-  const [socket] = useSocket('10001/main');
+  const [socket, disconnect] = useSocket('10001/main');
   const setModal = useSetRecoilState(modalState);
   const router = useRouter();
   const [, setGameMode] = useRecoilState(gameModeState);
@@ -30,6 +30,9 @@ export default function Socket() {
         setGameMode('');
         setGameQueue(true);
       }
+      socket?.on('disconnect', () => {
+        disconnect();
+      });
     });
   }, [socket]);
 

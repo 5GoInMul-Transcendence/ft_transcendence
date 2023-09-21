@@ -52,7 +52,7 @@ export default function Board({ game }: Props) {
       setP2Score(res.p2.score);
     });
 
-    socket?.on('disconnect', (res) => {
+    socket?.on('disconnect', () => {
       setEndGame(true);
       setTimeout(() => {
         disconnect();
