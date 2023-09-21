@@ -120,10 +120,10 @@ export class LoginController {
 
     if (this.loginService.checkTwoFactorOn(user.id)) {
       session.tempUserId = user.id;
-      res.redirect(this.configService.get('FRONT_URL') + RedirectResource.TWOFACTOR);
+      res.redirect(this.configService.get('FRONT_URI') + RedirectResource.TWOFACTOR);
     }
 
     this.sessionService.setSession(session, user.id);
-    res.redirect(this.configService.get('FRONT_URL') + RedirectResource.PROFILE_EDIT);
+    res.redirect(this.configService.get('FRONT_URI') + RedirectResource.PROFILE_EDIT);
   }
 }
