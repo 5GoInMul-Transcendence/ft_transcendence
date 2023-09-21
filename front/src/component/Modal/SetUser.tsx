@@ -6,8 +6,8 @@ import useSwrFetcher from '@/hooks/useSwrFetcher';
 import Button from '../Buttons/Button';
 import { IUserSetting } from '@/types/IUser';
 import { axiosInstance } from '@/utils/axios';
-import { useRecoilState } from 'recoil';
-import { invalidMsgState } from '@/utils/recoil/atom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { invalidMsgState, modalState } from '@/utils/recoil/atom';
 import InvalidMsg from './InvalidMsg';
 
 interface SetUserProps {
@@ -21,6 +21,7 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
     `/channel/setting/${channelid}/${userid}`
   );
 
+  const setModal = useSetRecoilState(modalState);
   const [admin, onChangeAdmin] = useToggle(data?.admin ?? false);
   const [mute, onChangeMute] = useToggle(data?.mute ?? false);
   const [ban, onChangeBan] = useToggle(data?.mute ?? false);
@@ -37,10 +38,14 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
       });
   };
   const kickUserHandler = async () => {
-    axiosInstance.put(`/channel/setting/${channelid}/user`, {
-      id: userid,
-      status: 'kick',
-    });
+    axiosInstance
+      .put(`/channel/setting/${channelid}/user`, {
+        id: userid,
+        status: 'kick',
+      })
+      .then(() => {
+        setModal(null);
+      });
   };
   const adminUserHandler = async () => {
     axiosInstance
@@ -48,8 +53,8 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
         id: userid,
         status: 'admin',
       })
-      .then((data) => {
-        if (data.data.resStatus.code === '0000') onChangeAdmin();
+      .then(() => {
+        onChangeAdmin();
       });
   };
 
@@ -59,8 +64,8 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
         id: userid,
         status: 'mute',
       })
-      .then((data) => {
-        if (data.data.resStatus.code === '0000') onChangeMute();
+      .then(() => {
+        onChangeMute();
       });
   };
 

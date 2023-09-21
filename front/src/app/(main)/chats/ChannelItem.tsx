@@ -52,9 +52,9 @@ export default function ChannelItem({
       <ChannelDiv>
         <ChannelNameDiv>{channelName}</ChannelNameDiv>
         <LastChatDiv>
-          {recentMessage && msg && msg.nickname === ''
-            ? ''
-            : msg.nickname + ':' + msg.content}
+          {recentMessage &&
+            msg &&
+            msg.nickname + (msg.id !== -1 ? ':' : '') + msg.content}
         </LastChatDiv>
       </ChannelDiv>
     </Container>

@@ -33,7 +33,7 @@ export default function ChannelEdit({
   };
 
   const onClickSetUser = (userid: number, nickname: string) => {
-    if (role !== 'dm')
+    if (role === 'owner' || role === 'admin')
       setModal({
         type: 'SET-User',
         modalProps: { userid, nickname, channelid },
