@@ -219,8 +219,9 @@ export class ChatService {
               .name(channel.name)
               .recentMessage(Builder(RecentMessage)
               .id(message?.id ?? -1)
-              .nickname(message?.user.nickname ?? '')
               .content(message?.content ?? '')
+              .nickname(message?.user.nickname ?? '')
+              .avatar(message?.user.avatar ?? '')
               .build())
               .build(),
           ),
