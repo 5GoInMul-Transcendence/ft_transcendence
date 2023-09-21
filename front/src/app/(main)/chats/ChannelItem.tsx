@@ -45,7 +45,6 @@ export default function ChannelItem({
     if (newMessage?.id === channelId) setMsg(newMessage.recentMessage);
   }, [newMessage]);
 
-  console.log(msg, recentMessage, 'recnet');
   return (
     <Container onClick={onClickChannel}>
       <ProfileImage url='' size='50px' />

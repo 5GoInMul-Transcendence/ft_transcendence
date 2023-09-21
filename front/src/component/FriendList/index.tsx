@@ -17,7 +17,6 @@ export default function FriendList() {
 
   useEffect(() => {
     socket?.on('friend_update', (res: any) => {
-      console.log(res, 'friends_update');
       setFriends((cur) => {
         const updatedFriends = cur.map((element) => {
           if (element.id === res.data.id) {

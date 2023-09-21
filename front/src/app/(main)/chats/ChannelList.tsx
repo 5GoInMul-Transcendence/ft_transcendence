@@ -52,7 +52,6 @@ export default function ChannelList() {
       }
     });
     socket?.on('updateMyChannel', ({ data }: { data: IMyChannel }) => {
-      console.log(data);
       setRecentMessage(data);
       setMyChannels((cur) => {
         cur.forEach((e) => {
@@ -62,8 +61,6 @@ export default function ChannelList() {
       });
     });
   }, [socket]);
-
-  console.log(recentMessageState);
 
   return (
     <Container>
