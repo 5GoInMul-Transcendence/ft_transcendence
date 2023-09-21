@@ -264,7 +264,8 @@ export class ChannelController {
 		if (await this.hashService.hashCompare(password, channel.password) === false) {
 			this.exceptionService.passwordIsNotValid();
 		}
-		this.linkService.createLinkChannelToUser(
+
+		await this.linkService.createLinkChannelToUser(
 			Builder(CreateLinkChannelToUserReqDto)
 			.channel(channel)
 			.user(user)
@@ -557,7 +558,7 @@ export class ChannelController {
 			this.exceptionService.itIsNotAdmin();
 		}
 
-		targetUser = await this.userService.getUserByUserId(channelId);
+		targetUser = await this.userService.getUserByUserId(targetUserId);
 		if (!targetUser) {
 			this.exceptionService.itIsInvalidRequest();
 		}
