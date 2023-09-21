@@ -57,7 +57,7 @@ export default function Board({ game }: Props) {
       setTimeout(() => {
         disconnect();
         mutate('/friend/list');
-        router.push('/main');
+        router.push('/startgame');
       }, 2000);
     });
   }, [socket]);
