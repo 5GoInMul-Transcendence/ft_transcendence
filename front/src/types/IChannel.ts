@@ -25,7 +25,6 @@ export interface IChatUser {
 }
 
 export interface IMessage {
-  id: number;
   nickname: string;
-  content: string;
+  message: string;
 }

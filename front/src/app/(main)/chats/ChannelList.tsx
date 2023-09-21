@@ -46,6 +46,7 @@ export default function ChannelList() {
       setMyChannels((cur) => cur.filter((e) => e.id !== data.id));
     });
     socket?.on('updateMyChannel', ({ data }: { data: IMyChannel }) => {
+      console.log(data);
       setRecentMessage(data);
       setMyChannels((cur) => {
         cur.forEach((e) => {
