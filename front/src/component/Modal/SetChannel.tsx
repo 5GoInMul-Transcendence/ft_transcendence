@@ -40,10 +40,8 @@ export default function SetChannel({
         mode: 'protected',
         password,
       })
-      .then((data) => {
-        if (data.data.resStatus.code === '0000') cancelSetChannelHandler();
-        if (data.data.resStatus.code === '0001')
-          setInvalidMsg(() => data.data.resStatus.message);
+      .then(() => {
+        cancelSetChannelHandler();
       });
   };
 

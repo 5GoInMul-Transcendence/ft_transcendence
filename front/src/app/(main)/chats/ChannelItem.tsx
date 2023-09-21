@@ -50,7 +50,7 @@ export default function ChannelItem({
       <ChannelDiv>
         <ChannelNameDiv>{channelName}</ChannelNameDiv>
         <LastChatDiv>
-          {recentMessage && msg && msg.nickname + ':' + msg.message}
+          {recentMessage && msg && msg.nickname + ':' + msg.content}
         </LastChatDiv>
       </ChannelDiv>
     </Container>

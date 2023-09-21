@@ -64,7 +64,7 @@ export default function ChannelChatting({
           <ChatItem
             key={`${channelId}${index}`}
             nickname={msg.nickname}
-            content={msg.message}
+            content={msg.content}
           />
         ))}
       </ChatZone>
