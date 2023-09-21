@@ -1,3 +1,5 @@
+import {PlayerNumber} from '../../player/enums/player-number.enum';
+
 export const SCREEN_WIDTH = 1200;
 export const SCREEN_HEIGHT = 700;
 
@@ -15,7 +17,8 @@ export class BallOption {
   speedUp: number;
   xDirection: number;
   yDirection: number;
-
+  nextHitPlayer: PlayerNumber;
+  
   constructor() {
     this.radius = 12.5;
     this.speed = 8;
