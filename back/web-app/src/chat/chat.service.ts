@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
-import { SendChatMessageDto } from './dto/send-chat-message.dto';
 import { ChatEvent } from './enums/chat-event.enum';
 import { Builder } from 'builder-pattern';
 import {
@@ -20,6 +19,7 @@ import { UpdateMyChannelDto } from './dto/update-my-channel.dto';
 import { AddMyChannelResDto } from './dto/add-my-channel-res.dto';
 import { ChannelMode } from '../channels/channel/enum/channel-mode.enum';
 import { DeleteChannelResDto } from './dto/delete-channel-res.dto';
+import { Message } from '../message/entities/message.entity';
 
 @Injectable()
 export class ChatService {
@@ -148,14 +148,14 @@ export class ChatService {
     }
   }
 
-  sendMessage(dto: SendChatMessageDto) {
-    const { user, channel, content } = dto;
+  sendMessage(message: Message) {
+    const { id, user, channel, content } = message;
 
     const resDto = Builder(UpdateMyChannelResDto)
       .id(channel.id)
       .recentMessage(
         Builder(ChatRecentMessage)
-          .id(user.id)
+          .id(id)
           .nickname(user.nickname)
           .content(content)
           .build(),
