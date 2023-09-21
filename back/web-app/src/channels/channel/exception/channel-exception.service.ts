@@ -45,7 +45,7 @@ export class ChannelExceptionService {
 		throw new HttpException(`${this.userSettingService.BAN_SECOND} 초 동안 채널에 입장할 수 없습니다!`, HttpStatus.BAD_REQUEST);
 	}
 	
-	iWasBlocked() {
+	youAreBlock() {
 		throw new HttpException('당신은 상대방으로부터 Block 되었습니다. 참회하세요!', HttpStatus.BAD_REQUEST);
 	}
 	
