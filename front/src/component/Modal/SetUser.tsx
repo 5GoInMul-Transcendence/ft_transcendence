@@ -6,6 +6,9 @@ import useSwrFetcher from '@/hooks/useSwrFetcher';
 import Button from '../Buttons/Button';
 import { IUserSetting } from '@/types/IUser';
 import { axiosInstance } from '@/utils/axios';
+import { useRecoilState } from 'recoil';
+import { invalidMsgState } from '@/utils/recoil/atom';
+import InvalidMsg from './InvalidMsg';
 
 interface SetUserProps {
   userid: string;
@@ -21,6 +24,7 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
   const [admin, onChangeAdmin] = useToggle(data?.admin ?? false);
   const [mute, onChangeMute] = useToggle(data?.mute ?? false);
   const [ban, onChangeBan] = useToggle(data?.mute ?? false);
+  const [invalidMsg] = useRecoilState(invalidMsgState);
 
   const banUserHandler = async () => {
     axiosInstance
@@ -88,6 +92,7 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
           />
         </div>
       </WrapperSection>
+      <InvalidMsg text={invalidMsg} />
       <Button text={'kick'} color='grey' onClick={kickUserHandler} />
     </Wrapper>
   );
