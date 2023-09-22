@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
-import { SendChatMessageDto } from './dto/send-chat-message.dto';
 import { ChatEvent } from './enums/chat-event.enum';
 import { Builder } from 'builder-pattern';
 import {
@@ -20,6 +19,9 @@ import { UpdateMyChannelDto } from './dto/update-my-channel.dto';
 import { AddMyChannelResDto } from './dto/add-my-channel-res.dto';
 import { ChannelMode } from '../channels/channel/enum/channel-mode.enum';
 import { DeleteChannelResDto } from './dto/delete-channel-res.dto';
+import { RecentMessage } from 'src/channels/channel/dto/recent-message.dto';
+import { MessageService } from 'src/message/message.service';
+import { Message } from 'src/message/entities/message.entity';
 
 @Injectable()
 export class ChatService {
@@ -27,7 +29,10 @@ export class ChatService {
   private chatServerSocket: Server;
   private chatUsers: Map<number, Socket>;
 
-  constructor(private linkChannelToUserService: LinkChannelToUserService) {
+  constructor(
+    private linkChannelToUserService: LinkChannelToUserService,
+    private messageService: MessageService,
+    ) {
     this.chatUsers = new Map<number, Socket>();
   }
 
@@ -148,16 +153,17 @@ export class ChatService {
     }
   }
 
-  sendMessage(dto: SendChatMessageDto) {
-    const { user, channel, content } = dto;
+  sendMessage(message: Message) {
+    const { id, user, channel, content } = message;
 
     const resDto = Builder(UpdateMyChannelResDto)
       .id(channel.id)
       .recentMessage(
         Builder(ChatRecentMessage)
-          .id(user.id)
-          .nickname(user.nickname)
+          .id(id)
           .content(content)
+          .nickname(user.nickname)
+          .avatar(user.avatar)
           .build(),
       )
       .build();
@@ -193,9 +199,9 @@ export class ChatService {
     }
   }
 
-  updateMyChannel(dto: UpdateMyChannelDto) {
+  async updateMyChannel(dto: UpdateMyChannelDto) {
     const { userId, event, channel } = dto;
-
+    let message: Message;
     const client = this.chatUsers.get(userId);
 
     if (!client) {
@@ -204,12 +210,19 @@ export class ChatService {
 
     switch (event) {
       case ChatEvent.AddMyChannel:
+        message = await this.messageService.getRecentMessageRelatedUserByChannelId(channel);
         client.emit(
           event,
           ApiResponseForm.ok(
             Builder(AddMyChannelResDto)
               .id(channel.id)
               .name(channel.name)
+              .recentMessage(Builder(RecentMessage)
+              .id(message?.id ?? -1)
+              .content(message?.content ?? '')
+              .nickname(message?.user.nickname ?? '')
+              .avatar(message?.user.avatar ?? '')
+              .build())
               .build(),
           ),
         );

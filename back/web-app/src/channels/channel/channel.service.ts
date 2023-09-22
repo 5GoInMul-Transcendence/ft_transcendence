@@ -56,9 +56,12 @@ export class ChannelService {
       const channel = link.channel;
 			const message: Message = await this.messageService.getRecentMessageRelatedUserByChannelId(channel);
 			const nicknameSendingMessage: string = message?.user.nickname;
+			const avatar: string = message?.user.avatar;
 			const recentMessage: RecentMessage = Builder(RecentMessage)
-			.message(message?.content ?? null)
-			.nickname(nicknameSendingMessage)
+			.id(message?.id ?? -1)
+			.content(message?.content ?? '')
+			.nickname(nicknameSendingMessage ?? '')
+			.avatar(avatar ?? '')
 			.build();
 
 			myChannelList.push(Builder(MyChannels)

@@ -11,7 +11,7 @@ export class ChannelSettingService {
 		linksInChannel.forEach((link) => {
 			information.push(
 				Builder(GetChannelInformationResDto)
-				.avartar(link.user.avatar)
+				.avatar(link.user.avatar)
 				.id(link.user.id)
 				.nickname(link.user.nickname)
 				.role(link.role)
