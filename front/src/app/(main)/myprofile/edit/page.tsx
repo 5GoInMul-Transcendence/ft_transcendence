@@ -10,6 +10,7 @@ import { useSetRecoilState } from 'recoil';
 import { invalidMsgState, modalState } from '@/utils/recoil/atom';
 import { useCallback, useRef } from 'react';
 import { useSWRConfig } from 'swr';
+import { axiosInstance } from '@/utils/axios';
 
 export default function Profile() {
   const { mutate } = useSWRConfig();
@@ -25,24 +26,10 @@ export default function Profile() {
       const formData = new FormData();
       formData.append('file', e.target.files[0]);
 
-      fetch(
-        `http://${process.env.NEXT_PUBLIC_BACK_SERVER}:${process.env.NEXT_PUBLIC_BACK_MAIN_PORT}/me/avatar`,
-        {
-          method: 'PUT',
-          body: formData,
-          credentials: 'include',
-        }
-      )
-        .then((res) => {
-          console.log(res);
-          mutate('/me');
-          mutate('/me/details');
-        })
-        .catch(() => {
-          setInvalidMsg('파일 업로드에 실패 하였습니다');
-          setModal({ type: 'API-Error' });
-          // 400일 때 에러처리 얘만 fetch 라 넣어야함
-        });
+      axiosInstance.put('/me/avatar', formData).then((res) => {
+        mutate('/me');
+        mutate('/me/details');
+      });
     },
     []
   );

@@ -1,6 +1,5 @@
 import ProfileImage from '@/component/ProfileImage';
-import Toggle from '@/component/Toggle';
-import useToggle from '@/hooks/useToggle';
+import SetUserToggle from '@/component/Toggle/SetUserToggle';
 import styled from 'styled-components';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
 import Button from '../Buttons/Button';
@@ -9,7 +8,6 @@ import { axiosInstance } from '@/utils/axios';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { invalidMsgState, modalState } from '@/utils/recoil/atom';
 import InvalidMsg from './InvalidMsg';
-import SetUserToggle from '../Toggle/SetUserToggle';
 
 interface SetUserProps {
   userid: string;
