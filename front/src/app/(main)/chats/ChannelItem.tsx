@@ -8,6 +8,7 @@ import { modalState, recentMessageState } from '@/utils/recoil/atom';
 import { IMessage } from '@/types/IChannel';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '@/utils/axios';
+import { truncateString } from '@/utils/truncateString';
 
 interface ChannelItemProps {
   channelId: number;
@@ -40,16 +41,23 @@ export default function ChannelItem({
       }
     });
   };
+
   useEffect(() => {
     if (newMessage?.id === channelId) setMsg(newMessage.recentMessage);
   }, [newMessage]);
+
   return (
     <Container onClick={onClickChannel}>
-      <ProfileImage url='' size='50px' />
+      <ProfileImage
+        url={(recentMessage && msg && msg?.avatar) ?? ''}
+        size='50px'
+      />
       <ChannelDiv>
-        <ChannelNameDiv>{channelName}</ChannelNameDiv>
+        <ChannelNameDiv>{truncateString(channelName, 12)}</ChannelNameDiv>
         <LastChatDiv>
-          {recentMessage && msg && msg.nickname + ':' + msg.content}
+          {recentMessage &&
+            msg &&
+            msg.nickname + (msg.id !== -1 ? ':' : '') + msg.content}
         </LastChatDiv>
       </ChannelDiv>
     </Container>
@@ -73,13 +81,13 @@ const ChannelDiv = styled.div`
 
 const ChannelNameDiv = styled.div`
   width: 100%;
-  font-size: ${({ theme }) => theme.fontSize.small};
+  font-size: ${({ theme }) => theme.fontSize.normal};
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0.2rem 0.4rem;
 `;
 
 const LastChatDiv = styled.div`
-  font-size: ${({ theme }) => theme.fontSize.xxsmall};
+  font-size: ${({ theme }) => theme.fontSize.xsmall};
   margin: 0.2rem 0.4rem;
 `;

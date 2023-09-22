@@ -53,12 +53,18 @@ export default function SignUp() {
         <div>ID</div>
         <input type='text' value={id} onChange={onChangeId} maxLength={12} />
         <div>Password</div>
-        <input type='password' value={password} onChange={onChangePassword} />
+        <input
+          type='password'
+          value={password}
+          onChange={onChangePassword}
+          maxLength={15}
+        />
         <div>Repeat Password</div>
         <input
           type='password'
           value={passwordCheck}
           onChange={onChangePasswordCheck}
+          maxLength={15}
         />
         {mismatchError && <div>x password does not match</div>}
         <button type='submit'>Create Account</button>

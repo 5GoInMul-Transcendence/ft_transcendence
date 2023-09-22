@@ -8,7 +8,9 @@ const useGameSocket = (
 ): [Socket | undefined, () => void] => {
   const disconnect = useCallback(() => {
     if (port) {
-      sockets[port].disconnect();
+      try {
+        sockets[port].disconnect();
+      } catch {}
       delete sockets[port];
     }
   }, [port]);

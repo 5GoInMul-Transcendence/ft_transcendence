@@ -11,7 +11,7 @@ import { IUserFriedns } from '@/types/IUser';
 import { axiosInstance } from '@/utils/axios';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
-import ProfileToggle from './ProfileToggle';
+import ProfileToggle from '@/component/Toggle/ProfileToggle';
 
 export default function Profile({ params }: { params: { user: string } }) {
   const [socket] = useSocket('10001/main');

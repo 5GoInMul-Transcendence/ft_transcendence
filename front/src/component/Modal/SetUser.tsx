@@ -1,12 +1,13 @@
 import ProfileImage from '@/component/ProfileImage';
-import Buttons from '@/component/Buttons';
-import Toggle from '@/component/Toggle';
-import useToggle from '@/hooks/useToggle';
+import SetUserToggle from '@/component/Toggle/SetUserToggle';
 import styled from 'styled-components';
-import axios from 'axios';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
-import { IUserSetting } from '@/types/IUser';
 import Button from '../Buttons/Button';
+import { IUserSetting } from '@/types/IUser';
+import { axiosInstance } from '@/utils/axios';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { invalidMsgState, modalState } from '@/utils/recoil/atom';
+import InvalidMsg from './InvalidMsg';
 
 interface SetUserProps {
   userid: string;
@@ -18,49 +19,21 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
   const data = useSwrFetcher<IUserSetting>(
     `/channel/setting/${channelid}/${userid}`
   );
+  const [invalidMsg] = useRecoilState(invalidMsgState);
+  const setModal = useSetRecoilState(modalState);
 
-  const [admin, onChangeAdmin] = useToggle(data?.admin ?? false);
-  const [mute, onChangeMute] = useToggle(data?.mute ?? false);
-  const [ban, onChangeBan] = useToggle(data?.mute ?? false);
-
-  const banUserHandler = async () => {
-    axios
+  const kickUserHandler = async () => {
+    axiosInstance
       .put(`/channel/setting/${channelid}/user`, {
         id: userid,
-        status: 'ban',
+        status: 'kick',
       })
       .then(() => {
-        onChangeBan();
-      });
-  };
-  const kickUserHandler = async () => {
-    axios.put(`/channel/setting/${channelid}/user`, {
-      id: userid,
-      status: 'kick',
-    });
-  };
-  const adminUserHandler = async () => {
-    axios
-      .put(`/channel/setting/${channelid}/user`, {
-        id: userid,
-        status: 'admin',
-      })
-      .then((data) => {
-        if (data.data.resStatus.code === '0000') onChangeAdmin();
+        setModal(null);
       });
   };
 
-  const muteUserHandler = async () => {
-    axios
-      .put(`/channel/setting/${channelid}/user`, {
-        id: userid,
-        status: 'mute',
-      })
-      .then((data) => {
-        if (data.data.resStatus.code === '0000') onChangeMute();
-      });
-  };
-
+  if (!data) return;
   return (
     <Wrapper>
       <WrapperSection>
@@ -69,26 +42,10 @@ export default function SetUser({ userid, nickname, channelid }: SetUserProps) {
           <div>{nickname}</div>
         </div>
         <div>
-          <Toggle
-            text='admin'
-            color='green'
-            checked={admin}
-            onToggle={adminUserHandler}
-          />
-          <Toggle
-            text='mute'
-            color='green'
-            checked={mute}
-            onToggle={muteUserHandler}
-          />
-          <Toggle
-            text='ban'
-            color='green'
-            checked={ban}
-            onToggle={muteUserHandler}
-          />
+          <SetUserToggle data={data} channelid={channelid} userid={userid} />
         </div>
       </WrapperSection>
+      <InvalidMsg text={invalidMsg} />
       <Button text={'kick'} color='grey' onClick={kickUserHandler} />
     </Wrapper>
   );

@@ -17,19 +17,24 @@ export default function FriendList() {
 
   useEffect(() => {
     socket?.on('friend_update', (res: any) => {
-      console.log(res, 'friends_update');
       setFriends((cur) => {
-        cur.forEach((element) => {
+        const updatedFriends = cur.map((element) => {
           if (element.id === res.data.id) {
-            element.nickname =
-              res.data.nickname === undefined
-                ? element.nickname
-                : res.data.nickname;
-            element.status =
-              res.data.status === undefined ? element.status : res.data.status;
+            return {
+              ...element,
+              nickname:
+                res.data.nickname === undefined
+                  ? element.nickname
+                  : res.data.nickname,
+              status:
+                res.data.status === undefined
+                  ? element.status
+                  : res.data.status,
+            };
           }
+          return element;
         });
-        return [...cur];
+        return updatedFriends;
       });
     });
   }, [socket]);
