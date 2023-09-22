@@ -232,14 +232,21 @@ export class ChannelController {
 	}
 
 	@Get(':channelid/check')
-	async checkChannel(@Param('channelid') channelId: number): Promise<CheckChannelResDto> {
+	async checkChannel(
+		@Param('channelid') channelId: number,
+		@Session() session: Record<string, any>,
+	): Promise<CheckChannelResDto> {
 		const channel = await this.channelService.getChannel(channelId);
+		const userId: number = session.userId;
+		let isBan: boolean;
 
 		if (channel === null) {
 			this.exceptionService.notExistChannel();
 		}
+		isBan = this.userSettingService.isBanUser(channel.id, userId);
 		return Builder(CheckChannelResDto)
 		.mode(channel.mode)
+		.isBan(isBan)
 		.build();
 	}
 
