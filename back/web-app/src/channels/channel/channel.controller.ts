@@ -27,7 +27,6 @@ import { UpdateRoleAtLeaveOwnerReqDto } from './dto/update-role-at-leave-owner-r
 import { UpdateRoleInLinkDto } from './dto/update-role-in-link.dto';
 import { LinkChannelToUserService } from './link-channel-to-user.service';
 import { ChatService } from '../../chat/chat.service';
-import { SendChatMessageDto } from '../../chat/dto/send-chat-message.dto';
 import { ChannelSettingService } from './channel-setting.service';
 import { UpdateChannelSettingReqDto } from './dto/update-channel-setting-req.dto';
 import { GetUserSettingInChannelResDto } from './dto/get-user-setting-in-channel-res.dto';
@@ -375,7 +374,7 @@ export class ChannelController {
 		if (!link) {
 			this.exceptionService.notEnterUserInChannel();
 		}
-		this.messageService.sendMessage(
+		const createdMessage = await this.messageService.sendMessage(
 			Builder(SendMessageDto)
 			.channel(channel)
 			.content(message)
@@ -383,13 +382,7 @@ export class ChannelController {
 			.timestamp(new Date())
 			.build()
 		);
-    this.chatService.sendMessage(
-      Builder(SendChatMessageDto)
-			.user(user)
-			.channel(channel)
-			.content(message)
-			.build(),
-    );
+    this.chatService.sendMessage(createdMessage);
 	}
 
 	private async updateRoleAtLeaveOwner(dto: UpdateRoleAtLeaveOwnerReqDto) {
