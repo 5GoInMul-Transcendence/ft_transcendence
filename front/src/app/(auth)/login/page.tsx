@@ -38,7 +38,12 @@ export default function Login() {
         <div>ID</div>
         <input type='id' value={id} onChange={onChangeId} maxLength={12} />
         <div>Password</div>
-        <input type='password' value={password} onChange={onChangePassword} />
+        <input
+          type='password'
+          value={password}
+          onChange={onChangePassword}
+          maxLength={15}
+        />
         <button type='submit'>Login</button>
       </Form>
       <button onClick={onClickOAuth}>Login with 42</button>
