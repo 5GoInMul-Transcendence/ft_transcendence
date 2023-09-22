@@ -1,4 +1,5 @@
 export class RecentMessage {
-	readonly nickname: string | null;
-	readonly message: string | null;
+	readonly id: number;
+	readonly nickname: string;
+	readonly content: string;
 }
