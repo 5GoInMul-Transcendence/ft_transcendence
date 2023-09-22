@@ -34,9 +34,10 @@ import { UserSettingService } from './user-setting/user-setting.service';
 import { UpdateUserSettingInChannelReqDto } from './dto/update-user-setting-in-channel-req.dto';
 import { IsMutedUserReqDto } from './dto/is-muted-user-req.dto';
 import { UserSettingStatus } from './enum/user-setting-status.enum';
-import {BlockDto} from '../../block/dto/block.dto';
-import {BlockService} from '../../block/block.service';
-import {MessageType} from '../../message/enums/message-type.enum';
+import { BlockDto } from '../../block/dto/block.dto';
+import { BlockService } from '../../block/block.service';
+import { MessageType } from '../../message/enums/message-type.enum';
+import { AuthenticatePasswordReqDto } from './dto/authenticate-password-req.dto';
 
 @Controller('channel')
 export class ChannelController {
@@ -216,6 +217,7 @@ export class ChannelController {
 				.build()
 			);
 			
+			this.chatService.enterChannel(invitedUserId, channel);
 			this.chatService.enterChannel(userId, channel);
 			
 			return Builder(CreateChannelResDto)
@@ -245,8 +247,9 @@ export class ChannelController {
 	async authenticatePassword(
 		@Param('channelid', ParseIntPipe) channelId: number,
 		@Session() session: Record<string, any>,
-		@Body('password') password: string, // pipe
+		@Body() dto: AuthenticatePasswordReqDto,
 	): Promise<CreateChannelResDto> {
+		const {password} = dto;
 		const channel = await this.channelService.getChannel(channelId);
 		const userId = session.userId;
 		const user = await this.userService.getUserByUserId(userId);
@@ -456,7 +459,7 @@ export class ChannelController {
 			if (channel.mode === ChannelMode.DM) {
 				anotherUser = await this.linkService.getFirstLinkByChannelId(channel.id);
 				await this.linkService.deleteLink(anotherUser);
-				this.chatService.leaveChannel(anotherUser.id, channel);
+				this.chatService.leaveChannel(anotherUser.user.id, channel);
 			}
 			// ban, mute memory map
 			await this.messageService.deleteAllMessages(channel.id);
