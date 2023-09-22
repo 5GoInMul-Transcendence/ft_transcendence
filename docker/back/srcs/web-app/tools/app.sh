@@ -1,3 +1,3 @@
 #!/bin/bash
 npm i
-npm run start:prod
+npm run start:prod --silence
