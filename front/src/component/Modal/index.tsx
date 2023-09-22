@@ -20,10 +20,14 @@ export default function Modal() {
   const [, setInvalidMsg] = useRecoilState(invalidMsgState);
 
   useEffect(() => {
-    return () => {
+    const modalClose = () => {
       setModal(null);
-    }
-  }, [])
+    };
+    window.addEventListener('popstate', modalClose);
+    return () => {
+      window.removeEventListener('popstate', modalClose);
+    };
+  }, []);
 
   const modalStorage: Record<string, Record<string, string | JSX.Element>> = {
     'ADD-Friend': { title: 'Add Friend', child: <AddFriend /> },

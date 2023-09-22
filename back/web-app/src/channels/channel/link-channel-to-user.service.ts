@@ -31,6 +31,7 @@ export class LinkChannelToUserService {
 	async getFirstLinkByChannelId(channelId: number): Promise<LinkChannelToUser | null> {
 		return await this.linkChannelToUserRepository
 		.createQueryBuilder('link')
+		.innerJoinAndSelect('link.user', 'user')
 		.where('link.channel = :channelId', {channelId})
 		.getOne();
 	}
