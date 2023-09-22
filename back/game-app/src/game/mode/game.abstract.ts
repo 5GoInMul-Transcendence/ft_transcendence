@@ -1,15 +1,9 @@
-import {
-  BallOption,
-  PaddleOption,
-  ScoreOption,
-  SCREEN_HEIGHT,
-  SCREEN_WIDTH,
-} from './object/game-object.option';
-import { GameObjects, GameScore } from './object/game-object';
-import { PlayerAction } from '../player/enums/player-action.enum';
-import { PlayerNumber } from '../player/enums/player-number.enum';
-import { GamePlayResult } from './enums/game-play-result.enum';
-import { GameStatus } from './enums/game-status.enum';
+import {BallOption, PaddleOption, ScoreOption, SCREEN_HEIGHT, SCREEN_WIDTH,} from './object/game-object.option';
+import {GameObjects, GameScore} from './object/game-object';
+import {PlayerAction} from '../player/enums/player-action.enum';
+import {PlayerNumber} from '../player/enums/player-number.enum';
+import {GamePlayResult} from './enums/game-play-result.enum';
+import {GameStatus} from './enums/game-status.enum';
 
 export abstract class AbstractGame {
   public id: string;
@@ -75,6 +69,7 @@ export abstract class AbstractGame {
 
     /* p1 패들 충돌 체크 */
     if (
+      this.ballOption.nextHitPlayer == PlayerNumber.P1 &&
       this.objects.b.x <=
       this.objects.p1.x + this.paddleOption.width + this.ballOption.radius
     ) {
@@ -82,16 +77,20 @@ export abstract class AbstractGame {
         this.objects.b.y > this.objects.p1.y - this.ballOption.radius &&
         this.objects.b.y < this.objects.p1.y + this.paddleOption.height + this.ballOption.radius
       ) {
+        this.ballOption.nextHitPlayer = this.ballOption.nextHitPlayer % 2 + 1;
         this.ballOption.xDirection *= -1;
         this.ballOption.speed += this.ballOption.speedUp;
       }
     }
     /* p2 패들 충돌 체크 */
-    if (this.objects.b.x >= this.objects.p2.x) {
+    if (
+        this.ballOption.nextHitPlayer == PlayerNumber.P2 &&
+        this.objects.b.x >= this.objects.p2.x - this.ballOption.radius) {
       if (
-        this.objects.b.y > this.objects.p2.y &&
-        this.objects.b.y < this.objects.p2.y + this.paddleOption.height
+        this.objects.b.y > this.objects.p2.y - this.ballOption.radius &&
+        this.objects.b.y < this.objects.p2.y + this.paddleOption.height + this.ballOption.radius
       ) {
+        this.ballOption.nextHitPlayer = this.ballOption.nextHitPlayer % 2 + 1;
         this.ballOption.xDirection *= -1;
         this.ballOption.speed += this.ballOption.speedUp;
       }
@@ -143,5 +142,7 @@ export abstract class AbstractGame {
 
     this.ballOption.xDirection = Math.round(Math.random()) ? 1 : -1;
     this.ballOption.yDirection = Math.round(Math.random()) ? 1 : -1;
+    
+    this.ballOption.nextHitPlayer = this.ballOption.xDirection == -1 ? PlayerNumber.P1 : PlayerNumber.P2;
   }
 }
