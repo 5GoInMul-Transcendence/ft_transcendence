@@ -44,11 +44,14 @@ export class MessageService {
 		})
 		const RecentMessages: RecentMessageAtEnter[] = messages.map((message) => {
 			const nicknameSendingMessage: string = message.user.nickname;
+			const avatar: string = message.user.avatar;
 
 			return Builder(RecentMessageAtEnter)
 			.id(message.id)
+			.userId(message.user.id)
 			.content(message.content)
 			.nickname(nicknameSendingMessage)
+			.avatar(avatar)
 			.build()
 		});
 

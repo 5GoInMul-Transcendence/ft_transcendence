@@ -4,6 +4,6 @@ export class SpeedGame extends AbstractGame {
   constructor(gameId: string) {
     super(gameId);
 
-    this.ballOption.speed = 12;
+    this.ballOption.speed = 10;
   }
 }

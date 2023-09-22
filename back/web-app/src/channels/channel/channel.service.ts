@@ -10,16 +10,15 @@ import { Builder } from 'builder-pattern';
 import { Message } from 'src/message/entities/message.entity';
 import { MessageService } from 'src/message/message.service';
 import { ChannelMode } from './enum/channel-mode.enum';
-import { Ban } from './entities/ban.entity';
+import { HashService } from 'src/common/hash/hash.service';
 
 @Injectable()
 export class ChannelService {
 	constructor(
 		@InjectRepository(Channel)
 		private channelRepository: Repository<Channel>,
-		@InjectRepository(Ban)
-		private banRepository: Repository<Ban>,
 		private messageService: MessageService,
+		private hashService: HashService,
 	) {}
 
 	async createChannel(dto: CreateChannelReqDto): Promise<Channel> {
@@ -57,9 +56,12 @@ export class ChannelService {
       const channel = link.channel;
 			const message: Message = await this.messageService.getRecentMessageRelatedUserByChannelId(channel);
 			const nicknameSendingMessage: string = message?.user.nickname;
+			const avatar: string = message?.user.avatar;
 			const recentMessage: RecentMessage = Builder(RecentMessage)
-			.message(message?.content ?? null)
-			.nickname(nicknameSendingMessage)
+			.id(message?.id ?? -1)
+			.content(message?.content ?? '')
+			.nickname(nicknameSendingMessage ?? '')
+			.avatar(avatar ?? '')
 			.build();
 
 			myChannelList.push(Builder(MyChannels)
@@ -72,21 +74,18 @@ export class ChannelService {
 		return myChannelList;
 	}
 
-	async getBanList(channelId: number): Promise<Ban | null> {
-		return await this.banRepository.createQueryBuilder('ban')
-		.where('ban.channel = :channelId', {channelId})
-		.getOne();
+	async updateChannelSetting(channelId: number, mode: string, password: string) {
+		if (mode === ChannelMode.PUBLIC) {
+			password = null;
+		}
+		const updatedInformations = {
+			mode,
+			password: await this.hashService.hashPassword(password),
+		};
+		this.channelRepository.update(channelId, updatedInformations)
 	}
 
 	async deleteChannel(channel: Channel): Promise<void> {
 		await this.channelRepository.remove(channel);
-	}
-
-	async deleteBanList(channelId: number): Promise<void> {
-		const ban: Ban | null = await this.getBanList(channelId);
-
-		if (!ban)
-			return;
-		await this.banRepository.remove(ban);
 	}
 }

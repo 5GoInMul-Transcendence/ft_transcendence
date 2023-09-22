@@ -18,10 +18,6 @@ export class AuthMiddleware implements NestMiddleware {
     if (this.sessionService.isDifferentSessionId(session.userId, session.id)) {
       throw new HttpException(RedirectResource.LOGIN, HttpStatus.FOUND);
     }
-    // 만료된 세션을 다시 부여
-    // req.session.cookie.expires = new Date(Date.now() + 20000);
-    // req.session.regenerate(() => this.sessionService.setSession(session, session.userId));
-
     next();
   }
 }

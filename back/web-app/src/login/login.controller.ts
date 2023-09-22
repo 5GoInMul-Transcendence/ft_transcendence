@@ -29,6 +29,7 @@ import { CreateUserDto } from 'src/users/user/dto/create-user.dto';
 import { SignupService } from 'src/signup/signup.service';
 import { HashService } from 'src/common/hash/hash.service';
 import { Response } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('login')
 export class LoginController {
@@ -39,6 +40,7 @@ export class LoginController {
     private memoryUserService: MemoryUserService,
     private signupService: SignupService,
     private hashService: HashService,
+    private configService: ConfigService,
   ) {}
 
   @Post()
@@ -73,7 +75,7 @@ export class LoginController {
     }
 
     this.sessionService.setSession(session, memberUser.user.id);
-    return RedirectResource.MAIN;
+    return RedirectResource.PROFILE_EDIT;
   }
 
   @Get('oauth/42')
@@ -82,12 +84,11 @@ export class LoginController {
 
   @Get('oauth/42/redirect')
   @UseGuards(FortyTwoAuthGuard)
-  @Redirect('http://localhost:3000/main')
   async ftAuthRedirect(
     @Req() req: any, // 유효성 검사 해야 하나?
     @Res() res: Response,
     @Session() session: Record<string, any>,
-  ) : Promise<void> {
+  ): Promise<void> {
     const reqUser: any = req.user;
     let user: User;
     let oauthUser: OauthUser;
@@ -119,10 +120,11 @@ export class LoginController {
 
     if (this.loginService.checkTwoFactorOn(user.id)) {
       session.tempUserId = user.id;
-      res.redirect('http://localhost:3000/2fa');
+      res.redirect(this.configService.get('FRONT_URI') + RedirectResource.TWOFACTOR);
+      return;
     }
 
     this.sessionService.setSession(session, user.id);
-    // return users; // Need to redirecte 200, /main
+    res.redirect(this.configService.get('FRONT_URI') + RedirectResource.PROFILE_EDIT);
   }
 }
