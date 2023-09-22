@@ -286,6 +286,7 @@ export class MatchService {
 
     /* 매치큐, 게임중이 아닐 경우만 초대를 받는다. */
     if (
+      userId == inviteUserId ||
       user?.status !== MainUserStatus.DEFAULT ||
       inviteUser?.status !== MainUserStatus.DEFAULT
     ) {
