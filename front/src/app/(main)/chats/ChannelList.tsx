@@ -46,11 +46,6 @@ export default function ChannelList() {
       setMyChannels((cur) => [...cur, data]);
     });
     socket?.on('deleteMyChannel', ({ data }: { data: IMyChannel }) => {
-      console.log(
-        `/chats/${data.id}`,
-        currentPath,
-        currentPath === `/chats/${data.id}`
-      );
       setMyChannels((cur) => cur.filter((e) => e.id !== data.id));
       if (currentPath === `/chats/${data.id}`) {
         route.push('/chats');
@@ -65,7 +60,7 @@ export default function ChannelList() {
         return [...cur];
       });
     });
-  }, [socket]);
+  }, [socket, currentPath]);
 
   return (
     <Container>
