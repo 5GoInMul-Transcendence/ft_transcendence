@@ -22,6 +22,8 @@ import { DeleteChannelResDto } from './dto/delete-channel-res.dto';
 import { RecentMessage } from 'src/channels/channel/dto/recent-message.dto';
 import { MessageService } from 'src/message/message.service';
 import { Message } from 'src/message/entities/message.entity';
+import { BlockService } from '../block/block.service';
+import { MessageType } from '../message/enums/message-type.enum';
 
 @Injectable()
 export class ChatService {
@@ -32,7 +34,8 @@ export class ChatService {
   constructor(
     private linkChannelToUserService: LinkChannelToUserService,
     private messageService: MessageService,
-    ) {
+    private blockService: BlockService,
+  ) {
     this.chatUsers = new Map<number, Socket>();
   }
 
@@ -153,7 +156,7 @@ export class ChatService {
     }
   }
 
-  sendMessage(message: Message) {
+  async sendMessage(message: Message) {
     const { id, user, channel, content } = message;
 
     const resDto = Builder(UpdateMyChannelResDto)
@@ -167,10 +170,32 @@ export class ChatService {
           .build(),
       )
       .build();
+    const blockedResDto = Builder(UpdateMyChannelResDto)
+      .id(channel.id)
+      .recentMessage(
+        Builder(ChatRecentMessage)
+          .id(id)
+          .content(MessageType.BLOCKED)
+          .nickname(user.nickname)
+          .avatar(user.avatar)
+          .build(),
+      )
+      .build();
 
-    this.chatServerSocket
+    const sockets = await this.chatServerSocket
       .to(channel.id.toString())
-      .emit(ChatEvent.UpdateMyChannel, ApiResponseForm.ok(resDto));
+      .fetchSockets();
+
+    for (const socket of sockets) {
+      const targetUserId = (socket as any).session.userId;
+
+      if (this.blockService.isBlockedUser(targetUserId, user.id)) {
+        socket.emit(ChatEvent.UpdateMyChannel, ApiResponseForm.ok(blockedResDto),
+        );
+      } else {
+        socket.emit(ChatEvent.UpdateMyChannel, ApiResponseForm.ok(resDto));
+      }
+    }
   }
 
   updateAllChannel(dto: UpdateAllChannelDto) {
