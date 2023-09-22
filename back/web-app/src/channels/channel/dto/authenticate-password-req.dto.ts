@@ -1,8 +1,6 @@
 import { IsValidatedChannelPassword } from "../pipes/channel-password.pipe";
 
-export class UpdateChannelSettingReqDto {
-	readonly mode: string;
-
+export class AuthenticatePasswordReqDto {
 	@IsValidatedChannelPassword()
 	readonly password: string;
-}
+};
