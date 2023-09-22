@@ -187,7 +187,7 @@ export class ChatService {
       .fetchSockets();
 
     for (const socket of sockets) {
-      const targetUserId = (socket as any).session.userId;
+      const targetUserId = (socket as any).handshake.session.userId;
 
       if (this.blockService.isBlockedUser(targetUserId, user.id)) {
         socket.emit(ChatEvent.UpdateMyChannel, ApiResponseForm.ok(blockedResDto),
