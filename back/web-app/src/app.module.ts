@@ -22,6 +22,7 @@ import { MeModule } from './users/me/me.module';
 import { MessageModule } from './message/message.module';
 import { AchievementModule } from './achievement/achievement.module';
 import { ChatModule } from './chat/chat.module';
+import { BlockModule } from './block/block.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { ChatModule } from './chat/chat.module';
     MessageModule,
     AchievementModule,
     ChatModule,
+    BlockModule,
   ],
   controllers: [AppController],
   providers: [AppService],

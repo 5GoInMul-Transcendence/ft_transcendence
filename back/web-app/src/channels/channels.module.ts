@@ -17,6 +17,7 @@ import { ChannelSettingService } from './channel/channel-setting.service';
 import { MuteProvider } from './channel/user-setting/mute.provider';
 import { UserSettingService } from './channel/user-setting/user-setting.service';
 import { BanProvider } from './channel/user-setting/ban.provider';
+import { BlockModule } from '../block/block.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { BanProvider } from './channel/user-setting/ban.provider';
     UserModule,
     MessageModule,
     HashModule,
+    BlockModule,
     forwardRef(() => ChatModule),
   ],
   controllers: [ChannelsController, ChannelController],

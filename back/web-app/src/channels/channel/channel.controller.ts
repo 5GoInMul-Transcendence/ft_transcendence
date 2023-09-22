@@ -34,6 +34,9 @@ import { UserSettingService } from './user-setting/user-setting.service';
 import { UpdateUserSettingInChannelReqDto } from './dto/update-user-setting-in-channel-req.dto';
 import { IsMutedUserReqDto } from './dto/is-muted-user-req.dto';
 import { UserSettingStatus } from './enum/user-setting-status.enum';
+import { BlockDto } from '../../block/dto/block.dto';
+import { BlockService } from '../../block/block.service';
+import { MessageType } from '../../message/enums/message-type.enum';
 import { AuthenticatePasswordReqDto } from './dto/authenticate-password-req.dto';
 
 @Controller('channel')
@@ -51,6 +54,7 @@ export class ChannelController {
 		private chatService: ChatService,
 		private settingService: ChannelSettingService,
 		private userSettingService: UserSettingService,
+		private blockService: BlockService,
 	) {}
 
 	@Post('public')
@@ -177,6 +181,13 @@ export class ChannelController {
 		if (invitedUserId === userId) {
 			this.exceptionService.itIsInvalidRequest();
 		}
+		if (this.blockService.isBlockedUser(userId, invitedUserId)) {
+			this.exceptionService.iBlockedHim();
+		}
+		if (this.blockService.isBlockedUser(invitedUserId, userId)) {
+			this.exceptionService.youAreBlock();
+		}
+		
 		links = await this.linkService.getCreateDmChannelRes(userId, invitedUserId);
 		if (links.length < 1) {
 			const user: User = await this.userService.getUserByUserId(userId);
@@ -337,7 +348,14 @@ export class ChannelController {
 		}
 		
 		recentMessages = await this.messageService.getMessages(channel.id);
-
+		
+		for (const recentMessage of recentMessages) {
+			if (this.blockService.isBlockedUser(userId, recentMessage.userId)) {
+				recentMessage.content = MessageType.BLOCKED;
+			}
+			delete recentMessage.userId;
+		}
+		
 		return Builder(EnterChannelRes)
 		.id(channel.id)
 		.name(channel.name)
@@ -708,6 +726,45 @@ export class ChannelController {
 				break;
 			case UserSettingStatus.BAN:
 				this.updateBanInUserSetting(channel, targetUserId, targetLink);
+		}
+	}
+	
+	@Post('block')
+	async block(@Session() session, @Body('blockUserId') blockUserId) {
+		const userId = session.userId;
+		
+		const isBlocked = this.blockService.block(
+				Builder(BlockDto).userId(userId).blockUserId(blockUserId).build(),
+		);
+		
+		if (isBlocked) {
+			const dmChannelLinks: any[] = await this.linkService.getCreateDmChannelRes(
+					userId,
+					blockUserId,
+			);
+			
+			if (dmChannelLinks.length == 0) {
+				return;
+			}
+			
+			const channel = await this.channelService.getChannel(dmChannelLinks[0].channel_id);
+			
+			// broadcast
+			this.chatService.leaveChannel(userId, channel);
+			this.chatService.leaveChannel(blockUserId, channel);
+			
+			// delete link
+			const links =  await this.linkService.getLinksRelatedUserByChannelId(dmChannelLinks[0].channel_id);
+			for (const link of links) {
+				this.linkService.deleteLink(link);
+			}
+			
+			// delete message
+			await this.messageService.deleteAllMessages(channel.id);
+			// 밴리스트 삭제 추가 예정
+			// 뮤트 삭제 추가 예정
+			await this.channelService.deleteChannel(channel);
+			return;
 		}
 	}
 }

@@ -16,6 +16,8 @@ import _ from 'lodash';
 import { CheckAvailableTwofactorDto } from './dto/check-available-twofactor.dto';
 import { TwoFactorStatus } from '../enums/twoFactor-status.enum';
 import { GetUserByNicknameDto } from './dto/get-user-by-nickname.dto';
+import { AddUserBlockDto } from './dto/add-user-block.dto';
+import { DeleteUserBlockDto } from './dto/delete-user-block.dto';
 
 @Injectable()
 export class MemoryUserService {
@@ -94,6 +96,16 @@ export class MemoryUserService {
   deleteUserFriend(dto: DeleteUserFriendDto) {
     const user = this.memoryUsers.get(dto.userId);
     user.friends.delete(dto.friendId);
+  }
+
+  addUserBlock(dto: AddUserBlockDto) {
+    const user = this.memoryUsers.get(dto.userId);
+    user.blocks.add(dto.blockUserId);
+  }
+
+  deleteUserBlock(dto: DeleteUserBlockDto) {
+    const user = this.memoryUsers.get(dto.userId);
+    user.blocks.delete(dto.blockUserId);
   }
 
   checkAvailableTwoFactor(dto: CheckAvailableTwofactorDto) {
