@@ -14,8 +14,8 @@ export default function SetNick() {
   const setModal = useSetRecoilState(modalState);
 
   const setNickHandler = async () => {
-    if (keyword === '') {
-      setInvalidMsg(() => 'nickname is empty');
+    if (keyword === '' || keyword.trim() === '') {
+      setInvalidMsg(() => '닉네임을 입력해주세요!');
       return;
     }
     axiosInstance.put('/me/nickname', { nickname: keyword }).then((res) => {

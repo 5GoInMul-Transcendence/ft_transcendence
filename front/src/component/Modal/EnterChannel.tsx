@@ -22,8 +22,8 @@ export default function EnterChannel({
   const router = useRouter();
 
   const setPasswordHandler = async () => {
-    if (keyword === '') {
-      setInvalidMsg(() => 'password is empty');
+    if (keyword === '' || keyword.trim() === '') {
+      setInvalidMsg(() => '패스워드를 입력해주세요!');
       return;
     }
     axiosInstance

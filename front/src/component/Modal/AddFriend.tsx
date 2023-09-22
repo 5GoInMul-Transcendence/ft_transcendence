@@ -18,8 +18,8 @@ export default function AddFriend() {
   const setModal = useSetRecoilState(modalState);
 
   const addFriendHandler = async () => {
-    if (keyword === '') {
-      setInvalidMsg(() => 'nickname is empty');
+    if (keyword === '' || keyword.trim() === '') {
+      setInvalidMsg(() => '닉네임을 입력해주세요!');
       return;
     }
     axiosInstance.post('/friend', { nickname: keyword }).then(() => {
