@@ -48,7 +48,10 @@ export default function ChannelItem({
 
   return (
     <Container onClick={onClickChannel}>
-      <ProfileImage url='' size='50px' />
+      <ProfileImage
+        url={(recentMessage && msg && msg?.avatar) ?? ''}
+        size='50px'
+      />
       <ChannelDiv>
         <ChannelNameDiv>{truncateString(channelName, 12)}</ChannelNameDiv>
         <LastChatDiv>
