@@ -48,6 +48,7 @@ export class MessageService {
 
 			return Builder(RecentMessageAtEnter)
 			.id(message.id)
+			.userId(message.user.id)
 			.content(message.content)
 			.nickname(nicknameSendingMessage)
 			.avatar(avatar)
