@@ -70,7 +70,7 @@ export default function ChannelChatting({
         ))}
       </ChatZone>
       <ChatBox onSubmit={onSubmit}>
-        <input value={input} onChange={onChangeInput} maxLength={40} />
+        <input value={input} onChange={onChangeInput} maxLength={255} />
         <button type='submit'>
           <Image src='/send.svg' alt='send' width={20} height={20} />
         </button>

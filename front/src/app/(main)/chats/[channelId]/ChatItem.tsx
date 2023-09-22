@@ -43,6 +43,9 @@ const NicknameDiv = styled.div<{ $me: boolean }>`
 `;
 
 const ContentDiv = styled.div`
+  max-width: 300px;
+  word-wrap: break-word; /* 긴 단어를 강제로 줄바꿈합니다. */
+  overflow: hidden; /* 내용이 넘치면 숨깁니다. */
   background-color: ${({ theme }) => theme.colors.darkgrey};
   padding: 0.4rem;
   border-radius: 5px;
