@@ -27,17 +27,17 @@ export default function CreateChannel() {
   };
   const createChannelHandler = async () => {
     setInvalidMsg('');
-    if (!channelName) {
-      setInvalidMsg(() => 'channel name is empty');
+    if (channelName === '' || channelName.trim() === '') {
+      setInvalidMsg(() => '채널이름을 입력해주세요!');
       return;
     }
     if (mode === 'protected') {
-      if (password === '') {
-        setInvalidMsg(() => 'password is empty');
+      if (password === '' || password.trim() === '') {
+        setInvalidMsg(() => '패스워드를 입력해주세요!');
         return;
       }
       if (password !== passwordCheck) {
-        setInvalidMsg(() => 'password mismatch');
+        setInvalidMsg(() => '입력하신 패스워드가 같지 않습니다!');
         return;
       }
       axiosInstance
@@ -62,7 +62,7 @@ export default function CreateChannel() {
         type='text'
         value={channelName}
         onChange={onChangeChannelName}
-        maxLength={12}
+        maxLength={32}
       />
       <RadioWrapper>
         <RadioInput

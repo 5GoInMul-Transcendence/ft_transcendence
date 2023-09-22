@@ -31,19 +31,28 @@ export default function SetChannel({
   const cancelSetChannelHandler = () => {
     setModal(null);
   };
+
+  const changeToPublic = () => {
+    axiosInstance
+      .put(`/channel/setting/${channelId}`, {
+        mode: 'public',
+        password: null,
+      })
+      .then(() => {
+        setModal(null);
+      });
+  };
   const saveSetChannelHandler = async () => {
     if (mode === 'public') {
-      axiosInstance
-        .post(`/channel/setting/${channelId}`, {
-          mode: 'public',
-        })
-        .then(() => {
-          setModal(null);
-        });
+      changeToPublic();
+      return;
+    }
+    if (password === '' || password.trim() === '') {
+      setInvalidMsg(() => '패스워드를 입력해주세요!');
       return;
     }
     if (password !== passwordCheck) {
-      setInvalidMsg(() => 'password mismatch');
+      setInvalidMsg(() => '입력하신 패스워드가 같지 않습니다!');
       return;
     }
     axiosInstance
