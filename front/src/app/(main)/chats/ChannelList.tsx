@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ChannelItem from './ChannelItem';
-
 import { IAllChannel, IMyChannel } from '@/types/IChannel';
 import useSocket from '@/hooks/useSocket';
 import { useSetRecoilState } from 'recoil';
@@ -19,6 +18,8 @@ export default function ChannelList() {
   const [myChannelOption, setmyChannelOption] = useState(true);
   const [myChannels, setMyChannels] = useState<IMyChannel[]>([]);
   const [allChannels, setAllChannels] = useState<IAllChannel[]>([]);
+  const [currentChannelId, setCurrentChannelId] = useState(0);
+
 
   const showAllChannels = () => {
     setmyChannelOption(false);
@@ -36,6 +37,13 @@ export default function ChannelList() {
   }, []);
 
   useEffect(() => {
+    if (`/chats/${currentChannelId}` === currentPath) {
+      route.push('/chats');
+    }
+    setCurrentChannelId(0);
+  }, [currentPath, currentChannelId]);
+
+  useEffect(() => {
     socket?.on('addAllChannel', ({ data }: { data: IAllChannel }) => {
       setAllChannels((cur) => [...cur, data]);
     });
@@ -47,9 +55,7 @@ export default function ChannelList() {
     });
     socket?.on('deleteMyChannel', ({ data }: { data: IMyChannel }) => {
       setMyChannels((cur) => cur.filter((e) => e.id !== data.id));
-      if (currentPath === `/chats/${data.id}`) {
-        route.push('/chats');
-      }
+      setCurrentChannelId(data.id);
     });
     socket?.on('updateMyChannel', ({ data }: { data: IMyChannel }) => {
       setRecentMessage(data);
@@ -60,7 +66,10 @@ export default function ChannelList() {
         return [...cur];
       });
     });
-  }, [socket, currentPath]);
+    socket?.on('disconnect', () => {
+      disconnect();
+    });
+  }, [socket]);
 
   return (
     <Container>

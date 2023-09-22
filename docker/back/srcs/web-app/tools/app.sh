@@ -1,3 +1,3 @@
 #!/bin/bash
-npm i
-npm run start:prod --silence
+npm i --silent
+npm run start:prod

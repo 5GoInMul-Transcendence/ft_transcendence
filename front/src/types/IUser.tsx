@@ -27,4 +27,5 @@ export interface IUserDetail {
 export interface IUserSetting {
   admin: boolean;
   mute: boolean;
+  ban: boolean;
 }

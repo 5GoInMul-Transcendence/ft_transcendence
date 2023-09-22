@@ -18,7 +18,7 @@ export default function SetUserToggle({
 }: setUserToggleProps) {
   const [admin, onChangeAdmin] = useToggle(data?.admin ?? false);
   const [mute, onChangeMute] = useToggle(data?.mute ?? false);
-  const [ban, onChangeBan] = useToggle(data?.mute ?? false);
+  const [ban, onChangeBan] = useToggle(data?.ban ?? false);
 
   const banUserHandler = async () => {
     axiosInstance
