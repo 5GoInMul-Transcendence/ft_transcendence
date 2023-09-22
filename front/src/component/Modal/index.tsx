@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import AddFriend from './AddFriend';
 import AuthPhone from './AuthPhone';
 import AuthMail from './AuthMail';

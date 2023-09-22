@@ -3,8 +3,8 @@
 import styled from 'styled-components';
 import ProfileImage from '@/component/ProfileImage';
 import { useRouter } from 'next/navigation';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { modalState, recentMessageState } from '@/utils/recoil/atom';
+import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
+import { modalState, recentMessageState, invalidMsgState } from '@/utils/recoil/atom';
 import { IMessage } from '@/types/IChannel';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '@/utils/axios';
@@ -25,12 +25,20 @@ export default function ChannelItem({
   const setModal = useSetRecoilState(modalState);
   const [msg, setMsg] = useState(recentMessage);
   const newMessage = useRecoilValue(recentMessageState);
+  const [, setInvalidMsg] = useRecoilState(invalidMsgState);
+
   const onClickChannel = () => {
     if (recentMessage) {
       router.push(`/chats/${channelId}`);
       return;
     }
     axiosInstance.get(`/channel/${channelId}/check`).then((data) => {
+      if (data.data.data.isBan === true)
+      {
+        setModal({ type: 'API-Error' });
+        setInvalidMsg('방에 입장할 수 없습니다!');
+        return;
+      }
       if (data.data.data.mode === 'protected') {
         setModal({
           type: 'ENTER-Channel',
