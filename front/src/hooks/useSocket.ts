@@ -5,8 +5,12 @@ const sockets: { [key: string]: Socket } = {};
 const useSocket = (port?: string): [Socket | undefined, () => void] => {
   const disconnect = useCallback(() => {
     if (port) {
-      sockets[port].disconnect();
-      delete sockets[port];
+      try {
+        sockets[port].disconnect();
+      }
+      catch {
+        delete sockets[port];
+      }
     }
   }, [port]);
   if (!port) {

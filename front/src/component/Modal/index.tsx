@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AddFriend from './AddFriend';
 import AuthPhone from './AuthPhone';
 import AuthMail from './AuthMail';
@@ -18,6 +18,12 @@ import MatchAccept from './MatchAccept';
 export default function Modal() {
   const [modal, setModal] = useRecoilState(modalState);
   const [, setInvalidMsg] = useRecoilState(invalidMsgState);
+
+  useEffect(() => {
+    return () => {
+      setModal(null);
+    }
+  }, [])
 
   const modalStorage: Record<string, Record<string, string | JSX.Element>> = {
     'ADD-Friend': { title: 'Add Friend', child: <AddFriend /> },

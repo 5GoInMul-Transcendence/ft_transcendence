@@ -8,6 +8,8 @@ import {
 @ValidatorConstraint()
 export class IsValidatedChannelPasswordConstraint implements ValidatorConstraintInterface {
   validate(password: string): boolean {
+    if (!password)
+      return true;
 		return password.length >= 4 && password.length <= 12;
   }
 
