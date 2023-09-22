@@ -64,6 +64,7 @@ export default function SignUp() {
           type='password'
           value={passwordCheck}
           onChange={onChangePasswordCheck}
+          maxLength={15}
         />
         {mismatchError && <div>x password does not match</div>}
         <button type='submit'>Create Account</button>
