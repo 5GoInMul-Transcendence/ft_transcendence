@@ -25,6 +25,12 @@ export default function Profile() {
       }
       const formData = new FormData();
       formData.append('file', e.target.files[0]);
+    
+      const maxSizeInBytes = 10 * 1024 * 1024; // 10MB
+      if (e.target.files[0].size > maxSizeInBytes) {
+        alert('파일 크기가 10MB를 초과합니다. 다른 파일을 선택해주세요.');
+        return;
+      }
 
       axiosInstance.put('/me/avatar', formData).then((res) => {
         mutate('/me');
