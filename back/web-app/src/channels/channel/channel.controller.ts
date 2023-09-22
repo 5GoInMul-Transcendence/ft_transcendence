@@ -36,6 +36,7 @@ import { IsMutedUserReqDto } from './dto/is-muted-user-req.dto';
 import { UserSettingStatus } from './enum/user-setting-status.enum';
 import {BlockDto} from '../../block/dto/block.dto';
 import {BlockService} from '../../block/block.service';
+import {MessageType} from '../../message/enums/message-type.enum';
 
 @Controller('channel')
 export class ChannelController {
@@ -344,7 +345,14 @@ export class ChannelController {
 		}
 		
 		recentMessages = await this.messageService.getMessages(channel.id);
-
+		
+		for (const recentMessage of recentMessages) {
+			if (this.blockService.isBlockedUser(userId, recentMessage.userId)) {
+				recentMessage.content = MessageType.BLOCKED;
+			}
+			delete recentMessage.userId;
+		}
+		
 		return Builder(EnterChannelRes)
 		.id(channel.id)
 		.name(channel.name)
