@@ -8,6 +8,7 @@ import { modalState, recentMessageState } from '@/utils/recoil/atom';
 import { IMessage } from '@/types/IChannel';
 import { useEffect, useState } from 'react';
 import { axiosInstance } from '@/utils/axios';
+import { truncateString } from '@/utils/truncateString';
 
 interface ChannelItemProps {
   channelId: number;
@@ -49,7 +50,7 @@ export default function ChannelItem({
     <Container onClick={onClickChannel}>
       <ProfileImage url='' size='50px' />
       <ChannelDiv>
-        <ChannelNameDiv>{channelName}</ChannelNameDiv>
+        <ChannelNameDiv>{truncateString(channelName, 12)}</ChannelNameDiv>
         <LastChatDiv>
           {recentMessage &&
             msg &&
