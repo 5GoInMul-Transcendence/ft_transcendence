@@ -23,7 +23,7 @@ export default function Board({ game }: Props) {
   const [standbyGame, setStandbyGame] = useState<boolean>(false);
   const [endGame, setEndGame] = useState<boolean>(false);
   const router = useRouter();
-  const [socket] = useGameSocket('10003/game', game.gameKey);
+  const [socket, disconnect] = useGameSocket('10003/game', game.gameKey);
 
   useEffect(() => {
     setReadyGame(true);
@@ -52,12 +52,12 @@ export default function Board({ game }: Props) {
       setP2Score(res.p2.score);
     });
 
-    socket?.on('disconnect', (res) => {
+    socket?.on('disconnect', () => {
       setEndGame(true);
       setTimeout(() => {
-        socket?.disconnect();
+        disconnect();
         mutate('/friend/list');
-        router.push('/main');
+        router.push('/startgame');
       }, 2000);
     });
   }, [socket]);

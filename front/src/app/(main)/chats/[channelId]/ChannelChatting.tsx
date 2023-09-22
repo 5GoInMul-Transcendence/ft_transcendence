@@ -60,16 +60,17 @@ export default function ChannelChatting({
         </button>
       </ChannelNameDiv>
       <ChatZone ref={scrollRef}>
-        {recentMessage?.map((msg) => (
+        {recentMessage?.map((msg, index) => (
           <ChatItem
-            key={msg.id}
+            key={`${channelId}${index}`}
+            avatar={msg.avatar}
             nickname={msg.nickname}
             content={msg.content}
           />
         ))}
       </ChatZone>
       <ChatBox onSubmit={onSubmit}>
-        <input value={input} onChange={onChangeInput} />
+        <input value={input} onChange={onChangeInput} maxLength={255} />
         <button type='submit'>
           <Image src='/send.svg' alt='send' width={20} height={20} />
         </button>

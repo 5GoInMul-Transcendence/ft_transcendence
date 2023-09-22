@@ -7,13 +7,17 @@ import styled from 'styled-components';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
 import { IUserDetail } from '@/types/IUser';
 import { useSetRecoilState } from 'recoil';
-import { modalState } from '@/utils/recoil/atom';
+import { invalidMsgState, modalState } from '@/utils/recoil/atom';
 import { useCallback, useRef } from 'react';
+import { useSWRConfig } from 'swr';
+import { axiosInstance } from '@/utils/axios';
 
 export default function Profile() {
+  const { mutate } = useSWRConfig();
   const data = useSwrFetcher<IUserDetail>('/me/details');
   const inputRef = useRef<HTMLInputElement | null>(null);
   const setModal = useSetRecoilState(modalState);
+  const setInvalidMsg = useSetRecoilState(invalidMsgState);
   const onUploadImage = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       if (!e.target.files) {
@@ -21,22 +25,17 @@ export default function Profile() {
       }
       const formData = new FormData();
       formData.append('file', e.target.files[0]);
-      fetch('http://localhost:8080/me/avatar', {
-        method: 'PUT',
-        body: formData,
-        credentials: 'include',
-      })
-        .then((res) => {})
-        .catch(() => {
-          // 400일 때 에러처리 얘만 fetch 라 넣어야함
-        });
+
+      axiosInstance.put('/me/avatar', formData).then((res) => {
+        mutate('/me');
+        mutate('/me/details');
+      });
     },
     []
   );
 
   if (!data) return;
 
-  console.log(data);
   return (
     <Container>
       <TopWrapper>

@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import { Socket, io } from 'socket.io-client';
-const backUrl = 'ws://localhost';
 
 const sockets: { [key: string]: Socket } = {};
 const useGameSocket = (
@@ -9,7 +8,9 @@ const useGameSocket = (
 ): [Socket | undefined, () => void] => {
   const disconnect = useCallback(() => {
     if (port) {
-      sockets[port].disconnect();
+      try {
+        sockets[port].disconnect();
+      } catch {}
       delete sockets[port];
     }
   }, [port]);
@@ -17,7 +18,7 @@ const useGameSocket = (
     return [undefined, disconnect];
   }
   if (!sockets[port]) {
-    sockets[port] = io(`${backUrl}:${port}`, {
+    sockets[port] = io(`ws://${process.env.NEXT_PUBLIC_BACK_SERVER}:${port}`, {
       transports: ['websocket'],
       auth: {
         gameKey: gameKey,

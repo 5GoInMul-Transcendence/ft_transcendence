@@ -29,7 +29,7 @@ export default function Login() {
   );
 
   const onClickOAuth = () => {
-    location.href = 'http://localhost:8080/login/oauth/42';
+    location.href = `http://${process.env.NEXT_PUBLIC_BACK_SERVER}:8080/login/oauth/42`;
   };
 
   return (
@@ -38,7 +38,12 @@ export default function Login() {
         <div>ID</div>
         <input type='id' value={id} onChange={onChangeId} maxLength={12} />
         <div>Password</div>
-        <input type='password' value={password} onChange={onChangePassword} />
+        <input
+          type='password'
+          value={password}
+          onChange={onChangePassword}
+          maxLength={15}
+        />
         <button type='submit'>Login</button>
       </Form>
       <button onClick={onClickOAuth}>Login with 42</button>

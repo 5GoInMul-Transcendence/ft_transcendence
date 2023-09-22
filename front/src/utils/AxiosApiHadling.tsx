@@ -21,7 +21,6 @@ export default function AxiosApiHadling() {
         const resMessage = error.response.data.resStatus.message;
         switch (resStatus) {
           case '0001':
-            console.log(modal, modal?.type);
             if (modal === null) setModal({ type: 'API-Error' });
             setInvalidMsg(resMessage);
             break;

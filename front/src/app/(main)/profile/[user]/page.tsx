@@ -5,19 +5,26 @@ import ProfileItem from './ProfileItem';
 import Buttons from '@/component/Buttons';
 import MatchItem from '@/component/MatchItem';
 import ProfileImage from '@/component/ProfileImage';
-import Toggle from '@/component/Toggle';
+import useSocket from '@/hooks/useSocket';
 import useSwrFetcher from '@/hooks/useSwrFetcher';
 import { IUserFriedns } from '@/types/IUser';
 import { axiosInstance } from '@/utils/axios';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
+import ProfileToggle from '@/component/Toggle/ProfileToggle';
 
 export default function Profile({ params }: { params: { user: string } }) {
+  const [socket] = useSocket('10001/main');
   const user = params.user;
   const data = useSwrFetcher<IUserFriedns>(`user/${user}`);
   const router = useRouter();
 
-  const onClickTogle = () => {};
+  const onMatch = () => {
+    socket?.emit('inviteMatch', {
+      inviteUserId: data.id,
+    });
+  };
+
   const onClickDM = () => {
     axiosInstance
       .post('/channel/dm', { invitedUserId: data.id })
@@ -34,34 +41,23 @@ export default function Profile({ params }: { params: { user: string } }) {
         <Wrapper $width={3}>
           <ProfileImage url={data.avatar} size='250px' />
           <TogglesWrapper>
-            <Toggle
-              text='follow'
-              color='green'
-              checked={data?.isFriend}
-              onToggle={onClickTogle}
-            />
-            <Toggle
-              text='block'
-              color='pink'
-              checked={data?.isBlock}
-              onToggle={onClickTogle}
-            />
+            <ProfileToggle data={data} />
           </TogglesWrapper>
         </Wrapper>
         <Wrapper $width={7}>
-          <ProfileItem title='NICNAME' content={`${data?.nickname}`} />
+          <ProfileItem title='NICNAME' content={`${data.nickname}`} />
           <ProfileItem
             title='LADDER LEVEL'
-            content={`${data?.gameRecord.ladderLevel}`}
+            content={`${data.gameRecord.ladderLevel}`}
           />
           <MatchItem
             title='WIN/LOSE'
-            content={`${data?.gameRecord.win}/${data?.gameRecord.lose}`}
+            content={`${data.gameRecord.win}/${data.gameRecord.lose}`}
             nickname={user}
           />
           <AchievementItem
             title='ACHIEVMENT'
-            content={data?.gameRecord.achievement || []}
+            content={data.gameRecord.achievement || []}
           />
         </Wrapper>
       </TopWrapper>
@@ -72,7 +68,7 @@ export default function Profile({ params }: { params: { user: string } }) {
           color: 'white',
           onClick: onClickDM,
         }}
-        rightButton={{ text: 'match game', color: 'green' }}
+        rightButton={{ text: 'match game', color: 'green', onClick: onMatch }}
       />
     </Container>
   );

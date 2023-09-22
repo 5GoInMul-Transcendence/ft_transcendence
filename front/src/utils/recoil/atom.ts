@@ -1,4 +1,5 @@
 import { IMyChannel } from '@/types/IChannel';
+import { IFriends } from '@/types/IFriends';
 import { atom } from 'recoil';
 
 interface modalType {
@@ -30,7 +31,13 @@ export const gameQueueState = atom<boolean>({
   key: 'gameQueueState',
   default: false,
 });
+
 export const userState = atom<string | null>({
   key: 'userState',
   default: null,
+});
+
+export const friendListState = atom<IFriends[] | undefined>({
+  key: 'friendListState',
+  default: undefined,
 });
