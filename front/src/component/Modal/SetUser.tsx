@@ -9,7 +9,7 @@ import { axiosInstance } from '@/utils/axios';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { invalidMsgState, modalState } from '@/utils/recoil/atom';
 import InvalidMsg from './InvalidMsg';
-import SetUserToggle from '../Toggle/setUserToggle';
+import SetUserToggle from '../Toggle/SetUserToggle';
 
 interface SetUserProps {
   userid: string;
