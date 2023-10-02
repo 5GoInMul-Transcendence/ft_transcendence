@@ -3,6 +3,7 @@
 import ProfileImage from '@/component/ProfileImage';
 import { userState } from '@/utils/recoil/atom';
 import Link from 'next/link';
+import React from 'react';
 import { useRecoilValue } from 'recoil';
 import styled from 'styled-components';
 
@@ -12,7 +13,7 @@ interface ChatItemProps {
   content: string;
 }
 
-export default function ChatItem({ avatar, nickname, content }: ChatItemProps) {
+function ChatItem({ avatar, nickname, content }: ChatItemProps) {
   const mynick = useRecoilValue(userState);
   //TODO: 내 정보 저장해두기
   return (
@@ -50,3 +51,5 @@ const ContentDiv = styled.div`
   padding: 0.4rem;
   border-radius: 5px;
 `;
+
+export default React.memo(ChatItem);
