@@ -6,37 +6,28 @@ import { FormEvent, useEffect, useRef } from 'react';
 import { IMessage } from '@/types/IChannel';
 import { useRouter } from 'next/navigation';
 import { axiosInstance } from '@/utils/axios';
+import ChatInput from './ChatInput';
 
 interface ChannelChattingProps {
   channelId: number;
   channelName: string;
-  onClickEdit: () => void;
   recentMessage: IMessage[];
+  onClickEdit: () => void;
 }
 
 export default function ChannelChatting({
   channelId,
   channelName,
-  onClickEdit,
   recentMessage,
+  onClickEdit,
 }: ChannelChattingProps) {
-  const [input, setInput, onChangeInput] = useInput('');
   const scrollRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
   const onExitChannel = () => {
     axiosInstance.delete(`/channel/${channelId}`).then(() => {
-      //TODO: 성공시에만 /chats로 돌아가기
       router.push('/chats');
     });
-  };
-
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    axiosInstance.post(`/channel/${channelId}/chat`, {
-      message: input,
-    });
-    setInput('');
   };
 
   useEffect(() => {
@@ -69,12 +60,7 @@ export default function ChannelChatting({
           />
         ))}
       </ChatZone>
-      <ChatBox onSubmit={onSubmit}>
-        <input value={input} onChange={onChangeInput} maxLength={255} />
-        <button type='submit'>
-          <Image src='/send.svg' alt='send' width={20} height={20} />
-        </button>
-      </ChatBox>
+      <ChatInput channelId={channelId} />
     </>
   );
 }
@@ -83,20 +69,6 @@ const ChannelNameDiv = styled.div`
   ${({ theme }) => theme.flex.spaceBetween}
   width: 100%;
   padding: 0.6rem;
-`;
-
-const ChatBox = styled.form`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  input {
-    border: solid 1px black;
-    border-radius: 5px;
-    color: black;
-    width: 70%;
-    height: 2rem;
-    margin-right: 10px;
-  }
 `;
 
 const ChatZone = styled.div`
