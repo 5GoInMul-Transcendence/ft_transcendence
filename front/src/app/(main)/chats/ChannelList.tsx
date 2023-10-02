@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ChannelItem from './ChannelItem';
 import { IAllChannel, IMyChannel } from '@/types/IChannel';
@@ -20,6 +20,30 @@ export default function ChannelList() {
   const [allChannels, setAllChannels] = useState<IAllChannel[]>([]);
   const [currentChannelId, setCurrentChannelId] = useState(0);
 
+  const AllChannelList = memo(() => {
+    return (
+      <>
+        {allChannels?.map((e) => (
+          <ChannelItem key={e.id} channelId={e.id} channelName={e.name} />
+        ))}
+      </>
+    );
+  });
+
+  const MyChannelList = memo(() => {
+    return (
+      <>
+        {myChannels?.map((e) => (
+          <ChannelItem
+            key={e.id}
+            channelId={e.id}
+            channelName={e.name}
+            recentMessage={e.recentMessage}
+          />
+        ))}
+      </>
+    );
+  });
 
   const showAllChannels = () => {
     setmyChannelOption(false);
@@ -27,6 +51,7 @@ export default function ChannelList() {
   const showMyChannels = () => {
     setmyChannelOption(true);
   };
+
   useEffect(() => {
     axiosInstance.get('/channels/mine').then((data) => {
       setMyChannels(data.data.data);
@@ -81,18 +106,7 @@ export default function ChannelList() {
           My
         </OptionButton>
       </ChannelOptions>
-      {myChannelOption
-        ? myChannels?.map((e) => (
-            <ChannelItem
-              key={e.id}
-              channelId={e.id}
-              channelName={e.name}
-              recentMessage={e.recentMessage}
-            />
-          ))
-        : allChannels?.map((e) => (
-            <ChannelItem key={e.id} channelId={e.id} channelName={e.name} />
-          ))}
+      {myChannelOption ? <MyChannelList /> : <AllChannelList />}
     </Container>
   );
 }
