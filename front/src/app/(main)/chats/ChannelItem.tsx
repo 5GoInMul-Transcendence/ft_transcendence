@@ -3,10 +3,9 @@
 import styled from 'styled-components';
 import ProfileImage from '@/component/ProfileImage';
 import { useRouter } from 'next/navigation';
-import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
-import { modalState, recentMessageState, invalidMsgState } from '@/utils/recoil/atom';
+import { useSetRecoilState, useRecoilState } from 'recoil';
+import { modalState, invalidMsgState } from '@/utils/recoil/atom';
 import { IMessage } from '@/types/IChannel';
-import { useEffect, useState } from 'react';
 import { axiosInstance } from '@/utils/axios';
 import { truncateString } from '@/utils/truncateString';
 
@@ -23,8 +22,6 @@ export default function ChannelItem({
 }: ChannelItemProps) {
   const router = useRouter();
   const setModal = useSetRecoilState(modalState);
-  const [msg, setMsg] = useState(recentMessage);
-  const newMessage = useRecoilValue(recentMessageState);
   const [, setInvalidMsg] = useRecoilState(invalidMsgState);
 
   const onClickChannel = () => {
@@ -33,8 +30,7 @@ export default function ChannelItem({
       return;
     }
     axiosInstance.get(`/channel/${channelId}/check`).then((data) => {
-      if (data.data.data.isBan === true)
-      {
+      if (data.data.data.isBan === true) {
         setModal({ type: 'API-Error' });
         setInvalidMsg('방에 입장할 수 없습니다!');
         return;
@@ -50,22 +46,15 @@ export default function ChannelItem({
     });
   };
 
-  useEffect(() => {
-    if (newMessage?.id === channelId) setMsg(newMessage.recentMessage);
-  }, [newMessage]);
-
   return (
     <Container onClick={onClickChannel}>
-      <ProfileImage
-        url={(recentMessage && msg && msg?.avatar) ?? ''}
-        size='50px'
-      />
+      <ProfileImage url={recentMessage?.avatar ?? ''} size='50px' />
       <ChannelDiv>
         <ChannelNameDiv>{truncateString(channelName, 12)}</ChannelNameDiv>
         <LastChatDiv>
-          {recentMessage &&
-            msg &&
-            msg.nickname + (msg.id !== -1 ? ':' : '') + msg.content}
+          {recentMessage.nickname +
+            (recentMessage.id !== -1 ? ':' : '') +
+            recentMessage.content}
         </LastChatDiv>
       </ChannelDiv>
     </Container>

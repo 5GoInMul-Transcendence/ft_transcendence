@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ChannelItem from './ChannelItem';
 import { IAllChannel, IMyChannel } from '@/types/IChannel';
@@ -20,7 +20,7 @@ export default function ChannelList() {
   const [allChannels, setAllChannels] = useState<IAllChannel[]>([]);
   const [currentChannelId, setCurrentChannelId] = useState(0);
 
-  const AllChannelList = memo(() => {
+  const AllChannelList = () => {
     return (
       <>
         {allChannels?.map((e) => (
@@ -28,9 +28,9 @@ export default function ChannelList() {
         ))}
       </>
     );
-  });
+  };
 
-  const MyChannelList = memo(() => {
+  const MyChannelList = () => {
     return (
       <>
         {myChannels?.map((e) => (
@@ -43,7 +43,7 @@ export default function ChannelList() {
         ))}
       </>
     );
-  });
+  };
 
   const showAllChannels = () => {
     setmyChannelOption(false);
@@ -84,11 +84,12 @@ export default function ChannelList() {
     });
     socket?.on('updateMyChannel', ({ data }: { data: IMyChannel }) => {
       setRecentMessage(data);
-      setMyChannels((cur) => {
-        cur.forEach((e) => {
-          if (e.id === data.id) e = data;
+      setMyChannels((current) => {
+        return current.map((item) => {
+          if (item.id === data.id)
+            return { ...item, recentMessage: data.recentMessage };
+          return item;
         });
-        return [...cur];
       });
     });
     socket?.on('disconnect', () => {
