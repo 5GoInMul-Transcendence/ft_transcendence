@@ -17,15 +17,15 @@ PONG_GAME는 클래식 게임인 Pong을 현대적으로 재해석한 웹 기반
 ## 기술 스택
 
 ### 프론트엔드
-![Next.js](https://img.shields.io/badge/-Next.js-black?logo=next.js&style=flat)  ![TypeScript](https://img.shields.io/badge/-TypeScript-blue?logo=typescript&style=flat)  ![React](https://img.shields.io/badge/-React-blue?logo=react&style=flat)  ![Recoil](https://img.shields.io/badge/-Recoil-9cf?logo=recoil&style=flat)  ![Styled-components](https://img.shields.io/badge/-Styled_components-ff69b4?logo=styled-components&style=flat)  ![SWR](https://img.shields.io/badge/-SWR-green?logo=vercel&style=flat)  ![Axios](https://img.shields.io/badge/-Axios-blue?logo=axios&style=flat)  ![Socket.io-client](https://img.shields.io/badge/-Socket.io-010101?logo=socket.io&style=flat)
+![Next.js](https://img.shields.io/badge/-Next.js-black?logo=next.js&style=for-the-badge)  ![TypeScript](https://img.shields.io/badge/-TypeScript-blue?logo=typescript&style=for-the-badge)  ![React](https://img.shields.io/badge/-React-blue?logo=react&style=for-the-badge)  ![Recoil](https://img.shields.io/badge/-Recoil-9cf?logo=recoil&style=for-the-badge)  ![Styled-components](https://img.shields.io/badge/-Styled_components-ff69b4?logo=styled-components&style=for-the-badge)  ![SWR](https://img.shields.io/badge/-SWR-green?logo=vercel&style=for-the-badge)  ![Axios](https://img.shields.io/badge/-Axios-blue?logo=axios&style=for-the-badge)  ![Socket.io-client](https://img.shields.io/badge/-Socket.io-010101?logo=socket.io&style=for-the-badge)
 
 ### 백엔드
-![NestJS](https://img.shields.io/badge/-NestJS-red?logo=nestjs&style=flat)  ![TypeORM](https://img.shields.io/badge/-TypeORM-orange?logo=typeorm&style=flat)  ![Passport](https://img.shields.io/badge/-Passport-lightgrey?logo=passport&style=flat)  ![Socket.io](https://img.shields.io/badge/-Socket.io-010101?logo=socket.io&style=flat)  ![Jest](https://img.shields.io/badge/-Jest-red?logo=jest&style=flat)  ![Class-validator](https://img.shields.io/badge/-Class_validator-orange?logo=typescript&style=flat)  ![Class-transformer](https://img.shields.io/badge/-Class_transformer-lightgrey?logo=typescript&style=flat)
+![NestJS](https://img.shields.io/badge/-NestJS-red?logo=nestjs&style=for-the-badge)  ![TypeORM](https://img.shields.io/badge/-TypeORM-orange?logo=typeorm&style=for-the-badge)  ![Passport](https://img.shields.io/badge/-Passport-lightgrey?logo=passport&style=for-the-badge)  ![Socket.io](https://img.shields.io/badge/-Socket.io-010101?logo=socket.io&style=for-the-badge)  ![Jest](https://img.shields.io/badge/-Jest-red?logo=jest&style=for-the-badge)  ![Class-validator](https://img.shields.io/badge/-Class_validator-orange?logo=typescript&style=for-the-badge)  ![Class-transformer](https://img.shields.io/badge/-Class_transformer-lightgrey?logo=typescript&style=for-the-badge)
 
 ### 데이터베이스
-![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-blue?logo=postgresql&style=flat)
+![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-blue?logo=postgresql&style=for-the-badge)
 ### 인프라
-![Docker](https://img.shields.io/badge/-Docker-blue?logo=docker&style=flat)
+![Docker](https://img.shields.io/badge/-Docker-blue?logo=docker&style=for-the-badge)
 
 
 ### 팀원 목록 & 담당 업무
