@@ -38,5 +38,3 @@ PONG_GAME는 클래식 게임인 Pong을 현대적으로 재해석한 웹 기반
 | [김동현](https://github.com/reg0145) | 백엔드 개발 |
 | [윤재상](https://github.com/brixxt27) | 백엔드 개발 |
 
-
-ft_transcendence는 [MIT 라이선스](notion://www.notion.so/LICENSE)로 제공됩니다.
