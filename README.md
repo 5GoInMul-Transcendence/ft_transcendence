@@ -18,4 +18,15 @@ PONG_GAME는 클래식 게임인 Pong을 현대적으로 재해석한 웹 기반
 - **데이터베이스**: PostgreSQL
 - **인프라:** Docker
 
+### 팀원 목록 & 담당 업무
+
+| 이름 | 담당 업무 |
+|------|-----------|
+| [박기선](https://github.com/Arkingco) | 프론트엔드 개발 |
+| [김지윤](https://github.com/kjy00) | 프론트엔드 개발 |
+| [배재영](https://github.com/pearpearB) | 프론트엔드 개발 |
+| [김동현](https://github.com/reg0145) | 백엔드 개발 |
+| [윤재상](https://github.com/brixxt27) | 백엔드 개발 |
+
+
 ft_transcendence는 [MIT 라이선스](notion://www.notion.so/LICENSE)로 제공됩니다.
